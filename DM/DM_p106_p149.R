@@ -2,9 +2,10 @@
 data(cars)
 str(cars)
 #######數據分箱
-# 將速度分成3類, #   第一類 speed<12 ; 第二類 speed <15 ; 第三類 speed >= 15
+# 將速度分成3類 第一類 speed<12 第二類 speed <15 第三類 speed >= 15
 cars$speed
 x=cars$speed
+x<12
 new_cars_band=1*(x<12)+2*(x>=12 & x<15)+3*(x>=15)###聰明的轉法 要學
 #  4==> 1*(TRUE)+2*(FALSE)+3*(FALSE)===>1*1+2*0+3*0=1
 #  25===>1*(FALSE)+2*(FALSE)+3*(TRUE)====>1*0+2*0+3*1=3
@@ -12,17 +13,29 @@ new_cars_band
 label=c("慢","中","快")
 new_cars_band=label[new_cars_band]  #用index 對應要寫對
 new_cars_band
+#用ifelse 巢狀粉快
+ifelse(x<12,"慢",ifelse(x>=15,"快","中"))
+x
 
+####慢中==>一般轎車 快==>跑車
 car_categ=c("一般轎車","跑車")
 new_cars_band_1=1*(new_cars_band %in% c("慢","中"))+2*(new_cars_band %in% c("快"))
 new_cars_band_1=car_categ[new_cars_band_1]
 new_cars_band_1
+#用ifelse 粉快
+new_cars_band_3=ifelse(new_cars_band&in&c("慢","中"),"一般轎車","跑車")
+
+####將一般轎車轉1 跑車轉0
+new_cars_band_2=1*(new_cars_band_1%in%c("一般轎車"))+0*(new_cars_band_1%in%c("跑車"))
+#用if else
+new_cars_band_2=ifelse(new_cars_band_1=="一般轎車",1,0)
+
 
 #P108
 #with in
 new_cars=cars
 new_cars=within(new_cars,{
-  speed_level=NA
+  speed_level=NA#不寫不行
   speed_level[cars$speed<12]="慢"
   speed_level[cars$speed>=12 & cars$speed<15]="中"
   speed_level[cars$speed>=15]="快"
