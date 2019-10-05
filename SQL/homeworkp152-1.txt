@@ -1,0 +1,382 @@
+mysql> select ename,deptno,sal from emp e where 
+    -> (deptno in (select deptno from emp where comm>0)) and
+    -> (e.ename in (select f.ename from emp f where f.ename=e.ename);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> select ename,deptno,sal from emp e where 
+    -> (deptno in (select deptno from emp where comm>0)) and
+    -> (e.ename in (select f.ename from emp f where f.ename=e.ename and deptno in (select deptno from emp where comm>0)));
++--------+--------+---------+
+| ename  | deptno | sal     |
++--------+--------+---------+
+| ALLEN  |     30 | 1600.00 |
+| WARD   |     30 | 1250.00 |
+| MARTIN |     30 | 1250.00 |
+| BLAKE  |     30 | 2850.00 |
+| TURNER |     30 | 1500.00 |
+| JAMES  |     30 |  950.00 |
++--------+--------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select distinct sal from emp;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 1300.00 |
++---------+
+12 rows in set (0.00 sec)
+
+mysql> select not distinct sal from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct sal from emp' at line 1
+mysql> select sal from emp e left outer join emp f on (e.sal=(distinct f.sal);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct f.sal)' at line 1
+mysql> select sal from emp e left outer join emp f on (e.sal=(distinct f.sal);;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct f.sal)' at line 1
+ERROR: 
+No query specified
+
+mysql> select sal from emp e left outer join emp f on (e.sal=(distinct f.sal));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct f.sal))' at line 1
+mysql> select sal from emp e left outer join emp f on (e.sal=(select distinct f.sal from emp f));
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal from emp e left outer join emp f on (e.sal=(select distinct sal from emp ));
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal from emp e left outer join emp f on (e.sal=f.(select distinct sal from emp ));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select distinct sal from emp ))' at line 1
+mysql> select sal from emp e left outer join (select distinct sal from emp) f on (e.sal=f.(select distinct sal from emp ));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select distinct sal from emp ))' at line 1
+mysql> select sal from emp e left outer join (select distinct sal from emp) f on (e.sal=f.sal);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal from emp e left outer join ((select distinct sal from emp) f) on (e.sal=f.sal);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') on (e.sal=f.sal)' at line 1
+mysql> select sal from emp e left outer join (select distinct sal sal from emp) f on (e.sal=f.sal);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select distinct sal sal from emp
+    -> ;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 1300.00 |
++---------+
+12 rows in set (0.00 sec)
+
+mysql> select distinct sal yy from emp
+    -> ;
++---------+
+| yy      |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 1300.00 |
++---------+
+12 rows in set (0.00 sec)
+
+mysql> select sal from emp e left outer join (select distinct sal yy from emp) f on (e.sal=f.yy);
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select sal from emp e right outer join (select distinct sal yy from emp) f on (e.sal=f.yy);
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select sal from emp e left outer join (select distinct sal yy from emp) f on (e.sal=f.yy);
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select sal from emp e left outer join (select distinct sal yy from emp) f on (e.sal=f.yy) where f.yy is null;
+Empty set (0.00 sec)
+
+mysql> select sal from emp e right outer join (select distinct sal yy from emp) f on (e.sal=f.yy) where f.yy is null;
+Empty set (0.00 sec)
+
+mysql> select sal from emp e  join (select distinct sal yy from emp) f on (e.sal=f.yy) where f.yy is null;
+Empty set (0.00 sec)
+
+mysql> select sal from emp e left outer  join (select distinct sal yy from emp) f on (e.sal=f.yy) ;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select sal from emp e rightt outer  join (select distinct sal yy from emp) f on (e.sal=f.yy) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'rightt outer  join (select distinct sal yy from emp) f on (e.sal=f.yy)' at line 1
+mysql> select sal from emp e right outer  join (select distinct sal yy from emp) f on (e.sal=f.yy) ;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select sal from emp e join (select distinct sal yy from emp) f on (e.sal=f.yy) ;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select distinct sal yy from emp;
++---------+
+| yy      |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 1300.00 |
++---------+
+12 rows in set (0.00 sec)
+
+mysql> select sal from emp e;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 1600.00 |
+| 1250.00 |
+| 2975.00 |
+| 1250.00 |
+| 2850.00 |
+| 2450.00 |
+| 3000.00 |
+| 5000.00 |
+| 1500.00 |
+| 1100.00 |
+|  950.00 |
+| 3000.00 |
+| 1300.00 |
++---------+
+14 rows in set (0.00 sec)
+
+mysql> select sal from emp e join (select distinct sal yy from emp) f on (e.empno=f.empno) ;
+ERROR 1054 (42S22): Unknown column 'f.empno' in 'on clause'
+mysql> select sal,empno from emp e join (select distinct sal,empno yy from emp) f on (e.empno=f.empno) ;
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp e join (select distinct sal,empno  from emp) f on (e.empno=f.empno) ;
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp e join (select distinct f.sal,empno from emp f) f on (e.empno=f.empno) ;
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp e join (select distinct f.sal,empno from emp f)  on (e.empno=f.empno) ;
+ERROR 1248 (42000): Every derived table must have its own alias
+mysql> select sal,empno from emp e join (select distinct sal,empno from emp ) f  on (e.empno=f.empno) ;
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp e join (select (distinct sal),empno from emp ) f  on (e.empno=f.empno) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct sal),empno from emp ) f  on (e.empno=f.empno)' at line 1
+mysql> select sal,empno from emp e join (select (distinct sal),empno from emp ) f  on (e.empno=f.empno) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct sal),empno from emp ) f  on (e.empno=f.empno)' at line 1
+mysql> select sal,empno from emp e join (select (distinct sal),empno from emp ) f  on (e.empno=f.empno) 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct sal),empno from emp ) f  on (e.empno=f.empno)' at line 1
+mysql> select sal,empno from emp e join (select (distinct sal),empno from emp ) f 
+    -> on (e.empno=f.empno);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct sal),empno from emp ) f 
+on (e.empno=f.empno)' at line 1
+mysql> select sal,empno from emp e join (select distinct sal,empno from emp ) f 
+    -> ;
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select distinct sal,empno from emp;
++---------+-------+
+| sal     | empno |
++---------+-------+
+|  800.00 |  7369 |
+| 1600.00 |  7499 |
+| 1250.00 |  7521 |
+| 2975.00 |  7566 |
+| 1250.00 |  7654 |
+| 2850.00 |  7698 |
+| 2450.00 |  7782 |
+| 3000.00 |  7788 |
+| 5000.00 |  7839 |
+| 1500.00 |  7844 |
+| 1100.00 |  7876 |
+|  950.00 |  7900 |
+| 3000.00 |  7902 |
+| 1300.00 |  7934 |
++---------+-------+
+14 rows in set (0.00 sec)
+
+mysql> select sal,empno from emp e join (select distinct sal,empno from emp ) f on (e.empno=f.empno);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp e join (select distinct y.sal,empno from emp y ) f on (e.empno=f.empno);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp e join (select distinct y.sal,empno from emp y) f on (e.empno=f.empno);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select distinct y.sal,empno from emp y;
++---------+-------+
+| sal     | empno |
++---------+-------+
+|  800.00 |  7369 |
+| 1600.00 |  7499 |
+| 1250.00 |  7521 |
+| 2975.00 |  7566 |
+| 1250.00 |  7654 |
+| 2850.00 |  7698 |
+| 2450.00 |  7782 |
+| 3000.00 |  7788 |
+| 5000.00 |  7839 |
+| 1500.00 |  7844 |
+| 1100.00 |  7876 |
+|  950.00 |  7900 |
+| 3000.00 |  7902 |
+| 1300.00 |  7934 |
++---------+-------+
+14 rows in set (0.00 sec)
+
+mysql> select sal,empno from emp as e join (select distinct y.sal,empno from emp as y) as f on (e.empno=f.empno);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp as e join (select distinct sal,empno from emp) as f on (e.empno=f.empno);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> select sal,empno from emp as e join (select distinct sal,empno from emp) f on (e.empno=f.empno);
+ERROR 1052 (23000): Column 'sal' in field list is ambiguous
+mysql> Terminal close -- exit!

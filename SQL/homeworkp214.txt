@@ -1,0 +1,17 @@
+1.create view EMP_VU
+as
+select empno,ename EMPLOYEE,deptno from emp;
+2.select * from EMP_VU;
+3.select EMPLOYEE,deptno from EMP_VU;
+4.create view DEPT20
+as
+select empno EMPLOYEE_ID,ename EMPLOYEE,deptno DEPARTMENT_ID from emp where deptno=20
+with check option;
+5.select * from dept20;
+desc dept20;
+6.去試試看
+7.create view SALARY_VU
+as
+select e.ename Employee,d.dname Department,e.sal Salary,s.grade Grade 
+from emp e join dept d on (e.deptno=d.deptno)
+		join salgrade s on (e.sal between s.losal and s.hisal);

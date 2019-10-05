@@ -1,0 +1,34 @@
+mysql> select e.ename,e.deptno,e.sal from emp e where (e.comm,e.sal) in (select f.comm,f.sal from emp f where e.ename!=f.ename and deptno=(select deptno from dept where loc="DALLAS"));
+Empty set (0.00 sec)
+
+mysql> select e.ename,e.deptno,e.sal from emp e where  deptno=(select deptno from dept where loc="DALLAS") and (e.comm,e.sal) in (select f.comm,f.sal from emp f where e.ename!=f.ename );
+Empty set (0.00 sec)
+
+mysql> select e.ename,e.deptno,e.sal from emp e where  deptno=(select deptno from dept where loc="DALLAS") and (ifnull(e.comm,0),e.sal) in (select ifnull(f.comm,0),f.sal from emp f where e.ename!=f.ename );
++-------+--------+---------+
+| ename | deptno | sal     |
++-------+--------+---------+
+| FORD  |     20 | 3000.00 |
+| SCOTT |     20 | 3000.00 |
++-------+--------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select e.ename,e.deptno,e.sal from emp e where (ifnull(e.comm,0),e.sal) in (select ifnull(f.comm,0),f.sal from emp f where e.ename!=f.ename and  deptno=(select deptno from dept where loc="DALLAS"));
++-------+--------+---------+
+| ename | deptno | sal     |
++-------+--------+---------+
+| SCOTT |     20 | 3000.00 |
+| FORD  |     20 | 3000.00 |
++-------+--------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select e.ename,e.deptno,e.sal from emp e where (e.deptno,e.sal) in (select f.deptno,f.sal from emp f where e.ename!=f.ename and comm>0);
++--------+--------+---------+
+| ename  | deptno | sal     |
++--------+--------+---------+
+| MARTIN |     30 | 1250.00 |
+| WARD   |     30 | 1250.00 |
++--------+--------+---------+
+2 rows in set (0.00 sec)
+
+mysql> notee

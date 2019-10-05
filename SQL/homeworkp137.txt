@@ -1,0 +1,230 @@
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | MIS        | NEW YORK |
+|     60 | MS         | NULL     |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select e.ename,e.empno,d.dname,d.loc from
+    -> emp e join dept d
+    -> on (e.deptno=d.deptno);
++--------+-------+------------+----------+
+| ename  | empno | dname      | loc      |
++--------+-------+------------+----------+
+| SMITH  |  7369 | RESEARCH   | DALLAS   |
+| ALLEN  |  7499 | SALES      | CHICAGO  |
+| WARD   |  7521 | SALES      | CHICAGO  |
+| JONES  |  7566 | RESEARCH   | DALLAS   |
+| MARTIN |  7654 | SALES      | CHICAGO  |
+| BLAKE  |  7698 | SALES      | CHICAGO  |
+| CLARK  |  7782 | ACCOUNTING | NEW YORK |
+| SCOTT  |  7788 | RESEARCH   | DALLAS   |
+| KING   |  7839 | ACCOUNTING | NEW YORK |
+| TURNER |  7844 | SALES      | CHICAGO  |
+| ADAMS  |  7876 | RESEARCH   | DALLAS   |
+| JAMES  |  7900 | SALES      | CHICAGO  |
+| FORD   |  7902 | RESEARCH   | DALLAS   |
+| MILLER |  7934 | ACCOUNTING | NEW YORK |
++--------+-------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select e.ename,e.comm,d.dname,d.loc from
+    -> emp e join dept d
+    -> on (e.deptno=d.deptno)
+    -> where comm>0;
++--------+---------+-------+---------+
+| ename  | comm    | dname | loc     |
++--------+---------+-------+---------+
+| ALLEN  |  300.00 | SALES | CHICAGO |
+| WARD   |  500.00 | SALES | CHICAGO |
+| MARTIN | 1400.00 | SALES | CHICAGO |
++--------+---------+-------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select e.ename,d.dname from
+    -> emp e join dept d
+    -> on (e.deptno=d.deptno)
+    ->  where e.ename like "%A%";
++--------+------------+
+| ename  | dname      |
++--------+------------+
+| ALLEN  | SALES      |
+| WARD   | SALES      |
+| MARTIN | SALES      |
+| BLAKE  | SALES      |
+| CLARK  | ACCOUNTING |
+| ADAMS  | RESEARCH   |
+| JAMES  | SALES      |
++--------+------------+
+7 rows in set (0.00 sec)
+
+mysql> select e.ename,e.job,e.deptno,d.dname from
+    -> emp e join dept d
+    -> on (e.deptno=d.deptno)
+    -> where d.dname="DALLAS";
+Empty set (0.00 sec)
+
+mysql> select e.ename,e.job,e.deptno,d.dname from
+    -> emp e join dept d
+    -> on (e.deptno=d.deptno)
+    -> where d.loc="DALLAS";
++-------+---------+--------+----------+
+| ename | job     | deptno | dname    |
++-------+---------+--------+----------+
+| SMITH | CLERK   |     20 | RESEARCH |
+| JONES | MANAGER |     20 | RESEARCH |
+| SCOTT | ANALYST |     20 | RESEARCH |
+| ADAMS | CLERK   |     20 | RESEARCH |
+| FORD  | ANALYST |     20 | RESEARCH |
++-------+---------+--------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select e.ename Employee,e.empno "Emp#",f.ename Manager,e.mgr "Mgr" from emp e join emp f on (e.mgr=f.empno);
++----------+------+---------+------+
+| Employee | Emp# | Manager | Mgr  |
++----------+------+---------+------+
+| SMITH    | 7369 | FORD    | 7902 |
+| ALLEN    | 7499 | BLAKE   | 7698 |
+| WARD     | 7521 | BLAKE   | 7698 |
+| JONES    | 7566 | KING    | 7839 |
+| MARTIN   | 7654 | BLAKE   | 7698 |
+| BLAKE    | 7698 | KING    | 7839 |
+| CLARK    | 7782 | KING    | 7839 |
+| SCOTT    | 7788 | JONES   | 7566 |
+| TURNER   | 7844 | BLAKE   | 7698 |
+| ADAMS    | 7876 | SCOTT   | 7788 |
+| JAMES    | 7900 | BLAKE   | 7698 |
+| FORD     | 7902 | JONES   | 7566 |
+| MILLER   | 7934 | CLARK   | 7782 |
++----------+------+---------+------+
+13 rows in set (0.00 sec)
+
+mysql> select e.ename Employee,e.empno "Emp#",f.ename Manager,e.mgr "Mgr#" from emp e join emp f on (e.mgr=f.empno);
++----------+------+---------+------+
+| Employee | Emp# | Manager | Mgr# |
++----------+------+---------+------+
+| SMITH    | 7369 | FORD    | 7902 |
+| ALLEN    | 7499 | BLAKE   | 7698 |
+| WARD     | 7521 | BLAKE   | 7698 |
+| JONES    | 7566 | KING    | 7839 |
+| MARTIN   | 7654 | BLAKE   | 7698 |
+| BLAKE    | 7698 | KING    | 7839 |
+| CLARK    | 7782 | KING    | 7839 |
+| SCOTT    | 7788 | JONES   | 7566 |
+| TURNER   | 7844 | BLAKE   | 7698 |
+| ADAMS    | 7876 | SCOTT   | 7788 |
+| JAMES    | 7900 | BLAKE   | 7698 |
+| FORD     | 7902 | JONES   | 7566 |
+| MILLER   | 7934 | CLARK   | 7782 |
++----------+------+---------+------+
+13 rows in set (0.00 sec)
+
+mysql> select * from salgrade;
++-------+---------+---------+
+| GRADE | LOSAL   | HISAL   |
++-------+---------+---------+
+|     1 |  700.00 | 1200.00 |
+|     2 | 1201.00 | 1400.00 |
+|     3 | 1401.00 | 2000.00 |
+|     4 | 2001.00 | 3000.00 |
+|     5 | 3001.00 | 9999.00 |
++-------+---------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select  e.ename,e.job,d.dname,e.sal,s.grade from
+    -> emp e join dept d on (e.deptno=d.deptno)
+    -> join salgrade s on (e.sal between s.losal and s.hisal);
++--------+-----------+------------+---------+-------+
+| ename  | job       | dname      | sal     | grade |
++--------+-----------+------------+---------+-------+
+| SMITH  | CLERK     | RESEARCH   |  800.00 |     1 |
+| ALLEN  | SALESMAN  | SALES      | 1600.00 |     3 |
+| WARD   | SALESMAN  | SALES      | 1250.00 |     2 |
+| JONES  | MANAGER   | RESEARCH   | 2975.00 |     4 |
+| MARTIN | SALESMAN  | SALES      | 1250.00 |     2 |
+| BLAKE  | MANAGER   | SALES      | 2850.00 |     4 |
+| CLARK  | MANAGER   | ACCOUNTING | 2450.00 |     4 |
+| SCOTT  | ANALYST   | RESEARCH   | 3000.00 |     4 |
+| KING   | PRESIDENT | ACCOUNTING | 5000.00 |     5 |
+| TURNER | SALESMAN  | SALES      | 1500.00 |     3 |
+| ADAMS  | CLERK     | RESEARCH   | 1100.00 |     1 |
+| JAMES  | CLERK     | SALES      |  950.00 |     1 |
+| FORD   | ANALYST   | RESEARCH   | 3000.00 |     4 |
+| MILLER | CLERK     | ACCOUNTING | 1300.00 |     2 |
++--------+-----------+------------+---------+-------+
+14 rows in set (0.00 sec)
+
+mysql> select e.ename,e.hiredate,f.ename,f.hiredate from
+    -> emp;
+ERROR 1054 (42S22): Unknown column 'e.ename' in 'field list'
+mysql> select e.ename Employee,e.hiredate "Emp Hiredate",f.ename "Manager",f.hiredate "Mgr Hiredate" from
+    -> emp e join emp f
+    -> on (e.mgr=f.empno and e.hiredate>f.hiredate);
++----------+---------------------+---------+---------------------+
+| Employee | Emp Hiredate        | Manager | Mgr Hiredate        |
++----------+---------------------+---------+---------------------+
+| MARTIN   | 1981-09-28 00:00:00 | BLAKE   | 1981-05-01 00:00:00 |
+| SCOTT    | 1982-12-09 00:00:00 | JONES   | 1981-04-02 00:00:00 |
+| TURNER   | 1981-09-08 00:00:00 | BLAKE   | 1981-05-01 00:00:00 |
+| ADAMS    | 1983-01-12 00:00:00 | SCOTT   | 1982-12-09 00:00:00 |
+| JAMES    | 1981-12-03 00:00:00 | BLAKE   | 1981-05-01 00:00:00 |
+| FORD     | 1981-12-03 00:00:00 | JONES   | 1981-04-02 00:00:00 |
+| MILLER   | 1982-01-23 00:00:00 | CLARK   | 1981-06-09 00:00:00 |
++----------+---------------------+---------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> select e.ename Employee,e.hiredate "Emp Hiredate",f.ename "Manager",f.hiredate "Mgr Hiredate" from
+    -> emp e join emp f
+    -> on (e.mgr=f.empno and e.hiredate<f.hiredate);
++----------+---------------------+---------+---------------------+
+| Employee | Emp Hiredate        | Manager | Mgr Hiredate        |
++----------+---------------------+---------+---------------------+
+| SMITH    | 1980-12-17 00:00:00 | FORD    | 1981-12-03 00:00:00 |
+| ALLEN    | 1981-02-20 00:00:00 | BLAKE   | 1981-05-01 00:00:00 |
+| WARD     | 1981-02-22 00:00:00 | BLAKE   | 1981-05-01 00:00:00 |
+| JONES    | 1981-04-02 00:00:00 | KING    | 1981-11-17 00:00:00 |
+| BLAKE    | 1981-05-01 00:00:00 | KING    | 1981-11-17 00:00:00 |
+| CLARK    | 1981-06-09 00:00:00 | KING    | 1981-11-17 00:00:00 |
++----------+---------------------+---------+---------------------+
+6 rows in set (0.00 sec)
+
+mysql> select d.dname dname,d.loc loc,count(*) "Number of People",round(avg(sal),2) Salary from
+    -> dept d join emp e on (d.deptno=e.deptno)
+    -> group by d.deptno;
++------------+----------+------------------+---------+
+| dname      | loc      | Number of People | Salary  |
++------------+----------+------------------+---------+
+| RESEARCH   | DALLAS   |                5 | 2175.00 |
+| SALES      | CHICAGO  |                6 | 1566.67 |
+| ACCOUNTING | NEW YORK |                3 | 2916.67 |
++------------+----------+------------------+---------+
+3 rows in set (0.03 sec)
+
+mysql> notee

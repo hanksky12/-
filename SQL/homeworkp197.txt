@@ -1,0 +1,26 @@
+1.create table department
+(id  numeric(7) not null,
+name  varchar(24) not null);
+2.insert into department select deptno,dname from dept;
+3.create table employee
+(id numeric(7) not null,
+last_name varchar(24),
+first_name varchar(24),
+dept_id numeric(7)
+)
+4.alter table employee 
+modify last_name varchar(40);
+5.create table employee2
+as
+select empno id,ename last_name,deptno dept_id from emp;
+6.drop table employee;
+7.alter table employee2
+rename employee;
+8.alter table employee
+drop last_name;
+9.alter table employee
+add salary numeric(7);
+10.alter table employee
+add constraint aas primary key(id);
+11.alter table employee
+add constraint aasd foreign key(dept_id) references dept(deptno);

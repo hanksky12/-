@@ -1,0 +1,177 @@
+mysql> desc dept;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| DEPTNO | int(11)     | NO   | PRI | NULL    |       |
+| DNAME  | varchar(14) | YES  |     | NULL    |       |
+| LOC    | varchar(13) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,job,hiredate from emp;
++-------+--------+-----------+---------------------+
+| empno | ename  | job       | hiredate            |
++-------+--------+-----------+---------------------+
+|  7369 | SMITH  | CLERK     | 1980-12-17 00:00:00 |
+|  7499 | ALLEN  | SALESMAN  | 1981-02-20 00:00:00 |
+|  7521 | WARD   | SALESMAN  | 1981-02-22 00:00:00 |
+|  7566 | JONES  | MANAGER   | 1981-04-02 00:00:00 |
+|  7654 | MARTIN | SALESMAN  | 1981-09-28 00:00:00 |
+|  7698 | BLAKE  | MANAGER   | 1981-05-01 00:00:00 |
+|  7782 | CLARK  | MANAGER   | 1981-06-09 00:00:00 |
+|  7788 | SCOTT  | ANALYST   | 1982-12-09 00:00:00 |
+|  7839 | KING   | PRESIDENT | 1981-11-17 00:00:00 |
+|  7844 | TURNER | SALESMAN  | 1981-09-08 00:00:00 |
+|  7876 | ADAMS  | CLERK     | 1983-01-12 00:00:00 |
+|  7900 | JAMES  | CLERK     | 1981-12-03 00:00:00 |
+|  7902 | FORD   | ANALYST   | 1981-12-03 00:00:00 |
+|  7934 | MILLER | CLERK     | 1982-01-23 00:00:00 |
++-------+--------+-----------+---------------------+
+14 rows in set (0.00 sec)
+
+mysql> select distinct job from emp;
++-----------+
+| job       |
++-----------+
+| CLERK     |
+| SALESMAN  |
+| MANAGER   |
+| ANALYST   |
+| PRESIDENT |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select empno Emp#,ename employee,job Job,hiredate "Hire Date" from emp;
+    -> select empno " Emp#",ename employee,job Job,hiredate "Hire Date" from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select empno " Emp#",ename employee,job Job,hiredate "Hire Date" from emp' at line 2
+mysql> select empno Emp#,ename employee,job Job,hiredate "Hire Date" from emp;
+    -> select empno Emp#,ename employee,job Job from emp;
+    -> select empno Emp# from emp;
+    -> select empno from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select empno Emp
+select empno Emp
+select empno from emp' at line 2
+mysql> select empno from emp;
++-------+
+| empno |
++-------+
+|  7782 |
+|  7839 |
+|  7934 |
+|  7369 |
+|  7566 |
+|  7788 |
+|  7876 |
+|  7902 |
+|  7499 |
+|  7521 |
+|  7654 |
+|  7698 |
+|  7844 |
+|  7900 |
++-------+
+14 rows in set (0.00 sec)
+
+mysql> select empno Emp# from emp;
+    -> select empno from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select empno from emp' at line 2
+mysql> select empno "Emp#" from emp;
++------+
+| Emp# |
++------+
+| 7782 |
+| 7839 |
+| 7934 |
+| 7369 |
+| 7566 |
+| 7788 |
+| 7876 |
+| 7902 |
+| 7499 |
+| 7521 |
+| 7654 |
+| 7698 |
+| 7844 |
+| 7900 |
++------+
+14 rows in set (0.00 sec)
+
+mysql> select empno "Emp#",ename Employee,job Job,hiredate "Hire Date";
+ERROR 1054 (42S22): Unknown column 'empno' in 'field list'
+mysql> select empno "Emp#",ename Employee,job Job,hiredate "Hire Date" from emp;
++------+----------+-----------+---------------------+
+| Emp# | Employee | Job       | Hire Date           |
++------+----------+-----------+---------------------+
+| 7369 | SMITH    | CLERK     | 1980-12-17 00:00:00 |
+| 7499 | ALLEN    | SALESMAN  | 1981-02-20 00:00:00 |
+| 7521 | WARD     | SALESMAN  | 1981-02-22 00:00:00 |
+| 7566 | JONES    | MANAGER   | 1981-04-02 00:00:00 |
+| 7654 | MARTIN   | SALESMAN  | 1981-09-28 00:00:00 |
+| 7698 | BLAKE    | MANAGER   | 1981-05-01 00:00:00 |
+| 7782 | CLARK    | MANAGER   | 1981-06-09 00:00:00 |
+| 7788 | SCOTT    | ANALYST   | 1982-12-09 00:00:00 |
+| 7839 | KING     | PRESIDENT | 1981-11-17 00:00:00 |
+| 7844 | TURNER   | SALESMAN  | 1981-09-08 00:00:00 |
+| 7876 | ADAMS    | CLERK     | 1983-01-12 00:00:00 |
+| 7900 | JAMES    | CLERK     | 1981-12-03 00:00:00 |
+| 7902 | FORD     | ANALYST   | 1981-12-03 00:00:00 |
+| 7934 | MILLER   | CLERK     | 1982-01-23 00:00:00 |
++------+----------+-----------+---------------------+
+14 rows in set (0.00 sec)
+
+mysql> select concat(ename," ,",job) "Employee and Title";
+ERROR 1054 (42S22): Unknown column 'ename' in 'field list'
+mysql> select concat(ename," ,",job) "Employee and Title" from emp;
++--------------------+
+| Employee and Title |
++--------------------+
+| SMITH ,CLERK       |
+| ALLEN ,SALESMAN    |
+| WARD ,SALESMAN     |
+| JONES ,MANAGER     |
+| MARTIN ,SALESMAN   |
+| BLAKE ,MANAGER     |
+| CLARK ,MANAGER     |
+| SCOTT ,ANALYST     |
+| KING ,PRESIDENT    |
+| TURNER ,SALESMAN   |
+| ADAMS ,CLERK       |
+| JAMES ,CLERK       |
+| FORD ,ANALYST      |
+| MILLER ,CLERK      |
++--------------------+
+14 rows in set (0.00 sec)
+
+mysql> notee

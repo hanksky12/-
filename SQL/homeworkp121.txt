@@ -1,0 +1,363 @@
+mysql> select  round(max(sal),0) Maximum,round(min(sal),0) Minimum,round(sum(sal),0) Sum,round(avg(sal),0) Average from emp;
++---------+---------+-------+---------+
+| Maximum | Minimum | Sum   | Average |
++---------+---------+-------+---------+
+|    5000 |     800 | 29025 |    2073 |
++---------+---------+-------+---------+
+1 row in set (0.00 sec)
+
+mysql> select job,round(max(sal),0) Maximum,round(min(sal),0) Minimum,round(sum(sal),0) Sum,round(avg(sal),0) Average from emp group by job;
++-----------+---------+---------+------+---------+
+| job       | Maximum | Minimum | Sum  | Average |
++-----------+---------+---------+------+---------+
+| CLERK     |    1300 |     800 | 4150 |    1038 |
+| SALESMAN  |    1600 |    1250 | 5600 |    1400 |
+| MANAGER   |    2975 |    2450 | 8275 |    2758 |
+| ANALYST   |    3000 |    3000 | 6000 |    3000 |
+| PRESIDENT |    5000 |    5000 | 5000 |    5000 |
++-----------+---------+---------+------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select job,round(min(sal),0) Minimum,round(max(sal),0) Maximum round(sum(sal),0) Sum,round(avg(sal),0) Average from emp group by job;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'round(sum(sal),0) Sum,round(avg(sal),0) Average from emp group by job' at line 1
+mysql> select job,round(min(sal),0) Minimum,round(max(sal),0) Maximum,round(sum(sal),0) Sum,round(avg(sal),0) Average from emp group by job;
++-----------+---------+---------+------+---------+
+| job       | Minimum | Maximum | Sum  | Average |
++-----------+---------+---------+------+---------+
+| CLERK     |     800 |    1300 | 4150 |    1038 |
+| SALESMAN  |    1250 |    1600 | 5600 |    1400 |
+| MANAGER   |    2450 |    2975 | 8275 |    2758 |
+| ANALYST   |    3000 |    3000 | 6000 |    3000 |
+| PRESIDENT |    5000 |    5000 | 5000 |    5000 |
++-----------+---------+---------+------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select job,round(min(sal),0) Minimum,round(max(sal),0) Maximum,round(sum(sal),0) Sum,avg(sal) Average from emp group by job;
++-----------+---------+---------+------+-------------+
+| job       | Minimum | Maximum | Sum  | Average     |
++-----------+---------+---------+------+-------------+
+| CLERK     |     800 |    1300 | 4150 | 1037.500000 |
+| SALESMAN  |    1250 |    1600 | 5600 | 1400.000000 |
+| MANAGER   |    2450 |    2975 | 8275 | 2758.333333 |
+| ANALYST   |    3000 |    3000 | 6000 | 3000.000000 |
+| PRESIDENT |    5000 |    5000 | 5000 | 5000.000000 |
++-----------+---------+---------+------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select job,count(*) from emp group by job;
++-----------+----------+
+| job       | count(*) |
++-----------+----------+
+| CLERK     |        4 |
+| SALESMAN  |        4 |
+| MANAGER   |        3 |
+| ANALYST   |        2 |
+| PRESIDENT |        1 |
++-----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select count(mgr) "Number of Managers" from emp group by mgr;
++--------------------+
+| Number of Managers |
++--------------------+
+|                  0 |
+|                  2 |
+|                  5 |
+|                  1 |
+|                  1 |
+|                  3 |
+|                  1 |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> select count(mgr) "Number of Managers",mgr  from emp group by mgr;
++--------------------+------+
+| Number of Managers | mgr  |
++--------------------+------+
+|                  0 | NULL |
+|                  2 | 7566 |
+|                  5 | 7698 |
+|                  1 | 7782 |
+|                  1 | 7788 |
+|                  3 | 7839 |
+|                  1 | 7902 |
++--------------------+------+
+7 rows in set (0.00 sec)
+
+mysql> select count(distint mgr) from emp ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mgr) from emp' at line 1
+mysql> select count(distinct mgr) from emp ;
++---------------------+
+| count(distinct mgr) |
++---------------------+
+|                   6 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct mgr) "Number of Managers" from emp ;
++--------------------+
+| Number of Managers |
++--------------------+
+|                  6 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select max(sal)-min(sal) DIFFERENCE from emp;
++------------+
+| DIFFERENCE |
++------------+
+|    4200.00 |
++------------+
+1 row in set (0.01 sec)
+
+mysql> select year(hiredate) from emp;
++----------------+
+| year(hiredate) |
++----------------+
+|           1980 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1982 |
+|           1981 |
+|           1981 |
+|           1983 |
+|           1981 |
+|           1981 |
+|           1982 |
++----------------+
+14 rows in set (0.00 sec)
+
+mysql> select count(year(hiredate)) from emp group by year(hriedate); 
+ERROR 1054 (42S22): Unknown column 'hriedate' in 'group statement'
+mysql> select count(year(hiredate)) from emp group by year(hiredate); 
++-----------------------+
+| count(year(hiredate)) |
++-----------------------+
+|                     1 |
+|                    10 |
+|                     2 |
+|                     1 |
++-----------------------+
+4 rows in set (0.00 sec)
+
+mysql> select count(year(hiredate)) from emp group by year(hriedate); 
+ERROR 1054 (42S22): Unknown column 'hriedate' in 'group statement'
+mysql> select count(year(hiredate)) from emp group by year(hiredate); 
++-----------------------+
+| count(year(hiredate)) |
++-----------------------+
+|                     1 |
+|                    10 |
+|                     2 |
+|                     1 |
++-----------------------+
+4 rows in set (0.00 sec)
+
+mysql> select  concat(year(hiredate)," Τ",count(year(hiredate),"") "赣だ秈计" from emp group by year(hiredate); 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"") "赣だ秈计" from emp group by year(hiredat' at line 1
+mysql> select  concat(year(hiredate)," Τ",count(year(hiredate)) "赣だ秈计" from emp group by year(hiredate); 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp group by year(hiredate)' at line 1
+mysql> select group_concat(year(hiredate)," Τ",count(year(hiredate),"" separator ":") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"" separator ":") "筁碭秈计" from emp grou' at line 1
+mysql> select group_concat(year(hiredate)," Τ",count(year(hiredate) separator ":") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'separator ":") "筁碭秈计" from emp group by year(hir' at line 1
+mysql> select group_concat(year(hiredate),count(year(hiredate) separator ":") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'separator ":") "筁碭秈计" from emp group by year(hir' at line 1
+mysql> select group_concat(year(hiredate)," Τ",count(year(hiredate),"" separator ",") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"" separator ",") "筁碭秈计" from emp grou' at line 1
+mysql> select group_concat(year(hiredate)," Τ",count(year(hiredate) separator ",") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'separator ",") "筁碭秈计" from emp group by year(hir' at line 1
+mysql> select group_concat(year(hiredate),count(year(hiredate) separator ",") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'separator ",") "筁碭秈计" from emp group by year(hir' at line 1
+mysql> select group_concat(count(year(hiredate) separator ",") "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'separator ",") "筁碭秈计" from emp group by year(hir' at line 1
+mysql> select group_concat(count(year(hiredate) ) "筁碭秈计" from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"筁碭秈计" from emp group by year(hiredate)' at line 1
+mysql> select group_concat(count(year(hiredate) ) from emp group by year(hiredate) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp group by year(hiredate)' at line 1
+mysql> select group_concat(count(year(hiredate) ) from emp group by hiredate ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp group by hiredate' at line 1
+mysql> select count(year(hiredate)  from emp group by hiredate ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp group by hiredate' at line 1
+mysql> select count(year(hiredate)  from emp group by job;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp group by job' at line 1
+mysql> select count(year(hiredate)  from emp ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp' at line 1
+mysql> select count(year(hiredate) from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp' at line 1
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select count(year(hiredate) from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp' at line 1
+mysql> select year(hiredate) from emp;
++----------------+
+| year(hiredate) |
++----------------+
+|           1980 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1981 |
+|           1982 |
+|           1981 |
+|           1981 |
+|           1983 |
+|           1981 |
+|           1981 |
+|           1982 |
++----------------+
+14 rows in set (0.00 sec)
+
+mysql> select year(hiredate) from emp group by year(hiredate);
++----------------+
+| year(hiredate) |
++----------------+
+|           1980 |
+|           1981 |
+|           1982 |
+|           1983 |
++----------------+
+4 rows in set (0.00 sec)
+
+mysql> select year(hiredate),count(*) from emp group by year(hiredate);
++----------------+----------+
+| year(hiredate) | count(*) |
++----------------+----------+
+|           1980 |        1 |
+|           1981 |       10 |
+|           1982 |        2 |
+|           1983 |        1 |
++----------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select  group_concat(year(hiredate),count(*)) from emp group by year(hiredate);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select  group_concat(year(hiredate),count(*) separator ",") from emp group by year(hiredate);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select  concat(year(hiredate),count(*)) from emp group by year(hiredate);
++---------------------------------+
+| concat(year(hiredate),count(*)) |
++---------------------------------+
+| 19801                           |
+| 198110                          |
+| 19822                           |
+| 19831                           |
++---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select  concat("",year(hiredate),"Τ",count(*)"") from emp group by year(hiredate);
+ERROR 1583 (42000): Incorrect parameters in the call to native function 'concat'
+mysql> select  concat("",year(hiredate),"Τ",count(*),"") from emp group by year(hiredate);
++------------------------------------------------------+
+| concat("",year(hiredate),"Τ",count(*),"") |
++------------------------------------------------------+
+| 1980Τ1                                    |
+| 1981Τ10                                   |
+| 1982Τ2                                    |
+| 1983Τ1                                    |
++------------------------------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select  concat("",year(hiredate),"Τ",count(*),"") "筁碭秈そ计秖" from emp group by year(hiredate);
++------------------------------+
+| 筁碭秈そ计秖 |
++------------------------------+
+| 1980Τ1            |
+| 1981Τ10           |
+| 1982Τ2            |
+| 1983Τ1            |
++------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select mgr,min(mgr) from emp where mgr is not null group by mgr having  min(mgr)>=1000 order by min(mgr) desc;
++------+----------+
+| mgr  | min(mgr) |
++------+----------+
+| 7902 |     7902 |
+| 7839 |     7839 |
+| 7788 |     7788 |
+| 7782 |     7782 |
+| 7698 |     7698 |
+| 7566 |     7566 |
++------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select mgr,min(sal)  from emp where mgr is not null group by mgr having  min(sal)>=1000 order by min(sal) desc;
++------+----------+
+| mgr  | min(sal) |
++------+----------+
+| 7566 |  3000.00 |
+| 7839 |  2450.00 |
+| 7782 |  1300.00 |
+| 7788 |  1100.00 |
++------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> notee

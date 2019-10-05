@@ -1,0 +1,47 @@
+mysql> select ename,hiredate,date_format(adddate(adddate(hiredate,interval 6 month)),interval mod-dayofweek(adddate(hiredate,interval 6 month)),7) day),"%W, the %d of $M") REVIEW from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),interval mod-dayofweek(adddate(hiredate,interval 6 month)),7) day),"%W, the %d' at line 1
+mysql> select ename,hiredate,date_format(adddate(adddate(hiredate,interval 6 month),interval mod(dayofweek(adddate(hiredate,interval 6 month)),7) day),"%W, the %d of $M") REVIEW fro m emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'fro m emp' at line 1
+mysql> select ename,hiredate,date_format(adddate(adddate(hiredate,interval 6 month),interval mod(dayofweek(adddate(hiredate,interval 6 month)),7) day),"%W, the %d of $M") REVIEW from emp;
++--------+---------------------+-------------------------+
+| ename  | hiredate            | REVIEW                  |
++--------+---------------------+-------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Sunday, the 21 of $M    |
+| ALLEN  | 1981-02-20 00:00:00 | Tuesday, the 25 of $M   |
+| WARD   | 1981-02-22 00:00:00 | Saturday, the 22 of $M  |
+| JONES  | 1981-04-02 00:00:00 | Thursday, the 08 of $M  |
+| MARTIN | 1981-09-28 00:00:00 | Monday, the 29 of $M    |
+| BLAKE  | 1981-05-01 00:00:00 | Monday, the 02 of $M    |
+| CLARK  | 1981-06-09 00:00:00 | Sunday, the 13 of $M    |
+| SCOTT  | 1982-12-09 00:00:00 | Tuesday, the 14 of $M   |
+| KING   | 1981-11-17 00:00:00 | Wednesday, the 19 of $M |
+| TURNER | 1981-09-08 00:00:00 | Wednesday, the 10 of $M |
+| ADAMS  | 1983-01-12 00:00:00 | Friday, the 15 of $M    |
+| JAMES  | 1981-12-03 00:00:00 | Tuesday, the 08 of $M   |
+| FORD   | 1981-12-03 00:00:00 | Tuesday, the 08 of $M   |
+| MILLER | 1982-01-23 00:00:00 | Thursday, the 29 of $M  |
++--------+---------------------+-------------------------+
+14 rows in set (0.03 sec)
+
+mysql> select ename,hiredate,date_format(adddate(adddate(hiredate,interval 6 month),interval mod(9-dayofweek(adddate(hiredate,interval 6 month)),7) day),"%W, the %d of %M") REVIEW from emp;
++--------+---------------------+----------------------------+
+| ename  | hiredate            | REVIEW                     |
++--------+---------------------+----------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Monday, the 22 of June     |
+| ALLEN  | 1981-02-20 00:00:00 | Monday, the 24 of August   |
+| WARD   | 1981-02-22 00:00:00 | Monday, the 24 of August   |
+| JONES  | 1981-04-02 00:00:00 | Monday, the 05 of October  |
+| MARTIN | 1981-09-28 00:00:00 | Monday, the 29 of March    |
+| BLAKE  | 1981-05-01 00:00:00 | Monday, the 02 of November |
+| CLARK  | 1981-06-09 00:00:00 | Monday, the 14 of December |
+| SCOTT  | 1982-12-09 00:00:00 | Monday, the 13 of June     |
+| KING   | 1981-11-17 00:00:00 | Monday, the 17 of May      |
+| TURNER | 1981-09-08 00:00:00 | Monday, the 08 of March    |
+| ADAMS  | 1983-01-12 00:00:00 | Monday, the 18 of July     |
+| JAMES  | 1981-12-03 00:00:00 | Monday, the 07 of June     |
+| FORD   | 1981-12-03 00:00:00 | Monday, the 07 of June     |
+| MILLER | 1982-01-23 00:00:00 | Monday, the 26 of July     |
++--------+---------------------+----------------------------+
+14 rows in set (0.00 sec)
+
+mysql> notee

@@ -1,0 +1,695 @@
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select deptno,group_concat(job) job from emp group by deptno;
++--------+---------------------------------------------------+
+| deptno | job                                               |
++--------+---------------------------------------------------+
+|     10 | MANAGER,PRESIDENT,CLERK                           |
+|     20 | CLERK,MANAGER,ANALYST,CLERK,ANALYST               |
+|     30 | SALESMAN,SALESMAN,SALESMAN,MANAGER,SALESMAN,CLERK |
++--------+---------------------------------------------------+
+3 rows in set (0.05 sec)
+
+mysql> select deptno,group_concat(distinct job order by 1) job from emp group by deptno;
++--------+-------------------------+
+| deptno | job                     |
++--------+-------------------------+
+|     10 | CLERK,MANAGER,PRESIDENT |
+|     20 | ANALYST,CLERK,MANAGER   |
+|     30 | CLERK,MANAGER,SALESMAN  |
++--------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp cross join dept ;
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO | DEPTNO | DNAME      | LOC      |
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     10 | ACCOUNTING | NEW YORK |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     30 | SALES      | CHICAGO  |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     40 | OPERATIONS | BOSTON   |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     50 | MIS        | NEW YORK |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     60 | MS         | NULL     |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     10 | ACCOUNTING | NEW YORK |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     20 | RESEARCH   | DALLAS   |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     40 | OPERATIONS | BOSTON   |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     50 | MIS        | NEW YORK |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     60 | MS         | NULL     |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     10 | ACCOUNTING | NEW YORK |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     20 | RESEARCH   | DALLAS   |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     40 | OPERATIONS | BOSTON   |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     50 | MIS        | NEW YORK |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     60 | MS         | NULL     |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     10 | ACCOUNTING | NEW YORK |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     30 | SALES      | CHICAGO  |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     40 | OPERATIONS | BOSTON   |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     50 | MIS        | NEW YORK |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     60 | MS         | NULL     |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     10 | ACCOUNTING | NEW YORK |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     20 | RESEARCH   | DALLAS   |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     40 | OPERATIONS | BOSTON   |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     50 | MIS        | NEW YORK |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     60 | MS         | NULL     |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     10 | ACCOUNTING | NEW YORK |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     20 | RESEARCH   | DALLAS   |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     30 | SALES      | CHICAGO  |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     40 | OPERATIONS | BOSTON   |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     50 | MIS        | NEW YORK |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     60 | MS         | NULL     |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     20 | RESEARCH   | DALLAS   |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     30 | SALES      | CHICAGO  |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     40 | OPERATIONS | BOSTON   |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     50 | MIS        | NEW YORK |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     60 | MS         | NULL     |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW YORK |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     30 | SALES      | CHICAGO  |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | BOSTON   |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     50 | MIS        | NEW YORK |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     60 | MS         | NULL     |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     20 | RESEARCH   | DALLAS   |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     30 | SALES      | CHICAGO  |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     40 | OPERATIONS | BOSTON   |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     50 | MIS        | NEW YORK |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     60 | MS         | NULL     |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     10 | ACCOUNTING | NEW YORK |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     20 | RESEARCH   | DALLAS   |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     40 | OPERATIONS | BOSTON   |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     50 | MIS        | NEW YORK |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     60 | MS         | NULL     |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     10 | ACCOUNTING | NEW YORK |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     30 | SALES      | CHICAGO  |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     40 | OPERATIONS | BOSTON   |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     50 | MIS        | NEW YORK |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     60 | MS         | NULL     |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     10 | ACCOUNTING | NEW YORK |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     20 | RESEARCH   | DALLAS   |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     30 | SALES      | CHICAGO  |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     40 | OPERATIONS | BOSTON   |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     50 | MIS        | NEW YORK |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     60 | MS         | NULL     |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW YORK |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     30 | SALES      | CHICAGO  |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | BOSTON   |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     50 | MIS        | NEW YORK |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     60 | MS         | NULL     |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     20 | RESEARCH   | DALLAS   |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     30 | SALES      | CHICAGO  |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     40 | OPERATIONS | BOSTON   |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     50 | MIS        | NEW YORK |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     60 | MS         | NULL     |
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+84 rows in set (0.03 sec)
+
+mysql> select 1.ename,2.loc from emp 1 cross join dept 2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1.ename,2.loc from emp 1 cross join dept 2' at line 1
+mysql> select a.ename,b.loc from emp a cross join dept b;
++--------+----------+
+| ename  | loc      |
++--------+----------+
+| SMITH  | NEW YORK |
+| SMITH  | DALLAS   |
+| SMITH  | CHICAGO  |
+| SMITH  | BOSTON   |
+| SMITH  | NEW YORK |
+| SMITH  | NULL     |
+| ALLEN  | NEW YORK |
+| ALLEN  | DALLAS   |
+| ALLEN  | CHICAGO  |
+| ALLEN  | BOSTON   |
+| ALLEN  | NEW YORK |
+| ALLEN  | NULL     |
+| WARD   | NEW YORK |
+| WARD   | DALLAS   |
+| WARD   | CHICAGO  |
+| WARD   | BOSTON   |
+| WARD   | NEW YORK |
+| WARD   | NULL     |
+| JONES  | NEW YORK |
+| JONES  | DALLAS   |
+| JONES  | CHICAGO  |
+| JONES  | BOSTON   |
+| JONES  | NEW YORK |
+| JONES  | NULL     |
+| MARTIN | NEW YORK |
+| MARTIN | DALLAS   |
+| MARTIN | CHICAGO  |
+| MARTIN | BOSTON   |
+| MARTIN | NEW YORK |
+| MARTIN | NULL     |
+| BLAKE  | NEW YORK |
+| BLAKE  | DALLAS   |
+| BLAKE  | CHICAGO  |
+| BLAKE  | BOSTON   |
+| BLAKE  | NEW YORK |
+| BLAKE  | NULL     |
+| CLARK  | NEW YORK |
+| CLARK  | DALLAS   |
+| CLARK  | CHICAGO  |
+| CLARK  | BOSTON   |
+| CLARK  | NEW YORK |
+| CLARK  | NULL     |
+| SCOTT  | NEW YORK |
+| SCOTT  | DALLAS   |
+| SCOTT  | CHICAGO  |
+| SCOTT  | BOSTON   |
+| SCOTT  | NEW YORK |
+| SCOTT  | NULL     |
+| KING   | NEW YORK |
+| KING   | DALLAS   |
+| KING   | CHICAGO  |
+| KING   | BOSTON   |
+| KING   | NEW YORK |
+| KING   | NULL     |
+| TURNER | NEW YORK |
+| TURNER | DALLAS   |
+| TURNER | CHICAGO  |
+| TURNER | BOSTON   |
+| TURNER | NEW YORK |
+| TURNER | NULL     |
+| ADAMS  | NEW YORK |
+| ADAMS  | DALLAS   |
+| ADAMS  | CHICAGO  |
+| ADAMS  | BOSTON   |
+| ADAMS  | NEW YORK |
+| ADAMS  | NULL     |
+| JAMES  | NEW YORK |
+| JAMES  | DALLAS   |
+| JAMES  | CHICAGO  |
+| JAMES  | BOSTON   |
+| JAMES  | NEW YORK |
+| JAMES  | NULL     |
+| FORD   | NEW YORK |
+| FORD   | DALLAS   |
+| FORD   | CHICAGO  |
+| FORD   | BOSTON   |
+| FORD   | NEW YORK |
+| FORD   | NULL     |
+| MILLER | NEW YORK |
+| MILLER | DALLAS   |
+| MILLER | CHICAGO  |
+| MILLER | BOSTON   |
+| MILLER | NEW YORK |
+| MILLER | NULL     |
++--------+----------+
+84 rows in set (0.00 sec)
+
+mysql> select * from emp e nature join dept d;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'nature join dept d' at line 1
+mysql> select * from emp e natural join dept d;
++--------+-------+--------+-----------+------+---------------------+---------+---------+------------+----------+
+| DEPTNO | EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DNAME      | LOC      |
++--------+-------+--------+-----------+------+---------------------+---------+---------+------------+----------+
+|     20 |  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL | RESEARCH   | DALLAS   |
+|     30 |  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 | SALES      | CHICAGO  |
+|     30 |  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 | SALES      | CHICAGO  |
+|     20 |  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL | RESEARCH   | DALLAS   |
+|     30 |  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 | SALES      | CHICAGO  |
+|     30 |  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL | SALES      | CHICAGO  |
+|     10 |  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL | ACCOUNTING | NEW YORK |
+|     20 |  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL | RESEARCH   | DALLAS   |
+|     10 |  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL | ACCOUNTING | NEW YORK |
+|     30 |  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 | SALES      | CHICAGO  |
+|     20 |  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL | RESEARCH   | DALLAS   |
+|     30 |  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL | SALES      | CHICAGO  |
+|     20 |  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL | RESEARCH   | DALLAS   |
+|     10 |  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL | ACCOUNTING | NEW YORK |
++--------+-------+--------+-----------+------+---------------------+---------+---------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select * from emp e join dept d on e.deptno=d.deptno;
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO | DEPTNO | DNAME      | LOC      |
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     30 | SALES      | CHICAGO  |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     30 | SALES      | CHICAGO  |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select * from emp e join dept d on e.deptno=d.deptno order by deptno;
+ERROR 1052 (23000): Column 'deptno' in order clause is ambiguous
+mysql> select * from emp e join dept d on e.deptno=d.deptno order by e.deptno;
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO | DEPTNO | DNAME      | LOC      |
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW YORK |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | DALLAS   |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     30 | SALES      | CHICAGO  |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     30 | SALES      | CHICAGO  |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     30 | SALES      | CHICAGO  |
++-------+--------+-----------+------+---------------------+---------+---------+--------+--------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select * from emp e join dept d using(deptno) order by e.deptno;
++--------+-------+--------+-----------+------+---------------------+---------+---------+------------+----------+
+| DEPTNO | EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DNAME      | LOC      |
++--------+-------+--------+-----------+------+---------------------+---------+---------+------------+----------+
+|     10 |  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL | ACCOUNTING | NEW YORK |
+|     10 |  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL | ACCOUNTING | NEW YORK |
+|     10 |  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL | ACCOUNTING | NEW YORK |
+|     20 |  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL | RESEARCH   | DALLAS   |
+|     20 |  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL | RESEARCH   | DALLAS   |
+|     20 |  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL | RESEARCH   | DALLAS   |
+|     20 |  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL | RESEARCH   | DALLAS   |
+|     20 |  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL | RESEARCH   | DALLAS   |
+|     30 |  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 | SALES      | CHICAGO  |
+|     30 |  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 | SALES      | CHICAGO  |
+|     30 |  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 | SALES      | CHICAGO  |
+|     30 |  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL | SALES      | CHICAGO  |
+|     30 |  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 | SALES      | CHICAGO  |
+|     30 |  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL | SALES      | CHICAGO  |
++--------+-------+--------+-----------+------+---------------------+---------+---------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select e.ename,e.job.d.comm from emp e join dept d on e.deptno=d.deptno order by e.deptno;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.comm from emp e join dept d on e.deptno=d.deptno order by e.deptno' at line 1
+mysql> select e.ename,e.job,e.comm,d.loc from emp e join dept d on e.deptno=d.deptno order by e.deptno;
++--------+-----------+---------+----------+
+| ename  | job       | comm    | loc      |
++--------+-----------+---------+----------+
+| CLARK  | MANAGER   |    NULL | NEW YORK |
+| KING   | PRESIDENT |    NULL | NEW YORK |
+| MILLER | CLERK     |    NULL | NEW YORK |
+| SMITH  | CLERK     |    NULL | DALLAS   |
+| JONES  | MANAGER   |    NULL | DALLAS   |
+| SCOTT  | ANALYST   |    NULL | DALLAS   |
+| ADAMS  | CLERK     |    NULL | DALLAS   |
+| FORD   | ANALYST   |    NULL | DALLAS   |
+| ALLEN  | SALESMAN  |  300.00 | CHICAGO  |
+| WARD   | SALESMAN  |  500.00 | CHICAGO  |
+| MARTIN | SALESMAN  | 1400.00 | CHICAGO  |
+| BLAKE  | MANAGER   |    NULL | CHICAGO  |
+| TURNER | SALESMAN  |    0.00 | CHICAGO  |
+| JAMES  | CLERK     |    NULL | CHICAGO  |
++--------+-----------+---------+----------+
+14 rows in set (0.00 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| customer       |
+| dept           |
+| emp            |
+| item           |
+| my_emp         |
+| ord            |
+| price          |
+| product        |
+| salgrade       |
++----------------+
+9 rows in set (0.03 sec)
+
+mysql> select * from price;
++--------+----------+----------+---------------------+---------------------+
+| PRODID | STDPRICE | MINPRICE | STARTDATE           | ENDDATE             |
++--------+----------+----------+---------------------+---------------------+
+| 100871 |     4.80 |     3.20 | 1985-01-01 00:00:00 | 1985-12-31 00:00:00 |
+| 100890 |    58.00 |    46.40 | 1985-01-01 00:00:00 | NULL                |
+| 100890 |    54.00 |    40.50 | 1984-01-01 00:00:00 | 1984-05-31 00:00:00 |
+| 100860 |    35.00 |    28.00 | 1986-06-01 00:00:00 | NULL                |
+| 100860 |    32.00 |    25.60 | 1986-01-01 00:00:00 | 1986-05-31 00:00:00 |
+| 100860 |    30.00 |    24.00 | 1985-01-01 00:00:00 | 1985-12-31 00:00:00 |
+| 100861 |    45.00 |    36.00 | 1986-06-01 00:00:00 | NULL                |
+| 100861 |    42.00 |    33.60 | 1986-01-01 00:00:00 | 1986-05-31 00:00:00 |
+| 100861 |    39.00 |    31.20 | 1985-01-01 00:00:00 | 1985-12-31 00:00:00 |
+| 100870 |     2.80 |     2.40 | 1986-01-01 00:00:00 | NULL                |
+| 100870 |     2.40 |     1.90 | 1985-01-01 00:00:00 | 1985-12-01 00:00:00 |
+| 100871 |     5.60 |     4.80 | 1986-01-01 00:00:00 | NULL                |
+| 101860 |    24.00 |    18.00 | 1985-02-15 00:00:00 | NULL                |
+| 101863 |    12.50 |     9.40 | 1985-02-15 00:00:00 | NULL                |
+| 102130 |     3.40 |     2.80 | 1985-08-18 00:00:00 | NULL                |
+| 200376 |     2.40 |     1.75 | 1986-11-15 00:00:00 | NULL                |
+| 200380 |     4.00 |     3.20 | 1986-11-15 00:00:00 | NULL                |
++--------+----------+----------+---------------------+---------------------+
+17 rows in set (0.03 sec)
+
+mysql> select * from product;
++--------+-------------------------+
+| PRODID | DESCRIP                 |
++--------+-------------------------+
+| 100860 | ACE TENNIS RACKET I     |
+| 100861 | ACE TENNIS RACKET II    |
+| 100870 | ACE TENNIS BALLS-3 PACK |
+| 100871 | ACE TENNIS BALLS-6 PACK |
+| 100890 | ACE TENNIS NET          |
+| 101860 | SP TENNIS RACKET        |
+| 101863 | SP JUNIOR RACKET        |
+| 102130 | RH: "GUIDE TO TENNIS"   |
+| 200376 | SB ENERGY BAR-6 PACK    |
+| 200380 | SB VITA SNACK-6 PACK    |
++--------+-------------------------+
+10 rows in set (0.03 sec)
+
+mysql> select * from item;
++-------+--------+--------+-------------+------+----------+
+| ORDID | ITEMID | PRODID | ACTUALPRICE | QTY  | ITEMTOT  |
++-------+--------+--------+-------------+------+----------+
+|   601 |      1 | 200376 |        2.40 |    1 |     2.40 |
+|   602 |      1 | 100870 |        2.80 |   20 |    56.00 |
+|   603 |      2 | 100860 |       56.00 |    4 |   224.00 |
+|   604 |      1 | 100890 |       58.00 |    3 |   174.00 |
+|   604 |      2 | 100861 |       42.00 |    2 |    84.00 |
+|   604 |      3 | 100860 |       44.00 |   10 |   440.00 |
+|   605 |      1 | 100861 |       45.00 |  100 |  4500.00 |
+|   605 |      2 | 100870 |        2.80 |  500 |  1400.00 |
+|   605 |      3 | 100890 |       58.00 |    5 |   290.00 |
+|   605 |      4 | 101860 |       24.00 |   50 |  1200.00 |
+|   605 |      5 | 101863 |        9.00 |  100 |   900.00 |
+|   605 |      6 | 102130 |        3.40 |   10 |    34.00 |
+|   606 |      1 | 102130 |        3.40 |    1 |     3.40 |
+|   607 |      1 | 100871 |        5.60 |    1 |     5.60 |
+|   608 |      1 | 101860 |       24.00 |    1 |    24.00 |
+|   608 |      2 | 100871 |        5.60 |    2 |    11.20 |
+|   609 |      1 | 100861 |       35.00 |    1 |    35.00 |
+|   609 |      2 | 100870 |        2.50 |    5 |    12.50 |
+|   609 |      3 | 100890 |       50.00 |    1 |    50.00 |
+|   610 |      1 | 100860 |       35.00 |    1 |    35.00 |
+|   610 |      2 | 100870 |        2.80 |    3 |     8.40 |
+|   610 |      3 | 100890 |       58.00 |    1 |    58.00 |
+|   611 |      1 | 100861 |       45.00 |    1 |    45.00 |
+|   612 |      1 | 100860 |       30.00 |  100 |  3000.00 |
+|   612 |      2 | 100861 |       40.50 |   20 |   810.00 |
+|   612 |      3 | 101863 |       10.00 |  150 |  1500.00 |
+|   612 |      4 | 100871 |        5.50 |  100 |   550.00 |
+|   613 |      1 | 100871 |        5.60 |  100 |   560.00 |
+|   613 |      2 | 101860 |       24.00 |  200 |  4800.00 |
+|   613 |      3 | 200380 |        4.00 |  150 |   600.00 |
+|   613 |      4 | 200376 |        2.20 |  200 |   440.00 |
+|   614 |      1 | 100860 |       35.00 |  444 | 15540.00 |
+|   614 |      2 | 100870 |        2.80 | 1000 |  2800.00 |
+|   614 |      3 | 100871 |        5.60 | 1000 |  5600.00 |
+|   615 |      1 | 100861 |       45.00 |    4 |   180.00 |
+|   615 |      2 | 100870 |        2.80 |  100 |   280.00 |
+|   615 |      3 | 100871 |        5.00 |   50 |   250.00 |
+|   616 |      1 | 100861 |       45.00 |   10 |   450.00 |
+|   616 |      2 | 100870 |        2.80 |   50 |   140.00 |
+|   616 |      3 | 100890 |       58.00 |    2 |   116.00 |
+|   616 |      4 | 102130 |        3.40 |   10 |    34.00 |
+|   616 |      5 | 200376 |        2.40 |   10 |    24.00 |
+|   617 |      1 | 100860 |       35.00 |   50 |  1750.00 |
+|   617 |      2 | 100861 |       45.00 |  100 |  4500.00 |
+|   617 |      3 | 100870 |        2.80 |  500 |  1400.00 |
+|   617 |      4 | 100871 |        5.60 |  500 |  2800.00 |
+|   617 |      5 | 100890 |       58.00 |  500 | 29000.00 |
+|   617 |      6 | 101860 |       24.00 |  100 |  2400.00 |
+|   617 |      7 | 101863 |       12.50 |  200 |  2500.00 |
+|   617 |      8 | 102130 |        3.40 |  100 |   340.00 |
+|   617 |      9 | 200376 |        2.40 |  200 |   480.00 |
+|   617 |     10 | 200380 |        4.00 |  300 |  1200.00 |
+|   618 |      1 | 100860 |       35.00 |   23 |   805.00 |
+|   618 |      2 | 100861 |       45.11 |   50 |  2255.50 |
+|   618 |      3 | 100870 |       45.00 |   10 |   450.00 |
+|   619 |      1 | 200380 |        4.00 |  100 |   400.00 |
+|   619 |      2 | 200376 |        2.40 |  100 |   240.00 |
+|   619 |      3 | 102130 |        3.40 |  100 |   340.00 |
+|   619 |      4 | 100871 |        5.60 |   50 |   280.00 |
+|   620 |      1 | 100860 |       35.00 |   10 |   350.00 |
+|   620 |      2 | 200376 |        2.40 | 1000 |  2400.00 |
+|   620 |      3 | 102130 |        3.40 |  500 |  1700.00 |
+|   621 |      1 | 100861 |       45.00 |   10 |   450.00 |
+|   621 |      2 | 100870 |        2.80 |  100 |   280.00 |
++-------+--------+--------+-------------+------+----------+
+64 rows in set (0.03 sec)
+
+mysql> select * from ord;
++-------+---------------------+----------+--------+---------------------+----------+
+| ORDID | ORDERDATE           | COMMPLAN | CUSTID | SHIPDATE            | TOTAL    |
++-------+---------------------+----------+--------+---------------------+----------+
+|   601 | 1987-01-07 00:00:00 | A        |    101 | 1987-01-08 00:00:00 |   101.40 |
+|   602 | 1987-01-11 00:00:00 | B        |    102 | 1987-01-11 00:00:00 |    45.00 |
+|   603 | 1987-01-15 00:00:00 | C        |    104 | 1987-01-20 00:00:00 |  5860.00 |
+|   604 | 1986-05-01 00:00:00 | A        |    106 | 1986-05-30 00:00:00 |     2.40 |
+|   605 | 1986-06-05 00:00:00 | B        |    102 | 1986-06-20 00:00:00 |    56.00 |
+|   606 | 1986-06-15 00:00:00 | A        |    106 | 1986-06-30 00:00:00 |   698.00 |
+|   607 | 1986-07-14 00:00:00 | A        |    106 | 1986-07-30 00:00:00 |  8324.00 |
+|   608 | 1986-07-14 00:00:00 | A        |    100 | 1986-07-30 00:00:00 |     3.40 |
+|   609 | 1986-08-01 00:00:00 | B        |    100 | 1986-08-15 00:00:00 |    97.50 |
+|   610 | 1986-07-18 00:00:00 | C        |    104 | 1986-07-18 00:00:00 |     5.60 |
+|   611 | 1986-07-25 00:00:00 | C        |    104 | 1986-07-25 00:00:00 |    35.20 |
+|   612 | 1986-06-05 00:00:00 |          |    102 | 1986-06-05 00:00:00 |   224.00 |
+|   613 | 1987-03-12 00:00:00 |          |    100 | 1987-05-12 00:00:00 |  4450.00 |
+|   614 | 1987-02-01 00:00:00 |          |    108 | 1987-02-01 00:00:00 |  6400.00 |
+|   615 | 1987-02-01 00:00:00 |          |    102 | 1987-02-05 00:00:00 | 23940.00 |
+|   616 | 1987-02-03 00:00:00 |          |    103 | 1987-02-10 00:00:00 |   764.00 |
+|   617 | 1987-02-02 00:00:00 |          |    104 | 1987-02-04 00:00:00 |  1260.00 |
+|   618 | 1987-02-05 00:00:00 |          |    105 | 1987-03-03 00:00:00 | 46370.00 |
+|   619 | 1987-02-01 00:00:00 |          |    107 | 1987-02-06 00:00:00 |   710.00 |
+|   620 | 1987-02-15 00:00:00 | A        |    102 | 1987-03-06 00:00:00 |  3510.50 |
+|   621 | 1987-01-01 00:00:00 | A        |    100 | 1987-01-06 00:00:00 |   730.00 |
++-------+---------------------+----------+--------+---------------------+----------+
+21 rows in set (0.03 sec)
+
+mysql> select * from salgrade;
++-------+---------+---------+
+| GRADE | LOSAL   | HISAL   |
++-------+---------+---------+
+|     1 |  700.00 | 1200.00 |
+|     2 | 1201.00 | 1400.00 |
+|     3 | 1401.00 | 2000.00 |
+|     4 | 2001.00 | 3000.00 |
+|     5 | 3001.00 | 9999.00 |
++-------+---------+---------+
+5 rows in set (0.02 sec)
+
+mysql> select * from customer;
++--------+----------------------------------------------+------------------+--------------+-------+-------+------+----------+-------+-------------+
+| CUSTID | NAME                                         | ADDRESS          | CITY         | STATE | ZIP   | AREA | PHONE    | REPID | CREDITLIMIT |
++--------+----------------------------------------------+------------------+--------------+-------+-------+------+----------+-------+-------------+
+|    100 | JOCKSPORTS                                   | 345 VIEWRIDGE    | BELMONT      | CA    | 96711 |  415 | 598-6609 |  7844 |     5000.00 |
+|    101 | TKB SPORT SHOP                               | 490 BOLI RD.     | REDWOOD CITY | CA    | 94061 |  415 | 368-1223 |  7521 |    10000.00 |
+|    102 | VOLLYRITE                                    | 9722 HAMILTON    | BURLINGAME   | CA    | 95133 |  415 | 644-3341 |  7654 |     7000.00 |
+|    103 | JUST TENNIS                                  | HILLVIEW MALL    | BURLINGAME   | CA    | 97544 |  415 | 677-9312 |  7521 |     3000.00 |
+|    104 | EVERY MOUNTAIN                               | 574 SUYYYYY RD.  | CUPERTINO    | CA    | 93301 |  408 | 996-2323 |  7499 |    10000.00 |
+|    105 | K + T SPORTS                                 | 3476 EL PASEO    | SANTA CLARA  | CA    | 91003 |  408 | 376-9966 |  7844 |     5000.00 |
+|    106 | SHAPE UP                                     | 908 SEQUOIA      | PALO ALTO    | CA    | 94301 |  415 | 364-9777 |  7521 |     6000.00 |
+|    107 | WOMENS SPORTS                                | VALCO VILLAGE    | SUNNYVALE    | CA    | 93301 |  408 | 967-4398 |  7499 |    10000.00 |
+|    108 | NORTH WOODS HEALTH AND FITNESS SUPPLY CENTER | 98 LONE PINE WAY | HIBBING      | MN    | 55649 |  612 | 566-9123 |  7844 |     8000.00 |
++--------+----------------------------------------------+------------------+--------------+-------+-------+------+----------+-------+-------------+
+9 rows in set (0.04 sec)
+
+mysql> select c.name,c.custid,o.ordid,i.itemid
+    -> from customer c join ord o on c.custid=o.custid
+    -> join item i on o.ordid=i.ordid;
++----------------------------------------------+--------+-------+--------+
+| name                                         | custid | ordid | itemid |
++----------------------------------------------+--------+-------+--------+
+| JOCKSPORTS                                   |    100 |   608 |      1 |
+| JOCKSPORTS                                   |    100 |   608 |      2 |
+| JOCKSPORTS                                   |    100 |   609 |      1 |
+| JOCKSPORTS                                   |    100 |   609 |      2 |
+| JOCKSPORTS                                   |    100 |   609 |      3 |
+| JOCKSPORTS                                   |    100 |   613 |      1 |
+| JOCKSPORTS                                   |    100 |   613 |      2 |
+| JOCKSPORTS                                   |    100 |   613 |      3 |
+| JOCKSPORTS                                   |    100 |   613 |      4 |
+| JOCKSPORTS                                   |    100 |   621 |      1 |
+| JOCKSPORTS                                   |    100 |   621 |      2 |
+| TKB SPORT SHOP                               |    101 |   601 |      1 |
+| VOLLYRITE                                    |    102 |   602 |      1 |
+| VOLLYRITE                                    |    102 |   605 |      1 |
+| VOLLYRITE                                    |    102 |   605 |      2 |
+| VOLLYRITE                                    |    102 |   605 |      3 |
+| VOLLYRITE                                    |    102 |   605 |      4 |
+| VOLLYRITE                                    |    102 |   605 |      5 |
+| VOLLYRITE                                    |    102 |   605 |      6 |
+| VOLLYRITE                                    |    102 |   612 |      1 |
+| VOLLYRITE                                    |    102 |   612 |      2 |
+| VOLLYRITE                                    |    102 |   612 |      3 |
+| VOLLYRITE                                    |    102 |   612 |      4 |
+| VOLLYRITE                                    |    102 |   615 |      1 |
+| VOLLYRITE                                    |    102 |   615 |      2 |
+| VOLLYRITE                                    |    102 |   615 |      3 |
+| VOLLYRITE                                    |    102 |   620 |      1 |
+| VOLLYRITE                                    |    102 |   620 |      2 |
+| VOLLYRITE                                    |    102 |   620 |      3 |
+| JUST TENNIS                                  |    103 |   616 |      1 |
+| JUST TENNIS                                  |    103 |   616 |      2 |
+| JUST TENNIS                                  |    103 |   616 |      3 |
+| JUST TENNIS                                  |    103 |   616 |      4 |
+| JUST TENNIS                                  |    103 |   616 |      5 |
+| EVERY MOUNTAIN                               |    104 |   603 |      2 |
+| EVERY MOUNTAIN                               |    104 |   610 |      1 |
+| EVERY MOUNTAIN                               |    104 |   610 |      2 |
+| EVERY MOUNTAIN                               |    104 |   610 |      3 |
+| EVERY MOUNTAIN                               |    104 |   611 |      1 |
+| EVERY MOUNTAIN                               |    104 |   617 |      1 |
+| EVERY MOUNTAIN                               |    104 |   617 |      2 |
+| EVERY MOUNTAIN                               |    104 |   617 |      3 |
+| EVERY MOUNTAIN                               |    104 |   617 |      4 |
+| EVERY MOUNTAIN                               |    104 |   617 |      5 |
+| EVERY MOUNTAIN                               |    104 |   617 |      6 |
+| EVERY MOUNTAIN                               |    104 |   617 |      7 |
+| EVERY MOUNTAIN                               |    104 |   617 |      8 |
+| EVERY MOUNTAIN                               |    104 |   617 |      9 |
+| EVERY MOUNTAIN                               |    104 |   617 |     10 |
+| K + T SPORTS                                 |    105 |   618 |      1 |
+| K + T SPORTS                                 |    105 |   618 |      2 |
+| K + T SPORTS                                 |    105 |   618 |      3 |
+| SHAPE UP                                     |    106 |   604 |      1 |
+| SHAPE UP                                     |    106 |   604 |      2 |
+| SHAPE UP                                     |    106 |   604 |      3 |
+| SHAPE UP                                     |    106 |   606 |      1 |
+| SHAPE UP                                     |    106 |   607 |      1 |
+| WOMENS SPORTS                                |    107 |   619 |      1 |
+| WOMENS SPORTS                                |    107 |   619 |      2 |
+| WOMENS SPORTS                                |    107 |   619 |      3 |
+| WOMENS SPORTS                                |    107 |   619 |      4 |
+| NORTH WOODS HEALTH AND FITNESS SUPPLY CENTER |    108 |   614 |      1 |
+| NORTH WOODS HEALTH AND FITNESS SUPPLY CENTER |    108 |   614 |      2 |
+| NORTH WOODS HEALTH AND FITNESS SUPPLY CENTER |    108 |   614 |      3 |
++----------------------------------------------+--------+-------+--------+
+64 rows in set (0.02 sec)
+
+mysql> select * from emp e join salgrade s on (e.sal between s.losal and s.hisal);
++-------+--------+-----------+------+---------------------+---------+---------+--------+-------+---------+---------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO | GRADE | LOSAL   | HISAL   |
++-------+--------+-----------+------+---------------------+---------+---------+--------+-------+---------+---------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |     1 |  700.00 | 1200.00 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |     3 | 1401.00 | 2000.00 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |     2 | 1201.00 | 1400.00 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |     4 | 2001.00 | 3000.00 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |     2 | 1201.00 | 1400.00 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |     4 | 2001.00 | 3000.00 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |     4 | 2001.00 | 3000.00 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |     4 | 2001.00 | 3000.00 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |     5 | 3001.00 | 9999.00 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |     3 | 1401.00 | 2000.00 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |     1 |  700.00 | 1200.00 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |     1 |  700.00 | 1200.00 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |     4 | 2001.00 | 3000.00 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |     2 | 1201.00 | 1400.00 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+-------+---------+---------+
+14 rows in set (0.00 sec)
+
+mysql> 
+mysql> select * from dept d left outer join emp e;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select * from dept d left outer join emp e on (d.deptno=e.deptno);
++--------+------------+----------+-------+--------+-----------+------+---------------------+---------+---------+--------+
+| DEPTNO | DNAME      | LOC      | EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++--------+------------+----------+-------+--------+-----------+------+---------------------+---------+---------+--------+
+|     10 | ACCOUNTING | NEW YORK |  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|     10 | ACCOUNTING | NEW YORK |  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|     10 | ACCOUNTING | NEW YORK |  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
+|     20 | RESEARCH   | DALLAS   |  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|     20 | RESEARCH   | DALLAS   |  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|     20 | RESEARCH   | DALLAS   |  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|     20 | RESEARCH   | DALLAS   |  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|     20 | RESEARCH   | DALLAS   |  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|     30 | SALES      | CHICAGO  |  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|     30 | SALES      | CHICAGO  |  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|     30 | SALES      | CHICAGO  |  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|     30 | SALES      | CHICAGO  |  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|     30 | SALES      | CHICAGO  |  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|     30 | SALES      | CHICAGO  |  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|     40 | OPERATIONS | BOSTON   |  NULL | NULL   | NULL      | NULL | NULL                |    NULL |    NULL |   NULL |
+|     50 | MIS        | NEW YORK |  NULL | NULL   | NULL      | NULL | NULL                |    NULL |    NULL |   NULL |
+|     60 | MS         | NULL     |  NULL | NULL   | NULL      | NULL | NULL                |    NULL |    NULL |   NULL |
++--------+------------+----------+-------+--------+-----------+------+---------------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select * from dept d left outer join emp e on (d.deptno=e.deptno) where e.empno is null;
++--------+------------+----------+-------+-------+------+------+----------+------+------+--------+
+| DEPTNO | DNAME      | LOC      | EMPNO | ENAME | JOB  | MGR  | HIREDATE | SAL  | COMM | DEPTNO |
++--------+------------+----------+-------+-------+------+------+----------+------+------+--------+
+|     40 | OPERATIONS | BOSTON   |  NULL | NULL  | NULL | NULL | NULL     | NULL | NULL |   NULL |
+|     50 | MIS        | NEW YORK |  NULL | NULL  | NULL | NULL | NULL     | NULL | NULL |   NULL |
+|     60 | MS         | NULL     |  NULL | NULL  | NULL | NULL | NULL     | NULL | NULL |   NULL |
++--------+------------+----------+-------+-------+------+------+----------+------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select e.ename,e.empno,e.mgr from emp e join emp f on (e.mgr=f.empno);
++--------+-------+------+
+| ename  | empno | mgr  |
++--------+-------+------+
+| SMITH  |  7369 | 7902 |
+| ALLEN  |  7499 | 7698 |
+| WARD   |  7521 | 7698 |
+| JONES  |  7566 | 7839 |
+| MARTIN |  7654 | 7698 |
+| BLAKE  |  7698 | 7839 |
+| CLARK  |  7782 | 7839 |
+| SCOTT  |  7788 | 7566 |
+| TURNER |  7844 | 7698 |
+| ADAMS  |  7876 | 7788 |
+| JAMES  |  7900 | 7698 |
+| FORD   |  7902 | 7566 |
+| MILLER |  7934 | 7782 |
++--------+-------+------+
+13 rows in set (0.00 sec)
+
+mysql> select e.ename,e.empno,e.mgr,f.empno,f.ename from emp e join emp f on (e.mgr=f.empno);
++--------+-------+------+-------+-------+
+| ename  | empno | mgr  | empno | ename |
++--------+-------+------+-------+-------+
+| SMITH  |  7369 | 7902 |  7902 | FORD  |
+| ALLEN  |  7499 | 7698 |  7698 | BLAKE |
+| WARD   |  7521 | 7698 |  7698 | BLAKE |
+| JONES  |  7566 | 7839 |  7839 | KING  |
+| MARTIN |  7654 | 7698 |  7698 | BLAKE |
+| BLAKE  |  7698 | 7839 |  7839 | KING  |
+| CLARK  |  7782 | 7839 |  7839 | KING  |
+| SCOTT  |  7788 | 7566 |  7566 | JONES |
+| TURNER |  7844 | 7698 |  7698 | BLAKE |
+| ADAMS  |  7876 | 7788 |  7788 | SCOTT |
+| JAMES  |  7900 | 7698 |  7698 | BLAKE |
+| FORD   |  7902 | 7566 |  7566 | JONES |
+| MILLER |  7934 | 7782 |  7782 | CLARK |
++--------+-------+------+-------+-------+
+13 rows in set (0.00 sec)
+
+mysql> nootee
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'nootee' at line 1
+mysql> notee;

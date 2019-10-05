@@ -1,0 +1,122 @@
+mysql> select * from emp
+    -> where deptno=(
+    -> select deptno from emp where ename="JAMES");
++-------+--------+----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+---------------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
++-------+--------+----------+------+---------------------+---------+---------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select ename,sal from emp where
+    -> sal>(
+    -> select avg(sal) from emp);
++-------+---------+
+| ename | sal     |
++-------+---------+
+| JONES | 2975.00 |
+| BLAKE | 2850.00 |
+| CLARK | 2450.00 |
+| SCOTT | 3000.00 |
+| KING  | 5000.00 |
+| FORD  | 3000.00 |
++-------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select empno,ename from emp
+    -> where empno in (
+    -> select mgr from emp);
++-------+-------+
+| empno | ename |
++-------+-------+
+|  7566 | JONES |
+|  7698 | BLAKE |
+|  7782 | CLARK |
+|  7788 | SCOTT |
+|  7839 | KING  |
+|  7902 | FORD  |
++-------+-------+
+6 rows in set (0.03 sec)
+
+mysql> select empno,ename,sal from emp where
+    -> sal > all (
+    -> select sal from emp where job ="SALESMAN");
++-------+-------+---------+
+| empno | ename | sal     |
++-------+-------+---------+
+|  7566 | JONES | 2975.00 |
+|  7698 | BLAKE | 2850.00 |
+|  7782 | CLARK | 2450.00 |
+|  7788 | SCOTT | 3000.00 |
+|  7839 | KING  | 5000.00 |
+|  7902 | FORD  | 3000.00 |
++-------+-------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select custid,orderdate from ord a
+    -> where orderdate=(
+    -> select orderdate from ord b where b.orderdate>a.orderdate);
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select custid,orderdate from ord a
+    -> where orderdate=(
+    -> select custid,orderdate from ord a;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> select custid,orderdate from ord a
+    -> where orderdate in (
+    -> select orderdate from ord b where b.orderdate>a.orderdate);
+Empty set (0.00 sec)
+
+mysql> select custid,orderdate from ord a
+    -> where orderdate =(
+    -> select orderdate from ord b where b.orderdate> all a.orderdate);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'a.orderdate)' at line 3
+mysql> select custid,orderdate from ord a
+    -> where orderdate =(
+    -> select orderdate from ord b where b.orderdate>= all a.orderdate);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'a.orderdate)' at line 3
+mysql> select * from ord;
++-------+---------------------+----------+--------+---------------------+----------+
+| ORDID | ORDERDATE           | COMMPLAN | CUSTID | SHIPDATE            | TOTAL    |
++-------+---------------------+----------+--------+---------------------+----------+
+|   601 | 1987-01-07 00:00:00 | A        |    101 | 1987-01-08 00:00:00 |   101.40 |
+|   602 | 1987-01-11 00:00:00 | B        |    102 | 1987-01-11 00:00:00 |    45.00 |
+|   603 | 1987-01-15 00:00:00 | C        |    104 | 1987-01-20 00:00:00 |  5860.00 |
+|   604 | 1986-05-01 00:00:00 | A        |    106 | 1986-05-30 00:00:00 |     2.40 |
+|   605 | 1986-06-05 00:00:00 | B        |    102 | 1986-06-20 00:00:00 |    56.00 |
+|   606 | 1986-06-15 00:00:00 | A        |    106 | 1986-06-30 00:00:00 |   698.00 |
+|   607 | 1986-07-14 00:00:00 | A        |    106 | 1986-07-30 00:00:00 |  8324.00 |
+|   608 | 1986-07-14 00:00:00 | A        |    100 | 1986-07-30 00:00:00 |     3.40 |
+|   609 | 1986-08-01 00:00:00 | B        |    100 | 1986-08-15 00:00:00 |    97.50 |
+|   610 | 1986-07-18 00:00:00 | C        |    104 | 1986-07-18 00:00:00 |     5.60 |
+|   611 | 1986-07-25 00:00:00 | C        |    104 | 1986-07-25 00:00:00 |    35.20 |
+|   612 | 1986-06-05 00:00:00 |          |    102 | 1986-06-05 00:00:00 |   224.00 |
+|   613 | 1987-03-12 00:00:00 |          |    100 | 1987-05-12 00:00:00 |  4450.00 |
+|   614 | 1987-02-01 00:00:00 |          |    108 | 1987-02-01 00:00:00 |  6400.00 |
+|   615 | 1987-02-01 00:00:00 |          |    102 | 1987-02-05 00:00:00 | 23940.00 |
+|   616 | 1987-02-03 00:00:00 |          |    103 | 1987-02-10 00:00:00 |   764.00 |
+|   617 | 1987-02-02 00:00:00 |          |    104 | 1987-02-04 00:00:00 |  1260.00 |
+|   618 | 1987-02-05 00:00:00 |          |    105 | 1987-03-03 00:00:00 | 46370.00 |
+|   619 | 1987-02-01 00:00:00 |          |    107 | 1987-02-06 00:00:00 |   710.00 |
+|   620 | 1987-02-15 00:00:00 | A        |    102 | 1987-03-06 00:00:00 |  3510.50 |
+|   621 | 1987-01-01 00:00:00 | A        |    100 | 1987-01-06 00:00:00 |   730.00 |
++-------+---------------------+----------+--------+---------------------+----------+
+21 rows in set (0.00 sec)
+
+mysql> select custid,orderdate from ord a
+    -> where orderdate =(
+    -> select orderdate from ord b where b.orderdate> all a.orderdate) group by b.custid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'a.orderdate) group by b.custid' at line 3
+mysql> select custid,orderdate from ord a
+    -> where orderdate =(
+    -> select orderdate from ord b where b.orderdate> a.orderdate) group by b.custid;
+ERROR 1054 (42S22): Unknown column 'b.custid' in 'group statement'
+mysql> ;
+ERROR: 
+No query specified
+
+mysql> notee

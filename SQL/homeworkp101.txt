@@ -1,0 +1,916 @@
+mysql> select date(now());
++-------------+
+| date(now()) |
++-------------+
+| 2019-08-17  |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select date(now()) "系統日期";
++------------+
+| 系統日期   |
++------------+
+| 2019-08-17 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,sal*1.15 from emp;
++-------+--------+---------+-----------+
+| empno | ename  | sal     | sal*1.15  |
++-------+--------+---------+-----------+
+|  7369 | SMITH  |  800.00 |  920.0000 |
+|  7499 | ALLEN  | 1600.00 | 1840.0000 |
+|  7521 | WARD   | 1250.00 | 1437.5000 |
+|  7566 | JONES  | 2975.00 | 3421.2500 |
+|  7654 | MARTIN | 1250.00 | 1437.5000 |
+|  7698 | BLAKE  | 2850.00 | 3277.5000 |
+|  7782 | CLARK  | 2450.00 | 2817.5000 |
+|  7788 | SCOTT  | 3000.00 | 3450.0000 |
+|  7839 | KING   | 5000.00 | 5750.0000 |
+|  7844 | TURNER | 1500.00 | 1725.0000 |
+|  7876 | ADAMS  | 1100.00 | 1265.0000 |
+|  7900 | JAMES  |  950.00 | 1092.5000 |
+|  7902 | FORD   | 3000.00 | 3450.0000 |
+|  7934 | MILLER | 1300.00 | 1495.0000 |
++-------+--------+---------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,floor(sal*1.15) from emp;
++-------+--------+---------+-----------------+
+| empno | ename  | sal     | floor(sal*1.15) |
++-------+--------+---------+-----------------+
+|  7369 | SMITH  |  800.00 |             920 |
+|  7499 | ALLEN  | 1600.00 |            1840 |
+|  7521 | WARD   | 1250.00 |            1437 |
+|  7566 | JONES  | 2975.00 |            3421 |
+|  7654 | MARTIN | 1250.00 |            1437 |
+|  7698 | BLAKE  | 2850.00 |            3277 |
+|  7782 | CLARK  | 2450.00 |            2817 |
+|  7788 | SCOTT  | 3000.00 |            3450 |
+|  7839 | KING   | 5000.00 |            5750 |
+|  7844 | TURNER | 1500.00 |            1725 |
+|  7876 | ADAMS  | 1100.00 |            1265 |
+|  7900 | JAMES  |  950.00 |            1092 |
+|  7902 | FORD   | 3000.00 |            3450 |
+|  7934 | MILLER | 1300.00 |            1495 |
++-------+--------+---------+-----------------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,floor(sal*1.15) "New Salary" from emp;
++-------+--------+---------+------------+
+| empno | ename  | sal     | New Salary |
++-------+--------+---------+------------+
+|  7369 | SMITH  |  800.00 |        920 |
+|  7499 | ALLEN  | 1600.00 |       1840 |
+|  7521 | WARD   | 1250.00 |       1437 |
+|  7566 | JONES  | 2975.00 |       3421 |
+|  7654 | MARTIN | 1250.00 |       1437 |
+|  7698 | BLAKE  | 2850.00 |       3277 |
+|  7782 | CLARK  | 2450.00 |       2817 |
+|  7788 | SCOTT  | 3000.00 |       3450 |
+|  7839 | KING   | 5000.00 |       5750 |
+|  7844 | TURNER | 1500.00 |       1725 |
+|  7876 | ADAMS  | 1100.00 |       1265 |
+|  7900 | JAMES  |  950.00 |       1092 |
+|  7902 | FORD   | 3000.00 |       3450 |
+|  7934 | MILLER | 1300.00 |       1495 |
++-------+--------+---------+------------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,floor(sal*1.15) "New Salary",sal-floor(sal*1.15) Increase from emp;
++-------+--------+---------+------------+----------+
+| empno | ename  | sal     | New Salary | Increase |
++-------+--------+---------+------------+----------+
+|  7369 | SMITH  |  800.00 |        920 |  -120.00 |
+|  7499 | ALLEN  | 1600.00 |       1840 |  -240.00 |
+|  7521 | WARD   | 1250.00 |       1437 |  -187.00 |
+|  7566 | JONES  | 2975.00 |       3421 |  -446.00 |
+|  7654 | MARTIN | 1250.00 |       1437 |  -187.00 |
+|  7698 | BLAKE  | 2850.00 |       3277 |  -427.00 |
+|  7782 | CLARK  | 2450.00 |       2817 |  -367.00 |
+|  7788 | SCOTT  | 3000.00 |       3450 |  -450.00 |
+|  7839 | KING   | 5000.00 |       5750 |  -750.00 |
+|  7844 | TURNER | 1500.00 |       1725 |  -225.00 |
+|  7876 | ADAMS  | 1100.00 |       1265 |  -165.00 |
+|  7900 | JAMES  |  950.00 |       1092 |  -142.00 |
+|  7902 | FORD   | 3000.00 |       3450 |  -450.00 |
+|  7934 | MILLER | 1300.00 |       1495 |  -195.00 |
++-------+--------+---------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,floor(sal*1.15) "New Salary",floor(sal*1.15)-sal Increase from emp;
++-------+--------+---------+------------+----------+
+| empno | ename  | sal     | New Salary | Increase |
++-------+--------+---------+------------+----------+
+|  7369 | SMITH  |  800.00 |        920 |   120.00 |
+|  7499 | ALLEN  | 1600.00 |       1840 |   240.00 |
+|  7521 | WARD   | 1250.00 |       1437 |   187.00 |
+|  7566 | JONES  | 2975.00 |       3421 |   446.00 |
+|  7654 | MARTIN | 1250.00 |       1437 |   187.00 |
+|  7698 | BLAKE  | 2850.00 |       3277 |   427.00 |
+|  7782 | CLARK  | 2450.00 |       2817 |   367.00 |
+|  7788 | SCOTT  | 3000.00 |       3450 |   450.00 |
+|  7839 | KING   | 5000.00 |       5750 |   750.00 |
+|  7844 | TURNER | 1500.00 |       1725 |   225.00 |
+|  7876 | ADAMS  | 1100.00 |       1265 |   165.00 |
+|  7900 | JAMES  |  950.00 |       1092 |   142.00 |
+|  7902 | FORD   | 3000.00 |       3450 |   450.00 |
+|  7934 | MILLER | 1300.00 |       1495 |   195.00 |
++-------+--------+---------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,floor(sal*1.15) "New Salary",floor(sal*0.15) Increase from emp;
++-------+--------+---------+------------+----------+
+| empno | ename  | sal     | New Salary | Increase |
++-------+--------+---------+------------+----------+
+|  7369 | SMITH  |  800.00 |        920 |      120 |
+|  7499 | ALLEN  | 1600.00 |       1840 |      240 |
+|  7521 | WARD   | 1250.00 |       1437 |      187 |
+|  7566 | JONES  | 2975.00 |       3421 |      446 |
+|  7654 | MARTIN | 1250.00 |       1437 |      187 |
+|  7698 | BLAKE  | 2850.00 |       3277 |      427 |
+|  7782 | CLARK  | 2450.00 |       2817 |      367 |
+|  7788 | SCOTT  | 3000.00 |       3450 |      450 |
+|  7839 | KING   | 5000.00 |       5750 |      750 |
+|  7844 | TURNER | 1500.00 |       1725 |      225 |
+|  7876 | ADAMS  | 1100.00 |       1265 |      165 |
+|  7900 | JAMES  |  950.00 |       1092 |      142 |
+|  7902 | FORD   | 3000.00 |       3450 |      450 |
+|  7934 | MILLER | 1300.00 |       1495 |      195 |
++-------+--------+---------+------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(addate(hiredate,interval 6 month),"%W,the %d of %M) REVIEW from emp;
+    "> "
+    -> select ename,hiredate,date_format(addate(hiredate,interval 6 month),"%W,the %d of %M") REVIEW from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),"%W,the %d of %M) REVIEW from emp;
+"
+select ename,hiredate,date_format(addate(' at line 1
+mysql> select ename,hiredate,date_format(adddate(hiredate,interval 6 month),"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+------------------------------+
+| ename  | hiredate            | REVIEW                       |
++--------+---------------------+------------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Wednesday,the 17 of June     |
+| ALLEN  | 1981-02-20 00:00:00 | Thursday,the 20 of August    |
+| WARD   | 1981-02-22 00:00:00 | Saturday,the 22 of August    |
+| JONES  | 1981-04-02 00:00:00 | Friday,the 02 of October     |
+| MARTIN | 1981-09-28 00:00:00 | Sunday,the 28 of March       |
+| BLAKE  | 1981-05-01 00:00:00 | Sunday,the 01 of November    |
+| CLARK  | 1981-06-09 00:00:00 | Wednesday,the 09 of December |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday,the 09 of June      |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May         |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March       |
+| ADAMS  | 1983-01-12 00:00:00 | Tuesday,the 12 of July       |
+| JAMES  | 1981-12-03 00:00:00 | Thursday,the 03 of June      |
+| FORD   | 1981-12-03 00:00:00 | Thursday,the 03 of June      |
+| MILLER | 1982-01-23 00:00:00 | Friday,the 23 of July        |
++--------+---------------------+------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,timestampdiff(month,hiredate,now());
+ERROR 1054 (42S22): Unknown column 'ename' in 'field list'
+mysql> select ename,timestampdiff(month,hiredate,now()) from emp;
++--------+-------------------------------------+
+| ename  | timestampdiff(month,hiredate,now()) |
++--------+-------------------------------------+
+| SMITH  |                                 464 |
+| ALLEN  |                                 461 |
+| WARD   |                                 461 |
+| JONES  |                                 460 |
+| MARTIN |                                 454 |
+| BLAKE  |                                 459 |
+| CLARK  |                                 458 |
+| SCOTT  |                                 440 |
+| KING   |                                 453 |
+| TURNER |                                 455 |
+| ADAMS  |                                 439 |
+| JAMES  |                                 452 |
+| FORD   |                                 452 |
+| MILLER |                                 450 |
++--------+-------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,timestampdiff(month,hiredate,now()) "MONTHS_WORKED" from emp;
++--------+---------------+
+| ename  | MONTHS_WORKED |
++--------+---------------+
+| SMITH  |           464 |
+| ALLEN  |           461 |
+| WARD   |           461 |
+| JONES  |           460 |
+| MARTIN |           454 |
+| BLAKE  |           459 |
+| CLARK  |           458 |
+| SCOTT  |           440 |
+| KING   |           453 |
+| TURNER |           455 |
+| ADAMS  |           439 |
+| JAMES  |           452 |
+| FORD   |           452 |
+| MILLER |           450 |
++--------+---------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,datediff(hiredate,now()) "MONTHS_WORKED" from emp;
++--------+---------------+
+| ename  | MONTHS_WORKED |
++--------+---------------+
+| SMITH  |        -14122 |
+| ALLEN  |        -14057 |
+| WARD   |        -14055 |
+| JONES  |        -14016 |
+| MARTIN |        -13837 |
+| BLAKE  |        -13987 |
+| CLARK  |        -13948 |
+| SCOTT  |        -13400 |
+| KING   |        -13787 |
+| TURNER |        -13857 |
+| ADAMS  |        -13366 |
+| JAMES  |        -13771 |
+| FORD   |        -13771 |
+| MILLER |        -13720 |
++--------+---------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,datediff(NOW(),hiredate) "MONTHS_WORKED" from emp;
++--------+---------------+
+| ename  | MONTHS_WORKED |
++--------+---------------+
+| SMITH  |         14122 |
+| ALLEN  |         14057 |
+| WARD   |         14055 |
+| JONES  |         14016 |
+| MARTIN |         13837 |
+| BLAKE  |         13987 |
+| CLARK  |         13948 |
+| SCOTT  |         13400 |
+| KING   |         13787 |
+| TURNER |         13857 |
+| ADAMS  |         13366 |
+| JAMES  |         13771 |
+| FORD   |         13771 |
+| MILLER |         13720 |
++--------+---------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,round(datediff(NOW(),hiredate/30),1) "MONTHS_WORKED" from emp;
++--------+---------------+
+| ename  | MONTHS_WORKED |
++--------+---------------+
+| SMITH  |          NULL |
+| ALLEN  |          NULL |
+| WARD   |          NULL |
+| JONES  |          NULL |
+| MARTIN |          NULL |
+| BLAKE  |          NULL |
+| CLARK  |          NULL |
+| SCOTT  |          NULL |
+| KING   |          NULL |
+| TURNER |          NULL |
+| ADAMS  |          NULL |
+| JAMES  |          NULL |
+| FORD   |          NULL |
+| MILLER |          NULL |
++--------+---------------+
+14 rows in set, 14 warnings (0.00 sec)
+
+mysql> select ename,round(datediff(NOW(),hiredate)/30),1) "MONTHS_WORKED" from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') "MONTHS_WORKED" from emp' at line 1
+mysql> select ename,round(datediff(NOW(),hiredate)/30),1)  from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')  from emp' at line 1
+mysql> select ename,round((datediff(NOW(),hiredate)/30),1)  from emp;
++--------+----------------------------------------+
+| ename  | round((datediff(NOW(),hiredate)/30),1) |
++--------+----------------------------------------+
+| SMITH  |                                  470.7 |
+| ALLEN  |                                  468.6 |
+| WARD   |                                  468.5 |
+| JONES  |                                  467.2 |
+| MARTIN |                                  461.2 |
+| BLAKE  |                                  466.2 |
+| CLARK  |                                  464.9 |
+| SCOTT  |                                  446.7 |
+| KING   |                                  459.6 |
+| TURNER |                                  461.9 |
+| ADAMS  |                                  445.5 |
+| JAMES  |                                  459.0 |
+| FORD   |                                  459.0 |
+| MILLER |                                  457.3 |
++--------+----------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,round((datediff(NOW(),hiredate)/30),0)  from emp;
++--------+----------------------------------------+
+| ename  | round((datediff(NOW(),hiredate)/30),0) |
++--------+----------------------------------------+
+| SMITH  |                                    471 |
+| ALLEN  |                                    469 |
+| WARD   |                                    469 |
+| JONES  |                                    467 |
+| MARTIN |                                    461 |
+| BLAKE  |                                    466 |
+| CLARK  |                                    465 |
+| SCOTT  |                                    447 |
+| KING   |                                    460 |
+| TURNER |                                    462 |
+| ADAMS  |                                    446 |
+| JAMES  |                                    459 |
+| FORD   |                                    459 |
+| MILLER |                                    457 |
++--------+----------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,round((datediff(NOW(),hiredate)/30),0) "MONTHS_WORKED" from emp;
++--------+---------------+
+| ename  | MONTHS_WORKED |
++--------+---------------+
+| SMITH  |           471 |
+| ALLEN  |           469 |
+| WARD   |           469 |
+| JONES  |           467 |
+| MARTIN |           461 |
+| BLAKE  |           466 |
+| CLARK  |           465 |
+| SCOTT  |           447 |
+| KING   |           460 |
+| TURNER |           462 |
+| ADAMS  |           446 |
+| JAMES  |           459 |
+| FORD   |           459 |
+| MILLER |           457 |
++--------+---------------+
+14 rows in set (0.00 sec)
+
+mysql> select <ename> earns <sal> from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<ename> earns <sal> from emp' at line 1
+mysql> select "<ename> earns <sal>" from emp;
++---------------------+
+| <ename> earns <sal> |
++---------------------+
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
+| <ename> earns <sal> |
++---------------------+
+14 rows in set (0.00 sec)
+
+mysql> select "<"ename"> earns <"sal">" from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"> earns <"sal">" from emp' at line 1
+mysql> select "%<"ename"%> earns %<"sal"%>" from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"%> earns %<"sal"%>" from emp' at line 1
+mysql> select concat("<",ename,">") from emp;
++-----------------------+
+| concat("<",ename,">") |
++-----------------------+
+| <SMITH>               |
+| <ALLEN>               |
+| <WARD>                |
+| <JONES>               |
+| <MARTIN>              |
+| <BLAKE>               |
+| <CLARK>               |
+| <SCOTT>               |
+| <KING>                |
+| <TURNER>              |
+| <ADAMS>               |
+| <JAMES>               |
+| <FORD>                |
+| <MILLER>              |
++-----------------------+
+14 rows in set (0.00 sec)
+
+mysql> select concat("<",ename,"> earns <",sal,"> monthly but wants <",sal*3,">") "Dream Salaries" from emp;
++------------------------------------------------------+
+| Dream Salaries                                       |
++------------------------------------------------------+
+| <SMITH> earns <800.00> monthly but wants <2400.00>   |
+| <ALLEN> earns <1600.00> monthly but wants <4800.00>  |
+| <WARD> earns <1250.00> monthly but wants <3750.00>   |
+| <JONES> earns <2975.00> monthly but wants <8925.00>  |
+| <MARTIN> earns <1250.00> monthly but wants <3750.00> |
+| <BLAKE> earns <2850.00> monthly but wants <8550.00>  |
+| <CLARK> earns <2450.00> monthly but wants <7350.00>  |
+| <SCOTT> earns <3000.00> monthly but wants <9000.00>  |
+| <KING> earns <5000.00> monthly but wants <15000.00>  |
+| <TURNER> earns <1500.00> monthly but wants <4500.00> |
+| <ADAMS> earns <1100.00> monthly but wants <3300.00>  |
+| <JAMES> earns <950.00> monthly but wants <2850.00>   |
+| <FORD> earns <3000.00> monthly but wants <9000.00>   |
+| <MILLER> earns <1300.00> monthly but wants <3900.00> |
++------------------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,lpad(sal,15,$) SALARY from emp;
+ERROR 1054 (42S22): Unknown column '$' in 'field list'
+mysql> select ename,lpad(sal,15,%$) SALARY from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%$) SALARY from emp' at line 1
+mysql> select ename,lpad(sal,15,"$") SALARY from emp;
++--------+-----------------+
+| ename  | SALARY          |
++--------+-----------------+
+| SMITH  | $$$$$$$$$800.00 |
+| ALLEN  | $$$$$$$$1600.00 |
+| WARD   | $$$$$$$$1250.00 |
+| JONES  | $$$$$$$$2975.00 |
+| MARTIN | $$$$$$$$1250.00 |
+| BLAKE  | $$$$$$$$2850.00 |
+| CLARK  | $$$$$$$$2450.00 |
+| SCOTT  | $$$$$$$$3000.00 |
+| KING   | $$$$$$$$5000.00 |
+| TURNER | $$$$$$$$1500.00 |
+| ADAMS  | $$$$$$$$1100.00 |
+| JAMES  | $$$$$$$$$950.00 |
+| FORD   | $$$$$$$$3000.00 |
+| MILLER | $$$$$$$$1300.00 |
++--------+-----------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,dayname(hiredate) from emp;
++--------+---------------------+-------------------+
+| ename  | hiredate            | dayname(hiredate) |
++--------+---------------------+-------------------+
+| SMITH  | 1980-12-17 00:00:00 | Wednesday         |
+| ALLEN  | 1981-02-20 00:00:00 | Friday            |
+| WARD   | 1981-02-22 00:00:00 | Sunday            |
+| JONES  | 1981-04-02 00:00:00 | Thursday          |
+| MARTIN | 1981-09-28 00:00:00 | Monday            |
+| BLAKE  | 1981-05-01 00:00:00 | Friday            |
+| CLARK  | 1981-06-09 00:00:00 | Tuesday           |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday          |
+| KING   | 1981-11-17 00:00:00 | Tuesday           |
+| TURNER | 1981-09-08 00:00:00 | Tuesday           |
+| ADAMS  | 1983-01-12 00:00:00 | Wednesday         |
+| JAMES  | 1981-12-03 00:00:00 | Thursday          |
+| FORD   | 1981-12-03 00:00:00 | Thursday          |
+| MILLER | 1982-01-23 00:00:00 | Saturday          |
++--------+---------------------+-------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,dayname(hiredate) day from emp order by dayname(hiredate);
++--------+---------------------+-----------+
+| ename  | hiredate            | day       |
++--------+---------------------+-----------+
+| ALLEN  | 1981-02-20 00:00:00 | Friday    |
+| BLAKE  | 1981-05-01 00:00:00 | Friday    |
+| MARTIN | 1981-09-28 00:00:00 | Monday    |
+| MILLER | 1982-01-23 00:00:00 | Saturday  |
+| WARD   | 1981-02-22 00:00:00 | Sunday    |
+| JONES  | 1981-04-02 00:00:00 | Thursday  |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday  |
+| JAMES  | 1981-12-03 00:00:00 | Thursday  |
+| FORD   | 1981-12-03 00:00:00 | Thursday  |
+| CLARK  | 1981-06-09 00:00:00 | Tuesday   |
+| KING   | 1981-11-17 00:00:00 | Tuesday   |
+| TURNER | 1981-09-08 00:00:00 | Tuesday   |
+| SMITH  | 1980-12-17 00:00:00 | Wednesday |
+| ADAMS  | 1983-01-12 00:00:00 | Wednesday |
++--------+---------------------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,dayname(hiredate) day from emp order by weekdate(hiredate);
+ERROR 1305 (42000): FUNCTION mydb.weekdate does not exist
+mysql> select ename,hiredate,dayname(hiredate) day from emp order by weekday(hiredate);
++--------+---------------------+-----------+
+| ename  | hiredate            | day       |
++--------+---------------------+-----------+
+| MARTIN | 1981-09-28 00:00:00 | Monday    |
+| CLARK  | 1981-06-09 00:00:00 | Tuesday   |
+| KING   | 1981-11-17 00:00:00 | Tuesday   |
+| TURNER | 1981-09-08 00:00:00 | Tuesday   |
+| SMITH  | 1980-12-17 00:00:00 | Wednesday |
+| ADAMS  | 1983-01-12 00:00:00 | Wednesday |
+| JONES  | 1981-04-02 00:00:00 | Thursday  |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday  |
+| JAMES  | 1981-12-03 00:00:00 | Thursday  |
+| FORD   | 1981-12-03 00:00:00 | Thursday  |
+| ALLEN  | 1981-02-20 00:00:00 | Friday    |
+| BLAKE  | 1981-05-01 00:00:00 | Friday    |
+| MILLER | 1982-01-23 00:00:00 | Saturday  |
+| WARD   | 1981-02-22 00:00:00 | Sunday    |
++--------+---------------------+-----------+
+14 rows in set (0.02 sec)
+
+mysql> select ename,ifnull(comm,"No Commission") COMM from emp;
++--------+---------------+
+| ename  | COMM          |
++--------+---------------+
+| SMITH  | No Commission |
+| ALLEN  | 300.00        |
+| WARD   | 500.00        |
+| JONES  | No Commission |
+| MARTIN | 1400.00       |
+| BLAKE  | No Commission |
+| CLARK  | No Commission |
+| SCOTT  | No Commission |
+| KING   | No Commission |
+| TURNER | 0.00          |
+| ADAMS  | No Commission |
+| JAMES  | No Commission |
+| FORD   | No Commission |
+| MILLER | No Commission |
++--------+---------------+
+14 rows in set (0.00 sec)
+
+mysql> select concat(ename,repeat(*,round(sal/100),0)) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*,round(sal/100),0)) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal desc' at line 1
+mysql> select concat(ename,repeat("*",round(sal/100),0)) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',0)) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal desc' at line 1
+mysql> select concat(ename,repeat("*",round(sal/100,0)) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp order by sal desc' at line 1
+mysql> select concat(ename,repeat("*",round(sal/100,0)) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp order by sal' at line 1
+mysql> select concat(ename,repeat("*",round(sal/100,0))) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal ;
++--------------------------------------------------------+
+| EMPLOYEE__AND__THEIR__SALARIES                         |
++--------------------------------------------------------+
+| SMITH********                                          |
+| JAMES**********                                        |
+| ADAMS***********                                       |
+| WARD*************                                      |
+| MARTIN*************                                    |
+| MILLER*************                                    |
+| TURNER***************                                  |
+| ALLEN****************                                  |
+| CLARK*************************                         |
+| BLAKE*****************************                     |
+| JONES******************************                    |
+| SCOTT******************************                    |
+| FORD******************************                     |
+| KING************************************************** |
++--------------------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select concat(ename,repeat("*",round(sal/100,0))) "EMPLOYEE__AND__THEIR__SALARIES" from emp order by sal desc;
++--------------------------------------------------------+
+| EMPLOYEE__AND__THEIR__SALARIES                         |
++--------------------------------------------------------+
+| KING************************************************** |
+| SCOTT******************************                    |
+| FORD******************************                     |
+| JONES******************************                    |
+| BLAKE*****************************                     |
+| CLARK*************************                         |
+| ALLEN****************                                  |
+| TURNER***************                                  |
+| MILLER*************                                    |
+| WARD*************                                      |
+| MARTIN*************                                    |
+| ADAMS***********                                       |
+| JAMES**********                                        |
+| SMITH********                                          |
++--------------------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(adddate(hiredate,interval 6 month),"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+------------------------------+
+| ename  | hiredate            | REVIEW                       |
++--------+---------------------+------------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Wednesday,the 17 of June     |
+| ALLEN  | 1981-02-20 00:00:00 | Thursday,the 20 of August    |
+| WARD   | 1981-02-22 00:00:00 | Saturday,the 22 of August    |
+| JONES  | 1981-04-02 00:00:00 | Friday,the 02 of October     |
+| MARTIN | 1981-09-28 00:00:00 | Sunday,the 28 of March       |
+| BLAKE  | 1981-05-01 00:00:00 | Sunday,the 01 of November    |
+| CLARK  | 1981-06-09 00:00:00 | Wednesday,the 09 of December |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday,the 09 of June      |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May         |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March       |
+| ADAMS  | 1983-01-12 00:00:00 | Tuesday,the 12 of July       |
+| JAMES  | 1981-12-03 00:00:00 | Thursday,the 03 of June      |
+| FORD   | 1981-12-03 00:00:00 | Thursday,the 03 of June      |
+| MILLER | 1982-01-23 00:00:00 | Friday,the 23 of July        |
++--------+---------------------+------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(adddate(hiredate,interval 6 month),"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+------------------------------+
+| ename  | hiredate            | REVIEW                       |
++--------+---------------------+------------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Wednesday,the 17 of June     |
+| ALLEN  | 1981-02-20 00:00:00 | Thursday,the 20 of August    |
+| WARD   | 1981-02-22 00:00:00 | Saturday,the 22 of August    |
+| JONES  | 1981-04-02 00:00:00 | Friday,the 02 of October     |
+| MARTIN | 1981-09-28 00:00:00 | Sunday,the 28 of March       |
+| BLAKE  | 1981-05-01 00:00:00 | Sunday,the 01 of November    |
+| CLARK  | 1981-06-09 00:00:00 | Wednesday,the 09 of December |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday,the 09 of June      |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May         |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March       |
+| ADAMS  | 1983-01-12 00:00:00 | Tuesday,the 12 of July       |
+| JAMES  | 1981-12-03 00:00:00 | Thursday,the 03 of June      |
+| FORD   | 1981-12-03 00:00:00 | Thursday,the 03 of June      |
+| MILLER | 1982-01-23 00:00:00 | Friday,the 23 of July        |
++--------+---------------------+------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,weekday(date_format(adddate(hiredate,interval 6 month),"%W,the %d of %M")) REVIEW from emp;
++--------+---------------------+--------+
+| ename  | hiredate            | REVIEW |
++--------+---------------------+--------+
+| SMITH  | 1980-12-17 00:00:00 |   NULL |
+| ALLEN  | 1981-02-20 00:00:00 |   NULL |
+| WARD   | 1981-02-22 00:00:00 |   NULL |
+| JONES  | 1981-04-02 00:00:00 |   NULL |
+| MARTIN | 1981-09-28 00:00:00 |   NULL |
+| BLAKE  | 1981-05-01 00:00:00 |   NULL |
+| CLARK  | 1981-06-09 00:00:00 |   NULL |
+| SCOTT  | 1982-12-09 00:00:00 |   NULL |
+| KING   | 1981-11-17 00:00:00 |   NULL |
+| TURNER | 1981-09-08 00:00:00 |   NULL |
+| ADAMS  | 1983-01-12 00:00:00 |   NULL |
+| JAMES  | 1981-12-03 00:00:00 |   NULL |
+| FORD   | 1981-12-03 00:00:00 |   NULL |
+| MILLER | 1982-01-23 00:00:00 |   NULL |
++--------+---------------------+--------+
+14 rows in set, 14 warnings (0.00 sec)
+
+mysql> select ename,hiredate,weekday(adddate(hiredate,interval 6 month))  from emp;
++--------+---------------------+---------------------------------------------+
+| ename  | hiredate            | weekday(adddate(hiredate,interval 6 month)) |
++--------+---------------------+---------------------------------------------+
+| SMITH  | 1980-12-17 00:00:00 |                                           2 |
+| ALLEN  | 1981-02-20 00:00:00 |                                           3 |
+| WARD   | 1981-02-22 00:00:00 |                                           5 |
+| JONES  | 1981-04-02 00:00:00 |                                           4 |
+| MARTIN | 1981-09-28 00:00:00 |                                           6 |
+| BLAKE  | 1981-05-01 00:00:00 |                                           6 |
+| CLARK  | 1981-06-09 00:00:00 |                                           2 |
+| SCOTT  | 1982-12-09 00:00:00 |                                           3 |
+| KING   | 1981-11-17 00:00:00 |                                           0 |
+| TURNER | 1981-09-08 00:00:00 |                                           0 |
+| ADAMS  | 1983-01-12 00:00:00 |                                           1 |
+| JAMES  | 1981-12-03 00:00:00 |                                           3 |
+| FORD   | 1981-12-03 00:00:00 |                                           3 |
+| MILLER | 1982-01-23 00:00:00 |                                           4 |
++--------+---------------------+---------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,dayofweek(adddate(hiredate,interval 6 month))  from emp;
++--------+---------------------+-----------------------------------------------+
+| ename  | hiredate            | dayofweek(adddate(hiredate,interval 6 month)) |
++--------+---------------------+-----------------------------------------------+
+| SMITH  | 1980-12-17 00:00:00 |                                             4 |
+| ALLEN  | 1981-02-20 00:00:00 |                                             5 |
+| WARD   | 1981-02-22 00:00:00 |                                             7 |
+| JONES  | 1981-04-02 00:00:00 |                                             6 |
+| MARTIN | 1981-09-28 00:00:00 |                                             1 |
+| BLAKE  | 1981-05-01 00:00:00 |                                             1 |
+| CLARK  | 1981-06-09 00:00:00 |                                             4 |
+| SCOTT  | 1982-12-09 00:00:00 |                                             5 |
+| KING   | 1981-11-17 00:00:00 |                                             2 |
+| TURNER | 1981-09-08 00:00:00 |                                             2 |
+| ADAMS  | 1983-01-12 00:00:00 |                                             3 |
+| JAMES  | 1981-12-03 00:00:00 |                                             5 |
+| FORD   | 1981-12-03 00:00:00 |                                             5 |
+| MILLER | 1982-01-23 00:00:00 |                                             6 |
++--------+---------------------+-----------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,dayname(adddate(hiredate,interval 6 month))  from emp;
++--------+---------------------+---------------------------------------------+
+| ename  | hiredate            | dayname(adddate(hiredate,interval 6 month)) |
++--------+---------------------+---------------------------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Wednesday                                   |
+| ALLEN  | 1981-02-20 00:00:00 | Thursday                                    |
+| WARD   | 1981-02-22 00:00:00 | Saturday                                    |
+| JONES  | 1981-04-02 00:00:00 | Friday                                      |
+| MARTIN | 1981-09-28 00:00:00 | Sunday                                      |
+| BLAKE  | 1981-05-01 00:00:00 | Sunday                                      |
+| CLARK  | 1981-06-09 00:00:00 | Wednesday                                   |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday                                    |
+| KING   | 1981-11-17 00:00:00 | Monday                                      |
+| TURNER | 1981-09-08 00:00:00 | Monday                                      |
+| ADAMS  | 1983-01-12 00:00:00 | Tuesday                                     |
+| JAMES  | 1981-12-03 00:00:00 | Thursday                                    |
+| FORD   | 1981-12-03 00:00:00 | Thursday                                    |
+| MILLER | 1982-01-23 00:00:00 | Friday                                      |
++--------+---------------------+---------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,dayname(adddate(hiredate,interval 6 month))  from emp;
++--------+---------------------+---------------------------------------------+
+| ename  | hiredate            | dayname(adddate(hiredate,interval 6 month)) |
++--------+---------------------+---------------------------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Wednesday                                   |
+| ALLEN  | 1981-02-20 00:00:00 | Thursday                                    |
+| WARD   | 1981-02-22 00:00:00 | Saturday                                    |
+| JONES  | 1981-04-02 00:00:00 | Friday                                      |
+| MARTIN | 1981-09-28 00:00:00 | Sunday                                      |
+| BLAKE  | 1981-05-01 00:00:00 | Sunday                                      |
+| CLARK  | 1981-06-09 00:00:00 | Wednesday                                   |
+| SCOTT  | 1982-12-09 00:00:00 | Thursday                                    |
+| KING   | 1981-11-17 00:00:00 | Monday                                      |
+| TURNER | 1981-09-08 00:00:00 | Monday                                      |
+| ADAMS  | 1983-01-12 00:00:00 | Tuesday                                     |
+| JAMES  | 1981-12-03 00:00:00 | Thursday                                    |
+| FORD   | 1981-12-03 00:00:00 | Thursday                                    |
+| MILLER | 1982-01-23 00:00:00 | Friday                                      |
++--------+---------------------+---------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,case dayname(adddate(hiredate,interval 6 month)) 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select ename,hiredate,case weekday(adddate(hiredate,interval 6 month))  
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select ename,hiredate,data_format(case dayname(adddate(hiredate,interval 6 month)) 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select ename,hiredate,data_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> when "0" then adddate(hiredate,interval 6 month)
+    -> when "1" then adddate(adddate(hiredate,interval 6 month),intercal 6 day)
+    -> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '6 day)' at line 3
+mysql> select ename,hiredate,data_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> when "0" then adddate(hiredate,interval 6 month)
+    -> when "1" then adddate(adddate(hiredate,interval 6 month),interval 6 day)
+    -> when "2" then adddate(adddate(hiredate,interval 6 month),interval 5 day)
+    -> when "3" then adddate(adddate(hiredate,interval 6 month),interval 4 day)
+    -> when "4" then adddate(adddate(hiredate,interval 6 month),interval 3 day)
+    -> when "5" then adddate(adddate(hiredate,interval 6 month),interval 2 day)
+    -> when "6" then adddate(adddate(hiredate,interval 6 month),interval 1 day),"%W,the %d of %M") REVIEW from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"%W,the %d of %M") REVIEW from emp' at line 8
+mysql> select ename,hiredate,data_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> when "0" then adddate(hiredate,interval 6 month)
+    ->  when "1" then adddate(adddate(hiredate,interval 6 month),interval 6 day)
+    ->  when "2" then adddate(adddate(hiredate,interval 6 month),interval 5 day)
+    ->  when "3" then adddate(adddate(hiredate,interval 6 month),interval 4 day)
+    -> when "4" then adddate(adddate(hiredate,interval 6 month),interval 3 day)
+    -> when "5" then adddate(adddate(hiredate,interval 6 month),interval 2 day)
+    -> when "6" then adddate(adddate(hiredate,interval 6 month),interval 1 day) end ,"%W,the %d of %M") REVIEW from emp;
+ERROR 1305 (42000): FUNCTION mydb.data_format does not exist
+mysql> select ename,hiredate,date_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> when "0" then adddate(hiredate,interval 6 month)
+    -> when "1" then adddate(adddate(hiredate,interval 6 month),interval 6 day)
+    ->  when "2" then adddate(adddate(hiredate,interval 6 month),interval 5 day)
+    ->  when "3" then adddate(adddate(hiredate,interval 6 month),interval 4 day)
+    -> when "4" then adddate(adddate(hiredate,interval 6 month),interval 3 day)
+    -> when "5" then adddate(adddate(hiredate,interval 6 month),interval 2 day)
+    -> when "6" then adddate(adddate(hiredate,interval 6 month),interval 1 day) end ,"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+---------------------------+
+| ename  | hiredate            | REVIEW                    |
++--------+---------------------+---------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Monday,the 22 of June     |
+| ALLEN  | 1981-02-20 00:00:00 | Monday,the 24 of August   |
+| WARD   | 1981-02-22 00:00:00 | Monday,the 24 of August   |
+| JONES  | 1981-04-02 00:00:00 | Monday,the 05 of October  |
+| MARTIN | 1981-09-28 00:00:00 | Monday,the 29 of March    |
+| BLAKE  | 1981-05-01 00:00:00 | Monday,the 02 of November |
+| CLARK  | 1981-06-09 00:00:00 | Monday,the 14 of December |
+| SCOTT  | 1982-12-09 00:00:00 | Monday,the 13 of June     |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May      |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March    |
+| ADAMS  | 1983-01-12 00:00:00 | Monday,the 18 of July     |
+| JAMES  | 1981-12-03 00:00:00 | Monday,the 07 of June     |
+| FORD   | 1981-12-03 00:00:00 | Monday,the 07 of June     |
+| MILLER | 1982-01-23 00:00:00 | Monday,the 26 of July     |
++--------+---------------------+---------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> when "0" then adddate(hiredate,interval 6 month)
+    -> when "adddate(hiredate,interval 6 month)" then adddate(adddate(hiredate,interval 6 month),interval 7-weekday(adddate(hiredate,interval 6 month)) day)
+    -> end ,"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+------------------------+
+| ename  | hiredate            | REVIEW                 |
++--------+---------------------+------------------------+
+| SMITH  | 1980-12-17 00:00:00 | NULL                   |
+| ALLEN  | 1981-02-20 00:00:00 | NULL                   |
+| WARD   | 1981-02-22 00:00:00 | NULL                   |
+| JONES  | 1981-04-02 00:00:00 | NULL                   |
+| MARTIN | 1981-09-28 00:00:00 | NULL                   |
+| BLAKE  | 1981-05-01 00:00:00 | NULL                   |
+| CLARK  | 1981-06-09 00:00:00 | NULL                   |
+| SCOTT  | 1982-12-09 00:00:00 | NULL                   |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May   |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March |
+| ADAMS  | 1983-01-12 00:00:00 | NULL                   |
+| JAMES  | 1981-12-03 00:00:00 | NULL                   |
+| FORD   | 1981-12-03 00:00:00 | NULL                   |
+| MILLER | 1982-01-23 00:00:00 | NULL                   |
++--------+---------------------+------------------------+
+14 rows in set, 12 warnings (0.00 sec)
+
+mysql> select ename,hiredate,date_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> when "0" then adddate(hiredate,interval 6 month)
+    -> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> select ename,hiredate,date_format(case weekday(adddate(hiredate,interval 6 month)) 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select ename,hiredate,date_format(case 
+    -> when weekday(adddate(hiredate,interval 6 month)) between 0 and 0 then weekday(adddate(hiredate,interval 6 month))
+    -> when weekday(adddate(hiredate,interval 6 month)) between 1 and 6 then 7-; weekday(adddate(hiredate,interval 6 month))
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'weekday(adddate(hiredate,interval 6 month))' at line 1
+mysql> select ename,hiredate,date_format(case 
+    -> when weekday(adddate(hiredate,interval 6 month)) between 0 and 0 then adddate(hiredate,interval 6 month)
+    -> when weekday(adddate(hiredate,interval 6 month)) between 1 and 6 then adddate(adddate(hiredate,interval 6 month),intercal 7-adddate(hiredate,interval 6 month) day) 
+    -> end,"%W,the %d of %M") REVIEW from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '7-adddate(hiredate,interval 6 month) day) 
+end,"%W,the %d of %M") REVIEW from em' at line 3
+mysql> select ename,hiredate,date_format(case 
+    -> when weekday(adddate(hiredate,interval 6 month)) between 0 and 0 then adddate(hiredate,interval 6 month)
+    -> when weekday(adddate(hiredate,interval 6 month)) between 1 and 6 then adddate(adddate(hiredate,interval 6 month),interval 7-adddate(hiredate,interval 6 month) day)
+    -> end ,"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+------------------------+
+| ename  | hiredate            | REVIEW                 |
++--------+---------------------+------------------------+
+| SMITH  | 1980-12-17 00:00:00 | NULL                   |
+| ALLEN  | 1981-02-20 00:00:00 | NULL                   |
+| WARD   | 1981-02-22 00:00:00 | NULL                   |
+| JONES  | 1981-04-02 00:00:00 | NULL                   |
+| MARTIN | 1981-09-28 00:00:00 | NULL                   |
+| BLAKE  | 1981-05-01 00:00:00 | NULL                   |
+| CLARK  | 1981-06-09 00:00:00 | NULL                   |
+| SCOTT  | 1982-12-09 00:00:00 | NULL                   |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May   |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March |
+| ADAMS  | 1983-01-12 00:00:00 | NULL                   |
+| JAMES  | 1981-12-03 00:00:00 | NULL                   |
+| FORD   | 1981-12-03 00:00:00 | NULL                   |
+| MILLER | 1982-01-23 00:00:00 | NULL                   |
++--------+---------------------+------------------------+
+14 rows in set, 12 warnings (0.02 sec)
+
+mysql> select ename,hiredate,date_format(case 
+    -> when weekday(adddate(hiredate,interval 6 month)) between 0 and 0 then adddate(hiredate,interval 6 month)
+    -> when weekday(adddate(hiredate,interval 6 month)) between 1 and 6 then adddate(adddate(hiredate,interval 6 month),interval 7-weekday(adddate(hiredate,interval 6 month)) day)
+    -> end ,"%W,the %d of %M") REVIEW from emp;
++--------+---------------------+---------------------------+
+| ename  | hiredate            | REVIEW                    |
++--------+---------------------+---------------------------+
+| SMITH  | 1980-12-17 00:00:00 | Monday,the 22 of June     |
+| ALLEN  | 1981-02-20 00:00:00 | Monday,the 24 of August   |
+| WARD   | 1981-02-22 00:00:00 | Monday,the 24 of August   |
+| JONES  | 1981-04-02 00:00:00 | Monday,the 05 of October  |
+| MARTIN | 1981-09-28 00:00:00 | Monday,the 29 of March    |
+| BLAKE  | 1981-05-01 00:00:00 | Monday,the 02 of November |
+| CLARK  | 1981-06-09 00:00:00 | Monday,the 14 of December |
+| SCOTT  | 1982-12-09 00:00:00 | Monday,the 13 of June     |
+| KING   | 1981-11-17 00:00:00 | Monday,the 17 of May      |
+| TURNER | 1981-09-08 00:00:00 | Monday,the 08 of March    |
+| ADAMS  | 1983-01-12 00:00:00 | Monday,the 18 of July     |
+| JAMES  | 1981-12-03 00:00:00 | Monday,the 07 of June     |
+| FORD   | 1981-12-03 00:00:00 | Monday,the 07 of June     |
+| MILLER | 1982-01-23 00:00:00 | Monday,the 26 of July     |
++--------+---------------------+---------------------------+
+14 rows in set (0.00 sec)
+
+mysql> notee

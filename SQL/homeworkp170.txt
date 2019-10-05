@@ -1,0 +1,16 @@
+8.start transaction;
+update my_emp set salary=salary*1.1;
+savepoint a1;
+delete from my_emp;
+select * from my_emp;
+rollback to a1;
+commit;
+7.delete from my_emp where FIRST_NAME="Betty" and LAST_NAME="Dancs";
+6.select * from my_emp;
+5.update my_emp set salary=1000 where salary<=900;
+4.SET SQL_SAFE_UPDATES=0 (有一個保護機制要先關)
+update my_emp LAST_NAME="Drexler" where ID=3;
+3.insert into my_emp(id,last_name,first_name,userid,salary) values(4,"Newman","Chad","cnewman",750);
+insert into my_emp(id,last_name,first_name,userid,salary) values(3,"Biri","Ben","bbiri",1100);
+2.insert into my_emp(id,last_name,first_name,userid,salary) values(2,"Dancs","Betty","bdancs",860);
+1.insert into my_emp(id,last_name,first_name,userid,salary) values(1,"Patel","Ralph","rpatel",795);

@@ -1,0 +1,488 @@
+mysql> select ename,hiredate from emp where
+    -> deptno =(
+    -> select deptno from emp where ename ="BLAKE");
++--------+---------------------+
+| ename  | hiredate            |
++--------+---------------------+
+| ALLEN  | 1981-02-20 00:00:00 |
+| WARD   | 1981-02-22 00:00:00 |
+| MARTIN | 1981-09-28 00:00:00 |
+| BLAKE  | 1981-05-01 00:00:00 |
+| TURNER | 1981-09-08 00:00:00 |
+| JAMES  | 1981-12-03 00:00:00 |
++--------+---------------------+
+6 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,deptno from emp where
+    -> deptno =(
+    -> select deptno from emp where ename ="BLAKE");
++--------+---------------------+--------+
+| ename  | hiredate            | deptno |
++--------+---------------------+--------+
+| ALLEN  | 1981-02-20 00:00:00 |     30 |
+| WARD   | 1981-02-22 00:00:00 |     30 |
+| MARTIN | 1981-09-28 00:00:00 |     30 |
+| BLAKE  | 1981-05-01 00:00:00 |     30 |
+| TURNER | 1981-09-08 00:00:00 |     30 |
+| JAMES  | 1981-12-03 00:00:00 |     30 |
++--------+---------------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select ename,hiredate from emp where
+    -> hiredate > (
+    -> select hiredate from emp where ename ="BLAKE");
++--------+---------------------+
+| ename  | hiredate            |
++--------+---------------------+
+| MARTIN | 1981-09-28 00:00:00 |
+| CLARK  | 1981-06-09 00:00:00 |
+| SCOTT  | 1982-12-09 00:00:00 |
+| KING   | 1981-11-17 00:00:00 |
+| TURNER | 1981-09-08 00:00:00 |
+| ADAMS  | 1983-01-12 00:00:00 |
+| JAMES  | 1981-12-03 00:00:00 |
+| FORD   | 1981-12-03 00:00:00 |
+| MILLER | 1982-01-23 00:00:00 |
++--------+---------------------+
+9 rows in set (0.00 sec)
+
+mysql> select hiredate from emp where ename ="BLAKE"
+    -> ;
++---------------------+
+| hiredate            |
++---------------------+
+| 1981-05-01 00:00:00 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select empno,ename,sal from emp where 
+    -> sal > ( select avg(sal) from emp )
+    -> order by sal desc;
++-------+-------+---------+
+| empno | ename | sal     |
++-------+-------+---------+
+|  7839 | KING  | 5000.00 |
+|  7788 | SCOTT | 3000.00 |
+|  7902 | FORD  | 3000.00 |
+|  7566 | JONES | 2975.00 |
+|  7698 | BLAKE | 2850.00 |
+|  7782 | CLARK | 2450.00 |
++-------+-------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select empno,ename from emp where
+    -> deptno  in (select deptno from emp where ename like "%T%);
+    "> "
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> select empno,ename from emp where
+    -> deptno  in (select deptno from emp where ename like "%T%");
++-------+--------+
+| empno | ename  |
++-------+--------+
+|  7369 | SMITH  |
+|  7566 | JONES  |
+|  7788 | SCOTT  |
+|  7876 | ADAMS  |
+|  7902 | FORD   |
+|  7499 | ALLEN  |
+|  7521 | WARD   |
+|  7654 | MARTIN |
+|  7698 | BLAKE  |
+|  7844 | TURNER |
+|  7900 | JAMES  |
++-------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select deptno from emp where ename like "%T%"
+    -> ;
++--------+
+| deptno |
++--------+
+|     20 |
+|     30 |
+|     20 |
+|     30 |
++--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,deptno,job from emp where
+    ->  deptno =(select deptno from dept where loc="DALLAS");
++-------+--------+---------+
+| ename | deptno | job     |
++-------+--------+---------+
+| SMITH |     20 | CLERK   |
+| JONES |     20 | MANAGER |
+| SCOTT |     20 | ANALYST |
+| ADAMS |     20 | CLERK   |
+| FORD  |     20 | ANALYST |
++-------+--------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select ename,sal from emp where
+    -> mgr = (select deptno from emp where ename="KING");
+Empty set (0.00 sec)
+
+mysql> select ename,sal from emp where
+    -> mgr = (selec empno from emp where ename="KING");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'empno from emp where ename="KING")' at line 2
+mysql> select ename,sal from emp where
+    -> mgr = (selet empno from emp where ename="KING");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'empno from emp where ename="KING")' at line 2
+mysql> select ename,sal from emp where
+    -> mgr = (select empno from emp where ename="KING");
++-------+---------+
+| ename | sal     |
++-------+---------+
+| JONES | 2975.00 |
+| BLAKE | 2850.00 |
+| CLARK | 2450.00 |
++-------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,ename,job from emp where
+    -> deptno = (select deptno from dept where deptno ="SALES:);
+    "> "
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> select deptno,ename,job from emp where
+    -> deptno = (select deptno from dept where deptno ="SALES");
+Empty set, 1 warning (0.00 sec)
+
+mysql> select deptno,ename,job from emp where
+    -> deptno = (select deptno from dept where dname="SALES");
++--------+--------+----------+
+| deptno | ename  | job      |
++--------+--------+----------+
+|     30 | ALLEN  | SALESMAN |
+|     30 | WARD   | SALESMAN |
+|     30 | MARTIN | SALESMAN |
+|     30 | BLAKE  | MANAGER  |
+|     30 | TURNER | SALESMAN |
+|     30 | JAMES  | CLERK    |
++--------+--------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal from emp where
+    -> (sal> (select avg(sal) where from emp )) and
+    -> (deptno  in (select deptno from emp where ename like "%T%"));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp )) and
+(deptno  in (select deptno from emp where ename like "%T%"))' at line 2
+mysql> select empno,ename,sal from emp where
+    -> (sal> (select avg(sal) from emp )) and
+    -> (deptno  in (select deptno from emp where ename like "%T%"));
++-------+-------+---------+
+| empno | ename | sal     |
++-------+-------+---------+
+|  7566 | JONES | 2975.00 |
+|  7788 | SCOTT | 3000.00 |
+|  7902 | FORD  | 3000.00 |
+|  7698 | BLAKE | 2850.00 |
++-------+-------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select deptno from emp where ename like "%T%"
+    -> ;
++--------+
+| deptno |
++--------+
+|     20 |
+|     30 |
+|     20 |
+|     30 |
++--------+
+4 rows in set (0.00 sec)
+
+mysql> select avg(sal) from emp;
++-------------+
+| avg(sal)    |
++-------------+
+| 2073.214286 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select ename,deptno,sal from emp where
+    -> (deptno in(select deptno from emp where comm>0)) and
+    -> (sal in (select sal from emp where comm>0));
++--------+--------+---------+
+| ename  | deptno | sal     |
++--------+--------+---------+
+| ALLEN  |     30 | 1600.00 |
+| WARD   |     30 | 1250.00 |
+| MARTIN |     30 | 1250.00 |
++--------+--------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where depno= (select deptno from dept where loc ="DALLS"))) and 
+    -> (comm in (select comm from emp where deptno=(select depno from dept where loc="DALLS")));
+ERROR 1054 (42S22): Unknown column 'depno' in 'where clause'
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where depno= (select deptno from deptno where loc ="DALLS"))) and 
+    -> (comm in (select comm from emp where deptno=(select depno from dept where loc="DALLS")));
+ERROR 1146 (42S02): Table 'mydb.deptno' doesn't exist
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where depno= (select deptno from dept where loc ="DALLS"))) and 
+    -> (comm in (select comm from emp where deptno=(select depno from dept where loc="DALLS")));
+ERROR 1054 (42S22): Unknown column 'depno' in 'where clause'
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where deptno= (select deptno from dept where loc ="DALLS"))) and 
+    -> (comm in (select comm from emp where deptno=(select depno from dept where loc="DALLS")));
+ERROR 1054 (42S22): Unknown column 'depno' in 'field list'
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where deptno= (select deptno from dept where loc ="DALLS"))) and 
+    -> (comm in (select comm from emp where deptno=(select deptno from dept where loc="DALLS")));
+Empty set (0.00 sec)
+
+mysql> select deptno from dept where loc ="DALLS"
+    -> ;
+Empty set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | MIS        | NEW YORK |
+|     60 | MS         | NULL     |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where deptno= (select deptno from dept where loc ="DALLAS"))) and 
+    -> (comm in (select comm from emp where deptno=(select deptno from dept where loc="DALLAS")));
+Empty set (0.00 sec)
+
+mysql> select deptno from dept where loc ="DALLAS";
++--------+
+| deptno |
++--------+
+|     20 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select sal from emp where deptno= (select deptno from dept where loc ="DALLAS")
+    -> ;
++---------+
+| sal     |
++---------+
+|  800.00 |
+| 2975.00 |
+| 3000.00 |
+| 1100.00 |
+| 3000.00 |
++---------+
+5 rows in set (0.00 sec)
+
+mysql> select comm from emp where deptno=(select deptno from dept where loc="DALLAS";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select comm from emp where deptno=(select deptno from dept where loc="DALLAS");
++------+
+| comm |
++------+
+| NULL |
+| NULL |
+| NULL |
+| NULL |
+| NULL |
++------+
+5 rows in set (0.00 sec)
+
+mysql> select comm from emp where deptno=(select deptno from dept where loc="DALLAS") and is not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'is not null' at line 1
+mysql> select comm from emp where (deptno=(select deptno from dept where loc="DALLAS")) and (is not null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'is not null)' at line 1
+mysql> select comm from emp where (deptno=(select deptno from dept where loc="DALLAS")) and (comm is not null);
+Empty set (0.00 sec)
+
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where deptno= (select deptno from dept where loc ="DALLAS"))) and 
+    -> (comm in (select comm from emp where deptno=(select deptno from dept where loc="DALLAS")  and (comm is not null)));
+Empty set (0.00 sec)
+
+mysql> select comm from emp where (deptno=(select deptno from dept where loc="DALLAS")) and (ifnull(0,0));
+Empty set (0.00 sec)
+
+mysql> select ifnull(select comm from emp where (deptno=(select deptno from dept where loc="DALLAS")) 0)),0);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select comm from emp where (deptno=(select deptno from dept where loc="DALLAS"))' at line 1
+mysql> select ifnull(select comm from emp where (deptno=(select deptno from dept where loc="DALLAS")) ,0);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select comm from emp where (deptno=(select deptno from dept where loc="DALLAS"))' at line 1
+mysql> select comm from emp where (deptno=(select deptno from dept where loc="DALLAS"))l;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'l' at line 1
+mysql> select comm from emp where (deptno=(select deptno from dept where loc="DALLAS"));
++------+
+| comm |
++------+
+| NULL |
+| NULL |
+| NULL |
+| NULL |
+| NULL |
++------+
+5 rows in set (0.00 sec)
+
+mysql> select  ifnull(comm,0) from emp where (deptno=(select deptno from dept where loc="DALLAS"));
++----------------+
+| ifnull(comm,0) |
++----------------+
+|           0.00 |
+|           0.00 |
+|           0.00 |
+|           0.00 |
+|           0.00 |
++----------------+
+5 rows in set (0.00 sec)
+
+mysql> select ename,deptno,sal from emp where
+    -> (sal in (select sal from emp where deptno= (select deptno from dept where loc ="DALLAS"))) and
+    -> (ifnull(comm,0) in (select ifnull(comm,0) from emp where deptno=(select deptno from dept where loc="DALLAS")));
++-------+--------+---------+
+| ename | deptno | sal     |
++-------+--------+---------+
+| SMITH |     20 |  800.00 |
+| JONES |     20 | 2975.00 |
+| SCOTT |     20 | 3000.00 |
+| ADAMS |     20 | 1100.00 |
+| FORD  |     20 | 3000.00 |
++-------+--------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select sal,comm from emp where
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select ename,hiredate,sal from emp where
+    -> (sal=(select sal from emp ename="SCOTT")) and 
+    -> (ifnull(comm,0)=(select ifnull(comm,0) from emp ename="SCOTT")) and
+    -> ename  not in("SCOTT");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '="SCOTT")) and 
+(ifnull(comm,0)=(select ifnull(comm,0) from emp ename="SCOTT")) ' at line 2
+mysql> select ename,hiredate,sal from emp where
+    -> (sal=(select sal from emp ename="SCOTT")) and 
+    -> (ifull(comm,0)=(select ifnull(com;m,0) from emp ename="SCOTT")) and
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '="SCOTT")) and 
+(ifull(comm,0)=(select ifnull(com' at line 2
+    -> (ifull(comm,0)=(select ifnull(com;m,0) from emp ename="SCOTT")) and
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'm,0) from emp ename="SCOTT")) and
+(ifull(comm,0)=(select ifnull(com' at line 1
+    -> "
+    "> "
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'm,0) from emp ename="SCOTT")) and
+"
+"' at line 1
+mysql> sal=(select sal from emp ename="SCOTT");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sal=(select sal from emp ename="SCOTT")' at line 1
+mysql> select sal from emp ename="SCOTT";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '="SCOTT"' at line 1
+mysql> select ename,hiredate,sal from emp where
+    -> (sal=(select sal from emp where ename="SCOTT")) and 
+    -> (ifnull(comm,0)=(select ifnull(comm,0) from  where emp ename="SCOTT")) and
+    -> ename  not in("SCOTT");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where emp ename="SCOTT")) and
+ename  not in("SCOTT")' at line 3
+mysql> select ename,hiredate,sal from emp where
+    -> (sal=(select sal from emp where ename="SCOTT")) and 
+    -> (ifnull(comm,0)=(select ifnull(comm,0) from emp where  ename="SCOTT")) and
+    -> ename  not in("SCOTT");
++-------+---------------------+---------+
+| ename | hiredate            | sal     |
++-------+---------------------+---------+
+| FORD  | 1981-12-03 00:00:00 | 3000.00 |
++-------+---------------------+---------+
+1 row in set (0.02 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE            | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+---------------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,sal from emp where
+    -> sal > all (select sal from emp where job="CLERKS")
+    -> order bysal desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'bysal desc' at line 3
+mysql> select ename,hiredate,sal from emp where
+    -> sal > all (select sal from emp where job="CLERKS")
+    -> order by sal desc;
++--------+---------------------+---------+
+| ename  | hiredate            | sal     |
++--------+---------------------+---------+
+| KING   | 1981-11-17 00:00:00 | 5000.00 |
+| SCOTT  | 1982-12-09 00:00:00 | 3000.00 |
+| FORD   | 1981-12-03 00:00:00 | 3000.00 |
+| JONES  | 1981-04-02 00:00:00 | 2975.00 |
+| BLAKE  | 1981-05-01 00:00:00 | 2850.00 |
+| CLARK  | 1981-06-09 00:00:00 | 2450.00 |
+| ALLEN  | 1981-02-20 00:00:00 | 1600.00 |
+| TURNER | 1981-09-08 00:00:00 | 1500.00 |
+| MILLER | 1982-01-23 00:00:00 | 1300.00 |
+| WARD   | 1981-02-22 00:00:00 | 1250.00 |
+| MARTIN | 1981-09-28 00:00:00 | 1250.00 |
+| ADAMS  | 1983-01-12 00:00:00 | 1100.00 |
+| JAMES  | 1981-12-03 00:00:00 |  950.00 |
+| SMITH  | 1980-12-17 00:00:00 |  800.00 |
++--------+---------------------+---------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,sal from emp where
+    -> sal >  any (select sal from emp where job="CLERKS")
+    -> order by sal desc;
+Empty set (0.02 sec)
+
+mysql> select ename,hiredate,sal from emp where
+    -> sal >  all (select sal from emp where job="CLERK")
+    -> order by sal desc;
++--------+---------------------+---------+
+| ename  | hiredate            | sal     |
++--------+---------------------+---------+
+| KING   | 1981-11-17 00:00:00 | 5000.00 |
+| SCOTT  | 1982-12-09 00:00:00 | 3000.00 |
+| FORD   | 1981-12-03 00:00:00 | 3000.00 |
+| JONES  | 1981-04-02 00:00:00 | 2975.00 |
+| BLAKE  | 1981-05-01 00:00:00 | 2850.00 |
+| CLARK  | 1981-06-09 00:00:00 | 2450.00 |
+| ALLEN  | 1981-02-20 00:00:00 | 1600.00 |
+| TURNER | 1981-09-08 00:00:00 | 1500.00 |
++--------+---------------------+---------+
+8 rows in set (0.00 sec)
+
+mysql> notee

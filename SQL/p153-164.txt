@@ -1,0 +1,61 @@
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | MIS        | NEW YORK |
+|     60 | MS         | NULL     |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> update dept 
+    -> set loc=taiwan
+    -> where dept=60;
+ERROR 1054 (42S22): Unknown column 'dept' in 'where clause'
+mysql> update dept 
+    -> set loc=taiwan
+    -> where deptno=60;
+ERROR 1054 (42S22): Unknown column 'taiwan' in 'field list'
+mysql> update dept \
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> update dept 
+    -> set loc="taiwan"
+    -> where deptno=60;
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | MIS        | NEW YORK |
+|     60 | MS         | taiwan   |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> update dept 
+    -> set loc= upper"taiwan"
+    -> where deptno=60;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"taiwan"
+where deptno=60' at line 2
+mysql> delete from dept where dept=60;
+ERROR 1054 (42S22): Unknown column 'dept' in 'where clause'
+mysql> delete from dept where deptno=60;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into emp(deptno) values(70);
+ERROR 1364 (HY000): Field 'EMPNO' doesn't have a default value
+mysql> delete from emp where deptno=30
+    -> ;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`mydb`.`emp`, CONSTRAINT `EMP_MGR_FK` FOREIGN KEY (`MGR`) REFERENCES `emp` (`EMPNO`))
+mysql> select * from bonus;
+ERROR 1146 (42S02): Table 'mydb.bonus' doesn't exist
+mysql> Terminal close -- exit!

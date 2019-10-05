@@ -1,0 +1,45 @@
+mysql> select lpad(ename,8" "),replace(job,"CLERK","克拉克"),concat(ename,"的經理是",mgr) "主管" from emp;
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'lpad'
+mysql> select lpad(ename,8," "),replace(job,"CLERK","克拉克"),concat(ename,"的經理是",mgr) "主管" from emp;
++-------------------+-------------------------------+--------------------+
+| lpad(ename,8," ") | replace(job,"CLERK","克拉克") | 主管               |
++-------------------+-------------------------------+--------------------+
+|    SMITH          | 克拉克                        | SMITH的經理是7902  |
+|    ALLEN          | SALESMAN                      | ALLEN的經理是7698  |
+|     WARD          | SALESMAN                      | WARD的經理是7698   |
+|    JONES          | MANAGER                       | JONES的經理是7839  |
+|   MARTIN          | SALESMAN                      | MARTIN的經理是7698 |
+|    BLAKE          | MANAGER                       | BLAKE的經理是7839  |
+|    CLARK          | MANAGER                       | CLARK的經理是7839  |
+|    SCOTT          | ANALYST                       | SCOTT的經理是7566  |
+|     KING          | PRESIDENT                     | NULL               |
+|   TURNER          | SALESMAN                      | TURNER的經理是7698 |
+|    ADAMS          | 克拉克                        | ADAMS的經理是7788  |
+|    JAMES          | 克拉克                        | JAMES的經理是7698  |
+|     FORD          | ANALYST                       | FORD的經理是7566   |
+|   MILLER          | 克拉克                        | MILLER的經理是7782 |
++-------------------+-------------------------------+--------------------+
+14 rows in set (0.02 sec)
+
+mysql> select rtrim(lpad(ename,8," ")),replace(job,"CLERK","克拉克"),concat(ename,"的經理是",mgr) "主管" from emp;
++--------------------------+-------------------------------+--------------------+
+| rtrim(lpad(ename,8," ")) | replace(job,"CLERK","克拉克") | 主管               |
++--------------------------+-------------------------------+--------------------+
+|    SMITH                 | 克拉克                        | SMITH的經理是7902  |
+|    ALLEN                 | SALESMAN                      | ALLEN的經理是7698  |
+|     WARD                 | SALESMAN                      | WARD的經理是7698   |
+|    JONES                 | MANAGER                       | JONES的經理是7839  |
+|   MARTIN                 | SALESMAN                      | MARTIN的經理是7698 |
+|    BLAKE                 | MANAGER                       | BLAKE的經理是7839  |
+|    CLARK                 | MANAGER                       | CLARK的經理是7839  |
+|    SCOTT                 | ANALYST                       | SCOTT的經理是7566  |
+|     KING                 | PRESIDENT                     | NULL               |
+|   TURNER                 | SALESMAN                      | TURNER的經理是7698 |
+|    ADAMS                 | 克拉克                        | ADAMS的經理是7788  |
+|    JAMES                 | 克拉克                        | JAMES的經理是7698  |
+|     FORD                 | ANALYST                       | FORD的經理是7566   |
+|   MILLER                 | 克拉克                        | MILLER的經理是7782 |
++--------------------------+-------------------------------+--------------------+
+14 rows in set (0.00 sec)
+
+mysql> notee
