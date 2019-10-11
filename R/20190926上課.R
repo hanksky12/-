@@ -180,13 +180,13 @@ df
 #####繪製預先分組的資料
 ggplot(df,aes(x=GENHLTH))
 ggplot(df,aes(x=GENHLTH))+geom_bar()
-k=ggplot(df,aes(x=GENHLTH,y=Freq))+geom_bar(stat = "identity")
+ggplot(df,aes(x=GENHLTH,y=Freq))+geom_bar(stat = "identity")
 
 
 #save
 ggsave(filename = "GENHLTH.png",plot=k)#plot 畫完圖丟進去的變數名稱
 ## antv documentation  甚麼時候該用甚麼樣的圖
-https://antv.alipay.com/zh-cn/vis/chart/index.html
+#https://antv.alipay.com/zh-cn/vis/chart/index.html
 
 ## Esquisse  GUI界面
 install.packages('esquisse')
@@ -223,8 +223,8 @@ unclass(t2)
 appledaily$dt = as.POSIXct(appledaily$dt,format = '%Y年%m月%d日%H:%M')
 str(appledaily)
 #時間套件lubridate
-install.packages("lubridate")
-
+#install.packages("lubridate")
+library(lubridate)
 #https://r4ds.had.co.nz/dates-and-times.html
 ## Extracting information
 now_date=now()#抓系統時間
@@ -241,7 +241,7 @@ wday(now_date,label=T)
 ymd(20190912)#年月日
 mdy(02032018)#月日年
 dmy(02032018)
-ymd("2019.09.12") #各種格式都能讀
+ymd("2019.09.12") #各種格式都能讀 引號
 ymd("2019@09@12")
 ymd('2019/01/29')
 ymd_hm()
@@ -254,7 +254,7 @@ appledaily$clicked[1]
 tmp=sub("人氣\\(","",appledaily$clicked[1])#前面放要換的 中間換完的 後面原資料
 tmp2=sub("\\)","",tmp)
 c=as.numeric(tmp2)
-
+c
 clicked = sub('\\)','',sub('人氣\\(','',appledaily$clicked))
 clicked = as.integer(clicked)
 head(clicked)
@@ -279,38 +279,26 @@ head(clicked)
 s = "aaa bbb ccc aaa bbb aaa"
 sub("aaa","",s)
 gsub("aaa","",s)
-#grep()====>回傳目標字串的 index          
+#grep()====>return index          
 test_str = c('abcd','bcd','cde')
 grep('a',test_str)
-test_str[grep('a',test_str)]
+test_str[grep('a',test_str)]  #"abcd"
 grep("中國",appledaily$title)
 appledaily[grep("中國",appledaily$title)[1:5],]
 
-
-#strsplit()===>字串分割 從符號去抓
-s=strsplit()
-#unlist  裡面是多元素的向量
-
-
-#substring===>取出部分字串 從index 去抓
-test_s="asddsd"
-
-#grep()  ==> return index
-
-
-          
 #grepl() ==> return boolean 
 grepl('a',test_str)
-test_str[grepl('a',test_str)]
-          
-#strsplit() ==> 字串分割
+test_str[grepl('a',test_str)]  #"abcd"
+
+#strsplit()===>字串分割 從符號去抓
 splited = strsplit(c('abc-def','ddd-ggg'),'-')
 splited
-class(splited)
+class(splited)#回傳list
+
 ### 取出list裡面部分元素
 sapply(splited,function(e){e[1]})
-unlist(splited)[seq(from=1,to=4,by=2)]
+unlist(splited)[seq(from=1,to=4,by=2)]#unlist  裡面是多元素的向量
 #substring() ==> 取得部份字串
 test_s = 'abcdef'
-nchar(test_s)
-substring(test_s,2,nchar('abcdef')-1)
+nchar(test_s) #字串長度函數
+substring(test_s,2,nchar('abcdef')-1) #取2-5(有包含5)

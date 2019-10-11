@@ -18,12 +18,15 @@ tail(iris,10)
 #[]篩選 放index,element name,condition
 #用col name篩
 iris[1:3,"Sepal.Length"]  #跟matrix一樣
+###篩選品種 <<<<setosa>>>>
+#第一種作法
 iris[,"Species"]=="setosa"  #出來BOOL向量  品種是setosa
-#用條件篩
 iris[iris[,"Species"]=="setosa",]
-iris[iris[,"Sepal.Length"]>5,] #花萼長度大於5的列
-iris$Species=="setosa"  #等於19行
+#用條件篩
+#第二種作法
+iris$Species=="setosa"  
 iris[iris$Species=="setosa",]
+iris[iris[,"Sepal.Length"]>5,] #花萼長度大於5的列
 #join
 df1=data.frame(cust_id=c(1:6),pro=c(rep("巧克力",3),rep("香蕉",3)))
 df2=data.frame(cust_id=c(1:3),name=c("小王","小名","老王"))
@@ -41,7 +44,7 @@ merge(x = df1, y = df2, by = NULL)
 which(iris$Species=="setosa")
 c(4,5,6)
 max(c(4,5,6))#找最大值
-which.max(c(4,5,6))#找最大值  的位置
+which.max(c(4,5,6))#找最大值的位置===>眾數
 #排序    #預設FALSE 升冪
 #sort
 head(iris)
@@ -55,9 +58,9 @@ setwd("E:/BIG\ DATA下載/R/riii/data") #斜線方向要改
 #可到右邊手動到目錄資料夾,用MORE裡面的 set as working dire....
 getwd()
 tw2330=read.csv("E:/BIG\ DATA下載/R/riii/data/2330.csv",header=T)#絕對路徑 ,讀欄位名稱 預設是TRUE
+tw2330=read.csv("./2330.csv",header=T) #相對路徑
 str(tw2330)
 tail(tw2330)
-read.csv("./2330.csv",header=T) #相對路徑
 ########as 可以做型態轉換
 as.character(c(1,2,3))
 as.numeric(c(T,F,T))
@@ -70,8 +73,9 @@ str(tw2330)
 #台積電 P35
 tw2330$Date>="2017-01-01"
 tw2230_2017=tw2330[tw2330$Date>="2017-01-01"&tw2330$Date<"2018-01-01",]
+#找最高收盤
 max(tw2230_2017$Close)# 直接取最高
-tw2230_2017[order(tw2230_2017$Close,decreasing = TRUE),] 
+ordered_stock=tw2230_2017[order(tw2230_2017$Close,decreasing = TRUE),] #用order找
 #Lists
 item=list(thing="hot",size=8)
 item$thing #用$+KEY  抓value
