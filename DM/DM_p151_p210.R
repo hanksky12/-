@@ -8,20 +8,20 @@ cos_xy
 
 cos_xy=(x%*%y)/(sum(x^2)^0.5*sum(y^2)^0.5)#也可以直接做
 cos_xy
-
+cor(a[,1],a[,2])
 #P152交叉統計表    ftable
 z <- data.frame(Main= c('豚','牛','牛','牛','豚','牛','豚'), sub=c('有','沒有','沒有','有','有','有','沒有') , drink=c('tea','coffee','coffee','tea','coffee','tea','coffee'))
 z
 ftable(z,row.vars = 1:2,col.vars = "drink")
 ftable(z,row.vars = "Main",col.vars = 2:3)
 
-###plyr套件  提供樞紐分析表需要的資料,不用每次都給一份
-## 利用group, sex進行分組，並計算年齡的平均數、標準差以及bill總和與平均 
+###plyr套件  提供樞紐分析表(excel)需要的資料,不用每次都給一份
 install.packages("plyr") 
 library(plyr)
 df<- data.frame( group = c(rep('個人戶', 20), rep('企業戶', 20)), sex = sample(c("M", "F"), size = 40, replace = TRUE), age = floor(runif(n = 40, min = 25, max = 40)), bill = floor(runif(n = 40, min = 199, max = 2600)) )
+## 利用group, sex進行分組，並計算年齡的平均數、標準差以及bill總和與平均 
 ddply(df, .(group, sex), summarize, mean_age = round(mean(age), 2), sd_age = round(sd(age), 2), sum_bill = sum(bill), mean_bill = round(mean(bill), 2) )
-#計算資料筆數count > ddply(df, c('group','sex'), nrow) > ddply(df, c('group','sex','age'), nrow) #是不是很像樞紐分析表的原始資料
+#計算資料筆數count
 ddply(df, c('group','sex'), nrow) 
 ddply(df, c('group','sex','age'), nrow) #是不是很像樞紐分析表的原始資料
 
@@ -47,11 +47,10 @@ iris
 attach(iris) #少打iris$ 就可以呼叫欄位
 plot(Petal.Length~Petal.Width, col=Species) #散佈圖指令
 
-
 #P158 長條圖
 data(mtcars) 
 attach(mtcars)
-table(cyl) #利用汽缸數產生次數分
+table(cyl) #利用汽缸數產生次數分配
 #直，絕對數字
 T_cyl=table(cyl)
 barplot(T_cyl,main = "汽缸數次數分配表",xlab="汽缸數",col=c("red","blue","green"),names.arg=c("四汽缸","六汽缸","八汽缸"),border="cyan")
@@ -75,6 +74,7 @@ barplot(T_cyl3 , main="cyl 汽缸數次數百分比堆疊圖", xlab="汽缸數",
 
 
 #####直方圖 p162
+install.packages("C50")
 library(C50)
 data(churn)
 attach(churnTrain)
@@ -86,7 +86,12 @@ hist(total_day_minutes, xlab=" 白天通話分鐘數", main="breaks =2", ylab="�
 hist(total_day_minutes, xlab=" 白天通話分鐘數", main="breaks =20", ylab="門號數", col="red", breaks=20 ) # 參數breaks設為20 
 hist(total_day_minutes, xlab=" 白天通話分鐘數", main="breaks =7", ylab="門號數", col="red", breaks=7 ) # 參數breaks設為7
 
-#########盒鬚圖
+#########盒鬚圖 P168
+dt=data.frame(total_eve_minutes,total_night_minutes,total_day_minutes)
+#顯示白天、晚上、半夜通話分鐘數
+boxplot(dt,horizontal = F,xlab="通話分鐘數",col=terrain.colors(3))
+legend("topright",title="撥打分鐘數",c("eve","night","day"),fill=terrain.colors(3),horiz=F,ncol=1,cex=0.8)
+#檢視在不同地區流失客戶與未流失客戶的晚上通話時間分布
 boxplot(total_eve_minutes~area_code*churn,horizontal=FALSE, xlab="夜晚通話分鐘數",col=terrain.colors(3))
 
 #tree map
@@ -168,7 +173,7 @@ y_hat=predict(baby.tree,newdata=Test, type="vector") #返回的y 不是純量，
 test.MAPE=mean(abs(y-y_hat)/y) 
 cat("MAPE(test)=",test.MAPE*100,"%\n")
 
-##HW 以多元回歸建模新生兒資料
+##HW 以多元回歸建模新生兒資料P211
 babyData <- read.table(file.choose(),header=T, sep=",")
 babyData=na.exclude(babyData)
 str(babyData)#1174
@@ -182,15 +187,16 @@ par(mfrow=c(1,2))
 hist(Train_baby$bwt) 
 hist(Test_baby$bwt)
 #建模
-lmTrain=lm(formula = bwt ~.-age, data = Train_baby)# R^2=0.2355 
+lmTrain=lm(formula = bwt ~.-age, data = Train_baby)# 0.2347 
 summary(lmTrain)
+lmTrain=lm(formula = bwt ~.-age-weight, data = Train_baby)#0.2356 
 #mape  train
 y=Train_baby$bwt
 y_hat=predict(lmTrain,newdata=Train_baby, type="response") 
 mape=mean(abs(y-y_hat)/y)
-cat("mape_train=",mape*100,"%")
+cat("mape_train=",mape*100,"%")#mape_train= 11.15818 %
 #mape test
 y2=Test_baby$bwt
 y2_hat=predict(lmTrain,newdata=Test_baby, type="response") 
 mape2=mean(abs(y2-y2_hat)/y2)
-cat("mape_train=",mape2*100,"%")
+cat("mape_test=",mape2*100,"%")#mape_test= 10.18286 %
