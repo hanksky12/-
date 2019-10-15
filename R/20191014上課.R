@@ -238,10 +238,10 @@ text(test_tree, all=TRUE, use.n=TRUE, cex=0.7)
 
 #預測函數predict   預測的Y
 predictions=predict(prune_tree,testset)
-predictions=predict(prune_tree,testset,type="class")#不加class 預設回傳機率
+predictions=predict(prune_tree,testset,type="class")#機率超過0.5預測為該類  不加class 預設回傳機率
 #取出測試集       真實的Y
 predictions==testset$churn
 #混淆矩陣
 library("caret")
 library("e1071")
-confusionMatrix(table(predictions,testset$churn))
+confusionMatrix(table(predictions,testset$churn)) #預測在前 真實在後 不然做起來會反
