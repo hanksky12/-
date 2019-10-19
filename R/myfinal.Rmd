@@ -92,12 +92,19 @@ house=cbind(house,y)
 #     存回house變數中 [5分]
 load("F:/資策會/R/teacher/riii/final/house_danger.RData")
 house=merge(x=house,y=house_danger,by = "ID", all.x = TRUE)
+house
 ```
 
 ```{r}
 #(12) 請將house資料以8:2的比例分為訓練集和測試集，
 #     將訓練集資料存在trainset變數中，將測試集資料存在testset變數中。 [5分]
-
+library(caret)
+index=createDataPartition(y=house$danger,p=0.8,list=F)
+trainset=house[index,]
+testset=house[-index,]
+par(mfrow=c(1,2))
+plot(trainset$danger)
+plot(testset$danger)
 ```
 
 ```{r}
@@ -105,25 +112,47 @@ house=merge(x=house,y=house_danger,by = "ID", all.x = TRUE)
 #     請利用行政區(area), 屋齡(building_age), 房屋總平方米數(building_sqmeter),
 #     房屋類型(building_type)及每平方米價格(price_per_sqmeter)
 #     5個變數作為解釋變數放入模型當中建模，並將模型存在house.rp變數中。 [5分]
-
+library(rpart)
+con=rpart.control(minsplit = 20,cp=0.001)
+house.rp=rpart(danger~area+building_age+building_sqmeter+building_type+price_per_sqmeter,data = trainset,control = con)
+summary(house.rp)
 ```
 
 ```{r}
 #(14) 請利用plot()和text()畫出house.rp模型的決策樹 [5分]
+plot(house.rp, uniform=TRUE,branch = 0.6, margin=0.1)
+text(house.rp, all=TRUE, use.n=TRUE, cex=0.7)
 
 ```
 
 ```{r}
 #(15) 請問此決策數是否需要進行剪枝(prune)？如需剪枝請將修剪後的模型存回house.rp中。 [5分]
-
+min_row=which.min(house.rp$cptable[,"xerror"])
+house_c=house.rp$cptable[min_row,"CP"]
+house.rp=prune(house.rp, cp=house_c)
+plot(house.rp, uniform=TRUE,branch = 0.6, margin=0.1)
+text(house.rp, all=TRUE, use.n=TRUE, cex=0.7)
+summary(house.rp)
 ```
 
 ```{r}
 #(16) 請將測試集資料(testset)放入模型中進行驗證，請問此模型的accuracy, precision, recall等績效分別為何？ [5分]
-
+predictions=predict(house.rp,testset,type='class')
+m=table(predictions,testset$danger)
+accuracy=sum(diag(m))/sum(m)
+precision=m[1,1]/(m[1,1]+m[1,2])
+recall=m[1,1]/(m[1,1]+m[2,1])
+accuracy
+precision
+recall
 ```
 
 ```{r}
 #(17) 請繪製出此模型的ROC曲線，並計算其AUC [8分]
-
+library(ROCR)
+pre=predict(house.rp,testset,type="prob")
+pre_pro=pre[,"YES"] 
+pre_fin=prediction(pre_pro,testset$danger)
+auc_value<-performance(pre_fin, measure ="auc")
+####要在建模前先補遺失值 
 ```

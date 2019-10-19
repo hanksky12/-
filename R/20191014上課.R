@@ -162,6 +162,7 @@ dbListTables(conn)
 
 
 #############機器學習
+#######監督式
 #決策樹
 #C50
 library(C50)
@@ -206,7 +207,7 @@ churn.rp=rpart(churn~.,data = trainset,control = con)
 s=summary(churn.rp) 
 s$cptable #把模型存入變數 就可以用$下選單來用他
 
-#########畫決策樹
+#########畫決策樹 
 #內建畫圖
 par(mfrow=c(1,1))
 ?plot.rpart
