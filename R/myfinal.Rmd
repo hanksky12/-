@@ -99,6 +99,10 @@ house
 #(12) 請將house資料以8:2的比例分為訓練集和測試集，
 #     將訓練集資料存在trainset變數中，將測試集資料存在testset變數中。 [5分]
 library(caret)
+library(mice)
+mice.data <- mice(data=house,m = 3,method = "cart")
+complete(mice.data,1)
+set.seed(2)
 index=createDataPartition(y=house$danger,p=0.8,list=F)
 trainset=house[index,]
 testset=house[-index,]
