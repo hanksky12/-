@@ -104,6 +104,10 @@ na_number=sapply("danger",function(e){ sum(is.na(house[,e])) })
 house = house[!is.na(house$danger),]
 
 library(caret)
+library(mice)
+mice.data <- mice(data=house,m = 3,method = "cart")
+complete(mice.data,1)
+set.seed(2)
 index=createDataPartition(y=house$danger,p=0.8,list=F)
 trainset=house[index,]
 testset=house[-index,]
