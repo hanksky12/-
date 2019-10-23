@@ -10,7 +10,8 @@ load("F:/資策會/R/teacher/riii/final/lvr_prices_big5.RData")
 
 ```{r}
 #(2) 請問可使用哪個函式觀看檔案的資料結構？[5分]
-str(lvr_prices)
+summary(lvr_prices)
+
 ```
 
 ```{r}
@@ -92,12 +93,16 @@ house=cbind(house,y)
 #     存回house變數中 [5分]
 load("F:/資策會/R/teacher/riii/final/house_danger.RData")
 house=merge(x=house,y=house_danger,by = "ID", all.x = TRUE)
-house
+str(house)
 ```
 
 ```{r}
 #(12) 請將house資料以8:2的比例分為訓練集和測試集，
 #     將訓練集資料存在trainset變數中，將測試集資料存在testset變數中。 [5分]
+
+na_number=sapply("danger",function(e){ sum(is.na(house[,e])) })
+house = house[!is.na(house$danger),]
+
 library(caret)
 index=createDataPartition(y=house$danger,p=0.8,list=F)
 trainset=house[index,]
@@ -154,5 +159,6 @@ pre=predict(house.rp,testset,type="prob")
 pre_pro=pre[,"YES"] 
 pre_fin=prediction(pre_pro,testset$danger)
 auc_value<-performance(pre_fin, measure ="auc")
-####要在建模前先補遺失值 
+perf.tpr.rocr<-performance(pre_fin, measure="tpr",x.measure = "fpr")
+plot(perf.tpr.rocr,main=paste("AUC:",(auc_value@y.values)))
 ```
