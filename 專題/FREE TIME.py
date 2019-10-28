@@ -18,9 +18,23 @@ if not os.path.exists(path): #沒有這個資料夾就新創資料夾
     os.mkdir(path)
 
 #第一層
-url="https://food.ltn.com.tw/category"
-res = requests.get(url, headers=headers)
-print(res)
-# soup = BeautifulSoup(res.text, 'html.parser')
-# title = soup.select('h2[id="hook*"]')
-# print(title)
+url_first="https://food.ltn.com.tw/category"
+res_first = requests.get(url_first, headers=headers)
+#print(res)
+soup_first = BeautifulSoup(res_first.text, 'html.parser')
+#p跟/p包含我要的五穀雜糧、肉類..，因為五穀雜糧下面的細項不點選就會全部在五穀頁面裡面，到下層連結只要用
+titles_first = soup_first.select('p')
+for title_first in titles_first:
+    try:
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        #print(title)
+        url_second = "https://food.ltn.com.tw/" + title_first.a["href"]
+        #print(insideurl)
+        res_second = requests.get(url_second, headers=headers)
+        soup_second = BeautifulSoup(res_second.text, 'html.parser')
+        soup_second.select()
+    except TypeError as e:
+        print(e)
+
+
+
