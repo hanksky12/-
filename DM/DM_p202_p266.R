@@ -176,10 +176,28 @@ Ypred= predict(svm, Test)
 message("準確度：",sum(diag(table(Test$Species,Ypred))) / sum(table(Test$Species,Ypred)) *100,"%")
 
 
-####分群方法
+####分群方法 p249
 ############## K-means
 iris_new <- iris[, -5] 
 set.seed(123)
 Cluster_km <- kmeans(iris_new, nstart=15,centers=3) # center就是設定群數 # nstart 是指重新隨意放 k 個中心點的次數, 一般建議 nstart >= 10 
 table(Cluster_km$cluster, iris[, 5]) #觀察分群結果與實際類別的差別
 plot(iris_new $Petal.Width, iris_new $Petal.Length, col=Cluster_km$cluster)
+
+##關聯法則p266
+#DMP266
+##關聯法則
+install.packages("arules") 
+library(arules)
+# (1)建置超市交易資料，7筆交易資料
+transaction_data<- data.frame(Bread =  c(T,T,F,T,T,F,F), Milk  =  c(T,F,T,T,T,T,F), Diaper = c(F,T,T,T,T,F,T), Beer =   c(F,T,T,T,F,F,T), Coke =   c(F,F,T,F,T,T,T) )
+# (2)建置關聯規則模型
+rule=apriori(transaction_data,parameter=list(supp=0.1,conf=0.8,maxlen=4))
+# (3)查看rule
+inspect(rule) #列出lhs rhs support confidence lift
+summary(rule)
+inspect(head(sort(rule,by="support"),20))  #依照support排序 
+inspect(head(sort(rule,by="confidence"),20)) #依照confidence排序 
+inspect(head(sort(rule,by="lift"),20))     #依照lift排序
+
+

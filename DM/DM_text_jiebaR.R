@@ -26,7 +26,7 @@ library(wordcloud2)
 library(tidyRSS) 
 
 #############針對RSS
-rss_url <- 'https://udn.com/rssfeed/news/2/7227/7002?ch=news' 
+rss_url <- 'https://udn.com/rssfeed/news/1013/7113/7471?ch=news' 
 rss <- tidyRSS::tidyfeed(feed = rss_url) #### 因為tidyfeed 是靜態方法  在R裡面要用::去呼叫 tidyRSS是實例
 rss$feed_title # RSS標題 
 rss$feed_link # RSS超連結 
