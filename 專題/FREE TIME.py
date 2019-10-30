@@ -30,59 +30,69 @@ for title_first in titles_first:
     try:
         print("~~~~~~~~~~~~~~~~~~the_second_level~~~~~~~~~~~~~~~~~~~~~")
         #第二層第1頁
-        url_second_level= "https://food.ltn.com.tw/" + title_first.a["href"] + "/" + str(1)
-        res_second = requests.get(url_second_level, headers=headers)
-        soup_second = BeautifulSoup(res_second.text, 'html.parser')
-        #找最後一頁數字
-        page_tail=soup_second.select('a[class="p_last"]')
-        page_last_number = page_tail[0]['href'].split("/")[5]
-        #print(page_last_number)
-        # 第二層第1頁~最後一頁
-        page_number=1
-        while page_number <= int(page_last_number):
-            url_second_level_every_page = "https://food.ltn.com.tw/" + title_first.a["href"]+"/"+str(page_number)
-            res_second_every_page = requests.get(url_second_level_every_page, headers=headers)
-            soup_second_every_page = BeautifulSoup(res_second_every_page.text, 'html.parser')
-            url_thrds = soup_second_every_page.select('div[data-desc="清單"] a')
-            #print(url_thrds)
-            print(str(page_number)+"page"+"~~~~~~~~~~~~~~~~~~~")
-            for url_thrd in url_thrds:
-                url_third_level="https://food.ltn.com.tw/"+url_thrd["href"]
-                #print(url_third_level)
-                
-                #第三層
-                res_third = requests.get(url_third_level, headers=headers)
-                soup_third = BeautifulSoup(res_third.text, 'html.parser')
-                print("~~~~~~~~~~~~~~~~~~the_third_level~~~~~~~~~~~~~~~~~~~~~")
-                #料理名
-                food_titles=soup_third.select('div[data-desc="內容頁"] h1')
-                food_title=food_titles[0].text
-                time.sleep(random.randint(1,5))
-                print(food_title)  #有IO的問題 試著加入多執行
-                #食材 未考慮周全
-                ingredients = soup_third.select('dl[class="recipe"] dd')
-                ingredient=ingredients[0].text
-                #圖片連結
-                image_links = soup_third.select('div[class="print_re"] img')
-                #image_link=ingredients[0]["src"]
-                
+        #跳過兩個分類，裡面頁面沒有內容，原本用except IndexError跳過，但會造成後面爬蟲在一個分類沒爬完，跳到下一個分類
+        if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87"):
+            url_second_level= "https://food.ltn.com.tw/" + title_first.a["href"] + "/" + str(1)
+            res_second = requests.get(url_second_level, headers=headers)
+            soup_second = BeautifulSoup(res_second.text, 'html.parser')
+            #找最後一頁數字
+            page_tail=soup_second.select('a[class="p_last"]')
+            page_last_number = page_tail[0]['href'].split("/")[5]
+            #print(page_last_number)
+            # 第二層第1頁~最後一頁
+            page_number=1
+            while page_number <= int(page_last_number):
+                url_second_level_every_page = "https://food.ltn.com.tw/" + title_first.a["href"]+"/"+str(page_number)
+                res_second_every_page = requests.get(url_second_level_every_page, headers=headers)
+                soup_second_every_page = BeautifulSoup(res_second_every_page.text, 'html.parser')
+                #print(soup_second_every_page)
+                url_thrds = soup_second_every_page.select('div[data-desc="清單"] a')
+                #print(url_thrds)
+                print(str(page_number)+"page"+"~~~~~~~~~~~~~~~~~~~")
+                for url_thrd in url_thrds:
+                    url_third_level="https://food.ltn.com.tw/"+url_thrd["href"]  #料理網址(欄位) ok
+                    #第三層
+                    res_third = requests.get(url_third_level, headers=headers)
+                    soup_third = BeautifulSoup(res_third.text, 'html.parser')
+                    print("~~~~~~~~~~~~~~~~~~the_third_level~~~~~~~~~~~~~~~~~~~~~")
+                    try:
+                        #料理名 ok
+                        food_titles=soup_third.select('div[data-desc="內容頁"] h1')
+                        food_title=food_titles[0].text
+                        #print(food_title)
+                        #食材 ok
+                        ingredients = soup_third.select('dl[class="recipe"] dd')
+                        for i in ingredients:
+                            ingredient=i.text
+                            #print(ingredient)
+                        #圖片連結 ok
+                        image_links = soup_third.select('div[class="print_re"] img')
+                        image_link=image_links[0]["src"]
+                        # 發文時間 ok
+                        times = soup_third.select('span[class="author"] b')
+                        time=times[0].text
+                        time=time.replace("/","-")
+                        #幾人份
+
+                        #步驟
+                        steps = soup_third.select('div[class="word"] p')
+                        for n,i in enumerate(steps):
+                            print(str(n),i)
+                            # for j in i:
+                            #     print(str(n),j)
 
 
-            page_number += 1
 
 
 
 
-
-
-
-
-
-
+                    except IndexError as e:
+                        print(e)
+                page_number += 1
     except TypeError as e:
         print(e)
-    except IndexError as e:
-        print(e)
+    #except IndexError as e:
+        #print(e)
 
 
 
