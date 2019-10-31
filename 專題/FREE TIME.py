@@ -27,7 +27,7 @@ list_of_recipe=[]
 url_first="https://food.ltn.com.tw/category"
 res_first = requests.get(url_first, headers=headers)
 soup_first = BeautifulSoup(res_first.text, 'html.parser')
-#p跟/p包含我要的五穀雜糧、肉類..，因為五穀雜糧下面的細項不點選就會全部在五穀頁面裡面，到下層連結只要用
+#tag p包含我要的五穀雜糧、肉類..而且五穀雜糧下面的細項不點選就已經全在五穀頁面裡面，到下層連結只要用五穀雜糧就可抓到全部
 titles_first = soup_first.select('p')
 for title_first in titles_first:
     try:
@@ -95,13 +95,13 @@ for title_first in titles_first:
                         #但是我把p寫在回圈內step.p則只會抓到多個div[class="word"]下層的第一個p,剛好可以避開TIP都在第二個
                         list_of_recipe.append(Dict_for_a_recipe)
                     except IndexError as e:
-                        print(e)
+                        print(e)#頁配文的文章格式與平常的不同，篇幅較少，就不抓
 
                 print(list_of_recipe)
 
                 page_number += 1
     except TypeError as e:
-        print(e)
+        print(e)#在第一層有些 tag p 下面沒有 tag a
 
 
 
