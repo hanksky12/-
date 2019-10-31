@@ -19,10 +19,7 @@ path=r'./food'  #資料夾
 if not os.path.exists(path): #沒有這個資料夾就新創資料夾
     os.mkdir(path)
 
-
-json={}
 list_of_recipe=[]
-
 #第一層
 url_first="https://food.ltn.com.tw/category"
 res_first = requests.get(url_first, headers=headers)
@@ -37,6 +34,7 @@ for title_first in titles_first:
         if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87"):
             url_second_level= "https://food.ltn.com.tw/" + title_first.a["href"] + "/" + str(1)
             res_second = requests.get(url_second_level, headers=headers)
+
             soup_second = BeautifulSoup(res_second.text, 'html.parser')
             #找最後一頁數字
             page_tail=soup_second.select('a[class="p_last"]')
@@ -103,6 +101,11 @@ for title_first in titles_first:
     except TypeError as e:
         print(e)#在第一層有些 tag p 下面沒有 tag a
 
+
+json={}
+json["recipe"]=list_of_recipe
+with open('FOOD.txt', 'w', encoding='utf-8') as f:
+    f.write(json)
 
 
 
