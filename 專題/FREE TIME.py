@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import time
-import random
 
 user_agenttt="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"
 headers={"user-agent":user_agenttt,
@@ -19,6 +18,10 @@ headers={"user-agent":user_agenttt,
 path=r'./food'  #資料夾
 if not os.path.exists(path): #沒有這個資料夾就新創資料夾
     os.mkdir(path)
+
+
+json={}
+list_of_recipe=[]
 
 #第一層
 url_first="https://food.ltn.com.tw/category"
@@ -45,54 +48,61 @@ for title_first in titles_first:
                 url_second_level_every_page = "https://food.ltn.com.tw/" + title_first.a["href"]+"/"+str(page_number)
                 res_second_every_page = requests.get(url_second_level_every_page, headers=headers)
                 soup_second_every_page = BeautifulSoup(res_second_every_page.text, 'html.parser')
-                #print(soup_second_every_page)
                 url_thrds = soup_second_every_page.select('div[data-desc="清單"] a')
                 #print(url_thrds)
                 print(str(page_number)+"page"+"~~~~~~~~~~~~~~~~~~~")
+                Dict_for_a_recipe={}
                 for url_thrd in url_thrds:
-                    url_third_level="https://food.ltn.com.tw/"+url_thrd["href"]  #料理網址(欄位) ok
+                    url_third_level="https://food.ltn.com.tw/"+url_thrd["href"]  #料理網址(欄位)
+                    Dict_for_a_recipe["recipe_url"]=url_third_level
                     #第三層
                     res_third = requests.get(url_third_level, headers=headers)
                     soup_third = BeautifulSoup(res_third.text, 'html.parser')
                     print("~~~~~~~~~~~~~~~~~~the_third_level~~~~~~~~~~~~~~~~~~~~~")
                     try:
-                        #料理名 ok
+                        #料理名
                         food_titles=soup_third.select('div[data-desc="內容頁"] h1')
                         food_title=food_titles[0].text
-                        #print(food_title)
-                        #食材 ok
-                        ingredients = soup_third.select('dl[class="recipe"] dd')
-                        for i in ingredients:
-                            ingredient=i.text
-                            #print(ingredient)
-                        #圖片連結 ok
+                        Dict_for_a_recipe["recipe_name"]=food_title
+                        #圖片連結
                         image_links = soup_third.select('div[class="print_re"] img')
                         image_link=image_links[0]["src"]
-                        # 發文時間 ok
+                        Dict_for_a_recipe["recipe_img_url"]=image_link
+                        # 發文時間
                         times = soup_third.select('span[class="author"] b')
                         time=times[0].text
                         time=time.replace("/","-")
+                        Dict_for_a_recipe["post_time"]=time
                         #幾人份
-
+                        Dict_for_a_recipe["quantity"]="1份"
+                        #食材
+                        ingredients = soup_third.select('dl[class="recipe"] dd')
+                        list_of_ingredients = []
+                        for i in ingredients:
+                            x=i.text.split("\n")
+                            for ingredient in x:
+                                d = {}
+                                d["ingredient_names"]=ingredient
+                                d["ingredient_units"]="1"
+                                list_of_ingredients.append(d)
+                        Dict_for_a_recipe["ingredients"]=list_of_ingredients
                         #步驟
-                        steps = soup_third.select('div[class="word"] p')
-                        for n,i in enumerate(steps):
-                            print(str(n),i)
-                            # for j in i:
-                            #     print(str(n),j)
+                        steps = soup_third.select('div[class="word"]')
+                        list_of_steps=[{"steps":n+1,"methods":step.p.text} for n,step in enumerate(steps) ]
+                        Dict_for_a_recipe["cooking_steps"]=list_of_steps
 
-
-
-
-
-
+                        #如果是select('div[class="word"]' p) 代表多個div[class="word"]下層的所有p都要抓到
+                        #但是我把p寫在回圈內step.p則只會抓到多個div[class="word"]下層的第一個p,剛好可以避開TIP都在第二個
+                        list_of_recipe.append(Dict_for_a_recipe)
                     except IndexError as e:
                         print(e)
+
+                print(list_of_recipe)
+
                 page_number += 1
     except TypeError as e:
         print(e)
-    #except IndexError as e:
-        #print(e)
+
 
 
 
