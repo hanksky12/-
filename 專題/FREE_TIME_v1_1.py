@@ -25,8 +25,8 @@ def producer(titles_firsts,queue):
             print("~~~~~~~~~~~~~~~~~~the_second_level~~~~~~~~~~~~~~~~~~~~~")
             # 第二層第1頁
             # 跳過兩個分類，裡面頁面沒有內容，原本用except IndexError跳過，但會造成後面爬蟲在一個分類沒爬完，跳到下一個分類
-            if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87"):
-                queue.put(title_first.a["href"])
+            if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87") and (title_first.a["href"] != "type/243"):
+                queue.put(title_first.a["href"])#傳遞Type 如果先組成url worker還要將url 還原成type才能組成url_second_level_every_page
         except TypeError as e:
             print(e)  # 在第一層有些 tag p 下面沒有 tag a
 
@@ -71,15 +71,15 @@ def main():
     worker1=mp.Process(target=worker,args=(1,queue))
     worker1.daemon=True
     worker1.start()
-    worker2=mp.Process(target=worker,args=(1,queue))
-    worker2.daemon=True
-    worker2.start()
-    worker3 = mp.Process(target=worker, args=(1, queue))
-    worker3.daemon = True
-    worker3.start()
-    worker4 = mp.Process(target=worker, args=(1, queue))
-    worker4.daemon = True
-    worker4.start()
+    # worker2=mp.Process(target=worker,args=(1,queue))
+    # worker2.daemon=True
+    # worker2.start()
+    # worker3 = mp.Process(target=worker, args=(1, queue))
+    # worker3.daemon = True
+    # worker3.start()
+    # worker4 = mp.Process(target=worker, args=(1, queue))
+    # worker4.daemon = True
+    # worker4.start()
 
     first(queue)
     queue.join()

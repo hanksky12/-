@@ -31,7 +31,7 @@ for title_first in titles_first:
         print("~~~~~~~~~~~~~~~~~~the_second_level~~~~~~~~~~~~~~~~~~~~~")
         #第二層第1頁
         #跳過兩個分類，裡面頁面沒有內容，原本用except IndexError跳過，但會造成後面爬蟲在一個分類沒爬完，跳到下一個分類
-        if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87"):
+        if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87") and (title_first.a["href"] != "type/243"):
             url_second_level= "https://food.ltn.com.tw/" + title_first.a["href"] + "/" + str(1)
             res_second = requests.get(url_second_level, headers=headers)
 
