@@ -19,19 +19,30 @@ path=r'./food'  #資料夾
 if not os.path.exists(path): #沒有這個資料夾就新創資料夾
     os.mkdir(path)
 
+
+x=1
+y=3
+human=6
+
 def producer(titles_firsts,queue):
+    list_of_title=[]
     for title_first in titles_firsts:
         try:
             print("~~~~~~~~~~~~~~~~~~the_second_level~~~~~~~~~~~~~~~~~~~~~")
             # 第二層第1頁
             # 跳過兩個分類，裡面頁面沒有內容，原本用except IndexError跳過，但會造成後面爬蟲在一個分類沒爬完，跳到下一個分類
-            if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87") and (title_first.a["href"] != "type/243"):
-                queue.put(title_first.a["href"])#傳遞Type 如果先組成url worker還要將url 還原成type才能組成url_second_level_every_page
+            if (title_first.a["href"] != "type/84") and (title_first.a["href"] != "type/87") and (title_first.a["href"] != "type/243")  :
+                list_of_title.append(title_first.a["href"])
         except TypeError as e:
             print(e)  # 在第一層有些 tag p 下面沒有 tag a
+    for n,i in enumerate(list_of_title):
+        if n+1>=x and n+1<=y :
+            queue.put(i)  # 傳遞Type 如果先組成url worker還要將url 還原成type才能組成url_second_level_every_page
+
 
 def worker(worker_id,queue):
     while True:
+        list_of_class=[]
         title_first=queue.get()
         print(title_first)
         url_second_level = "https://food.ltn.com.tw/" + title_first + "/" + str(1)
@@ -50,10 +61,17 @@ def worker(worker_id,queue):
             soup_second_every_page = BeautifulSoup(res_second_every_page.text, 'html.parser')
             url_thrds = soup_second_every_page.select('div[data-desc="清單"] a')
             for url_thrd in url_thrds:
-                url_third_level = "https://food.ltn.com.tw/" + url_thrd["href"]
-                print(url_third_level)
+                no_article_thrd=url_thrd["href"].split("/")[1]
+                print(no_article_thrd)
+                time.sleep(random.random())
+                list_of_class.append(no_article_thrd)#放進list
             print(str(page_number) + "page" + "~~~~~~~~~~~~~~~~~~~")
             page_number += 1
+        with open("%s/food_%s.txt"%(path,title_first), 'a+', encoding='utf-8') as f:
+            str_of_class=",".join(list_of_class)
+            f.write(str_of_class)
+        time.sleep(30)
+
 
 def first(queue):
     # 第一層
@@ -64,34 +82,20 @@ def first(queue):
     titles_first = soup_first.select('p')
     producer(titles_first,queue)
 
-def main():
+def main(human):
     t0 = time.time()
     print("start")
     queue=mp.JoinableQueue()
-    worker1=mp.Process(target=worker,args=(1,queue))
-    worker1.daemon=True
-    worker1.start()
-    # worker2=mp.Process(target=worker,args=(1,queue))
-    # worker2.daemon=True
-    # worker2.start()
-    # worker3 = mp.Process(target=worker, args=(1, queue))
-    # worker3.daemon = True
-    # worker3.start()
-    # worker4 = mp.Process(target=worker, args=(1, queue))
-    # worker4.daemon = True
-    # worker4.start()
-
+    for i in range(human+1):
+        worker_i=mp.Process(target=worker,args=(i+1,queue))
+        worker_i.daemon=True
+        worker_i.start()
+        print(worker_i)
     first(queue)
     queue.join()
 
     print(time.time()-t0, "seconds time")
-
-
-
 if __name__ == "__main__":
-    main()
+    main(human) #worker數目
 
 
-
-# with open('FOOD.txt', 'w', encoding='utf-8') as f:
-#     f.write(json)

@@ -1,7 +1,6 @@
-import requests
 from bs4 import BeautifulSoup
-import os
-import time
+import multiprocessing as mp
+import os,time,random,requests,json,re
 
 user_agenttt="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"
 headers={"user-agent":user_agenttt,
@@ -18,3 +17,76 @@ headers={"user-agent":user_agenttt,
 path=r'./food'  #資料夾
 if not os.path.exists(path): #沒有這個資料夾就新創資料夾
     os.mkdir(path)
+
+def producer(queue):
+    with open("%s/food.txt"%(path), 'r', encoding='utf-8') as f:
+        str_of_class=f.read(f)
+        list_of_class=str_of_class.split(",")
+        for i in list_of_class:
+            queue.put(i)
+def worker(worker_id,queue):
+    while True:
+        no_article_thrd=queue.get()
+        no_article_thrd="article/"+str(no_article_thrd)
+        url_third_level = "https://food.ltn.com.tw/" + no_article_thrd
+        Dict_for_a_recipe={}
+        #食譜連結
+        Dict_for_a_recipe["recipe_url"] = url_third_level
+        # 第三層
+        res_third = requests.get(url_third_level, headers=headers)
+        soup_third = BeautifulSoup(res_third.text, 'html.parser')
+        print("~~~~~~~~~~~~~~~~~~the_third_level~~~~~~~~~~~~~~~~~~~~~")
+        try:
+            # 料理名
+            food_titles = soup_third.select('div[data-desc="內容頁"] h1')
+            food_title = food_titles[0].text
+            Dict_for_a_recipe["recipe_name"] = food_title
+            # 圖片連結
+            image_links = soup_third.select('div[class="print_re"] img')
+            image_link = image_links[0]["src"]
+            Dict_for_a_recipe["recipe_img_url"] = image_link
+            # 發文時間
+            times = soup_third.select('span[class="author"] b')
+            time = times[0].text
+            time = time.replace("/", "-")
+            Dict_for_a_recipe["post_time"] = time
+            # 幾人份
+            Dict_for_a_recipe["quantity"] = "1份"
+            # 食材
+            ingredients = soup_third.select('dl[class="recipe"] dd')
+            list_of_ingredients = []
+            for i in ingredients:
+                x = i.text.split("\n")
+                for ingredient in x:
+                    d = {}
+                    d["ingredient_names"] = ingredient
+                    d["ingredient_units"] = "1"
+                    list_of_ingredients.append(d)
+            Dict_for_a_recipe["ingredients"] = list_of_ingredients
+            # 步驟
+            steps = soup_third.select('div[class="word"]')
+            list_of_steps = [{"steps": n + 1, "methods": step.p.text} for n, step in enumerate(steps)]
+            Dict_for_a_recipe["cooking_steps"] = list_of_steps
+
+            # 如果是select('div[class="word"]' p) 代表多個div[class="word"]下層的所有p都要抓到
+            # 但是我把p寫在回圈內step.p則只會抓到多個div[class="word"]下層的第一個p,剛好可以避開TIP都在第二個
+            time.sleep(random.random())
+            with open("food_json.txt","a+",encoding="utf-8") as f:
+                json.dump(Dict_for_a_recipe,f)
+        except IndexError as e:
+            print(e)  # 頁配文的文章格式與平常的不同，篇幅較少，就不抓
+
+def main():
+    t0 = time.time()
+    print("start")
+    queue=mp.JoinableQueue()
+    for i in range(6):
+        worker_i=mp.Process(target=worker,args=(i+1,queue))
+        worker_i.daemon=True
+        worker_i.start()
+        print(worker_i)
+    producer(queue)
+    queue.join()
+    print(time.time() - t0, "seconds time")
+if __name__ == "__main__":
+    main()
