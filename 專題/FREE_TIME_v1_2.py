@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import multiprocessing as mp
 import os,time,random,requests,json,re
-
+#五穀、肉
 user_agenttt="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"
 headers={"user-agent":user_agenttt,
 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
@@ -14,21 +14,24 @@ headers={"user-agent":user_agenttt,
 "sec-fetch-site": "cross-site",
 "upgrade-insecure-requests": "1"}
 
-path=r'./food'  #資料夾
-if not os.path.exists(path): #沒有這個資料夾就新創資料夾
-    os.mkdir(path)
+path1=r'./food'  #資料夾
+path2=r'./collction'
+if not os.path.exists(path2): #沒有這個資料夾就新創資料夾
+    os.mkdir(path2)
 
 def producer(queue):
-    with open("%s/food.txt"%(path), 'r', encoding='utf-8') as f:
-        str_of_class=f.read(f)
-        list_of_class=str_of_class.split(",")
-        for i in list_of_class:
-            queue.put(i)
+    list_txt=os.listdir(path1) #返回path指定的文件夹包含的文件或文件夹的名字的列表
+    for txt in list_txt:
+        with open(path1+"/"+txt, 'r', encoding='utf-8') as f:
+            str_of_class=f.read()
+            list_of_class=str_of_class.split(",")
+            for i in list_of_class:
+                queue.put(i)
 def worker(worker_id,queue):
     while True:
         no_article_thrd=queue.get()
-        no_article_thrd="article/"+str(no_article_thrd)
-        url_third_level = "https://food.ltn.com.tw/" + no_article_thrd
+        article_thrd="article/"+str(no_article_thrd)
+        url_third_level = "https://food.ltn.com.tw/" + article_thrd
         Dict_for_a_recipe={}
         #食譜連結
         Dict_for_a_recipe["recipe_url"] = url_third_level
@@ -47,9 +50,9 @@ def worker(worker_id,queue):
             Dict_for_a_recipe["recipe_img_url"] = image_link
             # 發文時間
             times = soup_third.select('span[class="author"] b')
-            time = times[0].text
-            time = time.replace("/", "-")
-            Dict_for_a_recipe["post_time"] = time
+            time_food = times[0].text
+            time_food = time_food.replace("/", "-")
+            Dict_for_a_recipe["post_time"] = time_food
             # 幾人份
             Dict_for_a_recipe["quantity"] = "1份"
             # 食材
@@ -71,8 +74,10 @@ def worker(worker_id,queue):
             # 如果是select('div[class="word"]' p) 代表多個div[class="word"]下層的所有p都要抓到
             # 但是我把p寫在回圈內step.p則只會抓到多個div[class="word"]下層的第一個p,剛好可以避開TIP都在第二個
             time.sleep(random.random())
-            with open("food_json.txt","a+",encoding="utf-8") as f:
+            print(Dict_for_a_recipe)
+            with open("%s/food_json_%s.txt"%(path2,no_article_thrd),"a+",encoding="utf-8") as f:
                 json.dump(Dict_for_a_recipe,f)
+
         except IndexError as e:
             print(e)  # 頁配文的文章格式與平常的不同，篇幅較少，就不抓
 

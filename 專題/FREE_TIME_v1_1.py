@@ -1,7 +1,11 @@
 from bs4 import BeautifulSoup
 import multiprocessing as mp
+#from modul_hank import *
 import os,time,random,requests
 
+x=4
+y=5
+human=6
 
 user_agenttt="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"
 headers={"user-agent":user_agenttt,
@@ -19,13 +23,14 @@ path=r'./food'  #資料夾
 if not os.path.exists(path): #沒有這個資料夾就新創資料夾
     os.mkdir(path)
 
-
-x=1
-y=3
-human=6
-
-def producer(titles_firsts,queue):
+def producer(queue):
     list_of_title=[]
+    # 第一層
+    url_first = "https://food.ltn.com.tw/category"
+    res_first = requests.get(url_first, headers=headers)
+    soup_first = BeautifulSoup(res_first.text, 'html.parser')
+    # tag p包含我要的五穀雜糧、肉類..而且五穀雜糧下面的細項不點選就已經全在五穀頁面裡面，到下層連結只要用五穀雜糧就可抓到全部
+    titles_firsts = soup_first.select('p')
     for title_first in titles_firsts:
         try:
             print("~~~~~~~~~~~~~~~~~~the_second_level~~~~~~~~~~~~~~~~~~~~~")
@@ -67,22 +72,16 @@ def worker(worker_id,queue):
                 list_of_class.append(no_article_thrd)#放進list
             print(str(page_number) + "page" + "~~~~~~~~~~~~~~~~~~~")
             page_number += 1
+        title_first=str(title_first).replace("/","_")
         with open("%s/food_%s.txt"%(path,title_first), 'a+', encoding='utf-8') as f:
             str_of_class=",".join(list_of_class)
             f.write(str_of_class)
         time.sleep(30)
 
 
-def first(queue):
-    # 第一層
-    url_first = "https://food.ltn.com.tw/category"
-    res_first = requests.get(url_first, headers=headers)
-    soup_first = BeautifulSoup(res_first.text, 'html.parser')
-    # tag p包含我要的五穀雜糧、肉類..而且五穀雜糧下面的細項不點選就已經全在五穀頁面裡面，到下層連結只要用五穀雜糧就可抓到全部
-    titles_first = soup_first.select('p')
-    producer(titles_first,queue)
 
 def main(human):
+    #lazy(5)
     t0 = time.time()
     print("start")
     queue=mp.JoinableQueue()
@@ -91,11 +90,10 @@ def main(human):
         worker_i.daemon=True
         worker_i.start()
         print(worker_i)
-    first(queue)
+    producer(queue)
     queue.join()
-
     print(time.time()-t0, "seconds time")
 if __name__ == "__main__":
-    main(human) #worker數目
+    main(5) #worker數目
 
 
