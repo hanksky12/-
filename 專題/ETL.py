@@ -1,146 +1,44 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[25]:
-
-
 import pandas as pd
 import os,json,re
-path=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_11_23"
+path=r".\collction_freefood_11_23"
 #讀所有json
 json_list=os.listdir(path)
-json_list
-
-
-# In[26]:
-
-
-df=pd.DataFrame(columns=["食譜名稱","食材與單位","步驟"])
-# df
-
-
-# In[27]:
-
-#
-# for i in json_list:
-#     try:
-#         with open(path+"/"+i, "r", encoding="utf-8") as f:
-#             try:
-#
-#                 dic=f.read()
-#                 d=json.loads(dic)
-#                 food_list=[[]]
-#                 food_list[0].append(d["recipe_name"])
-#                 food_list[0].append(d["ingredients"])
-#                 food_list[0].append(d["cooking_steps"])
-#                 print(food_list)
-#                 df=df.append(pd.DataFrame(food_list,columns=["食譜名稱","食材與單位","步驟"]))
-#             except ValueError as e:
-#                 print(e)
-#             #except JSONDecodeError as e:
-#                 #print(e)
-#     except PermissionError as e:
-#         print(e)
-#     except FileNotFoundError as e:
-#         print(e)
-
-        
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-# def column_filter(s):
-#     #x= re.split('【|】|▪|：|•',s)[-1]
-#     x=s.replace("✿","")
-#
-#     return x
-#
-
-# In[ ]:
-
-
-# try:
-#     df=df["食譜名稱"].apply(column_filter)
-# except IndexError as e:
-#     print(e)
-# except KeyError as e:
-#     print(e)
-# except AttributeError as e:
-#     print(e)
-# df
-
-
-# In[24]:
-
-
-# df.to_csv(r'./icook.csv',index=0,encoding="utf-8")
-#
-
-# In[ ]:
-
-
-
-
-
-# In[28]:
-
-
-ddf=pd.DataFrame(columns=["食譜名稱","食材與單位"])
-# ddf
-
-
-# In[29]:
-
-
-#
-# foodd_list=[["陳皮紅豆湯圓x","[{'ingredient_names': '雞蛋蛋黃3顆', 'ingredient_units': '雞蛋蛋黃3顆'}]"],["花生x","[{'ingredient_names': '芝麻油10g', 'ingredient_units': '芝麻油10g'}]"]]
-# ddf=ddf.append(pd.DataFrame(foodd_list,columns=["食譜名稱","食材與單位"]))
-# ddf
-
-
-# In[30]:
-
-#
-# def column_filter(s):
-#     #x= re.split('【|】|▪|：|•',s)[-1]
-#     x=s.replace("✿","")
-#
-#     return x
-
-
-# In[82]:
-
 
 for i in json_list:
     try:
-        with open(path+"/"+i, "r", encoding="utf-8") as f:
+        with open(path + "/" + i, "r", encoding="utf-8") as f:
             try:
-        
-                dic=f.read()
-                d=json.loads(dic)
-                #print(d)
-                list_ingredients=d["ingredients"]
-                #print(list_ingredients)
+                dic = f.read()
+                d = json.loads(dic)
+                # print(d)
+                #清理食材
+                list_ingredients = d["ingredients"]
+                # print(list_ingredients)
                 for i in list_ingredients:
-                    ingredient_names=i["ingredient_names"]
-                    #print(ingredient_names)
-                    a=re.split(r"\d",ingredient_names)[0].strip().split("（")[0].replace("少許","").replace("適量","").replace("少量","").replace("半","0.5")
-                    b=re.split(r"\d",a)[0].replace("依個人喜好添加","").replace("適當","").strip().split("、")[0].split("﹙")[0].split("(")[0].replace("新鮮","")\
-                    .replace("手工","").split("或")[0].replace("基底","").split("約")[0].split(r" ")[0]
-                    c=re.sub(r"[^\u4e00-\u9fa5]", "",b)
-                    print(c)
-                    #英文???被轉掉 再去找unicode
+                    ingredient_names = i["ingredient_names"]
+                    a=ingredient_names.replace("半", "0.5")
+                    b=re.split(r"\d", a)[0]
+                    c=re.sub(r"([^\u4e00-\u9fa5\u0041-\u005A\u0061-\u007A]|一(包|碗|小碗|附)|(適|少)(量|當|許)|新鮮|市售|\
+                    |隔夜|切(段|絲|成|塊|片|碎末|花|碎|小丁|丁|末|細|條|小(塊|段))|約|(或|可(不用|用|依|選|均勻|不加|視家裡|替換|\
+                    |省略|切分|以)).*)|(皆|亦|即|也|均)可|(此次|一(個|支|大匙|小(撮|匙)|隻|把)|(依|視)個人|又(稱|名)).*|\
+                    |兩(?!節|層).*|數.*|少|個人包|成分|手切|去(皮|骨)|帶皮|現炒|原味|吃剩的|一(?!即|般)|小$.*|斜段","", b)
+                    d=re.sub(r"各$|各(式|種)|片狀|特級冷壓初榨|剝殼|方便製作的份量|不同|小(丁|束)|酌量|茄子重量的|沒餡","",c)
+                    #print(d)
 
 
-                    
-                
+
+
+                    list_ingredient_units=["適量","少許","一大匙","一小匙","一小撮","一包","酌量","少量","一把","一棵","一付"\
+                                           ]
+                    ingredient_units=i["ingredient_units"]
+                    ingredient_units = ingredient_units.replace("半", "0.5")
+
+                    for  n,j in enumerate(list_ingredient_units):
+                        ingredient_units=ingredient_units.replace(str(j),str(n+10000))
+                    print(d,"            ",ingredient_units)
+
+
+
             except ValueError as e:
                 print(e)
             except JSONDecodeError as e:
@@ -151,7 +49,6 @@ for i in json_list:
         print(e)
 
 
-# In[ ]:
 
 
 
