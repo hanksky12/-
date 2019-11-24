@@ -6,7 +6,7 @@
 
 import pandas as pd
 import os,json,re
-path=r"F:\資策會\專題\爬蟲\venv\collctions"
+path=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_11_23"
 #讀所有json
 json_list=os.listdir(path)
 json_list
@@ -16,35 +16,35 @@ json_list
 
 
 df=pd.DataFrame(columns=["食譜名稱","食材與單位","步驟"])
-df
+# df
 
 
 # In[27]:
 
+#
+# for i in json_list:
+#     try:
+#         with open(path+"/"+i, "r", encoding="utf-8") as f:
+#             try:
+#
+#                 dic=f.read()
+#                 d=json.loads(dic)
+#                 food_list=[[]]
+#                 food_list[0].append(d["recipe_name"])
+#                 food_list[0].append(d["ingredients"])
+#                 food_list[0].append(d["cooking_steps"])
+#                 print(food_list)
+#                 df=df.append(pd.DataFrame(food_list,columns=["食譜名稱","食材與單位","步驟"]))
+#             except ValueError as e:
+#                 print(e)
+#             #except JSONDecodeError as e:
+#                 #print(e)
+#     except PermissionError as e:
+#         print(e)
+#     except FileNotFoundError as e:
+#         print(e)
 
-for i in json_list:
-    try:
-        with open(path+"/"+i, "r", encoding="utf-8") as f:
-            try:
         
-                dic=f.read()
-                d=json.loads(dic)
-                food_list=[[]]
-                food_list[0].append(d["recipe_name"])
-                food_list[0].append(d["ingredients"])
-                food_list[0].append(d["cooking_steps"])
-                print(food_list)
-                df=df.append(pd.DataFrame(food_list,columns=["食譜名稱","食材與單位","步驟"]))
-            except ValueError as e:
-                print(e)
-            #except JSONDecodeError as e:
-                #print(e)
-    except PermissionError as e:
-        print(e)
-    except FileNotFoundError as e:
-        print(e)
-
-        
 
 
 # In[ ]:
@@ -56,32 +56,32 @@ for i in json_list:
 # In[ ]:
 
 
-def column_filter(s):
-    #x= re.split('【|】|▪|：|•',s)[-1]
-    x=s.replace("✿","")
-    
-    return x
-
+# def column_filter(s):
+#     #x= re.split('【|】|▪|：|•',s)[-1]
+#     x=s.replace("✿","")
+#
+#     return x
+#
 
 # In[ ]:
 
 
-try:
-    df=df["食譜名稱"].apply(column_filter)
-except IndexError as e:
-    print(e)
-except KeyError as e:
-    print(e)
-except AttributeError as e:
-    print(e)
-df
+# try:
+#     df=df["食譜名稱"].apply(column_filter)
+# except IndexError as e:
+#     print(e)
+# except KeyError as e:
+#     print(e)
+# except AttributeError as e:
+#     print(e)
+# df
 
 
 # In[24]:
 
 
-df.to_csv(r'./icook.csv',index=0,encoding="utf-8")
-
+# df.to_csv(r'./icook.csv',index=0,encoding="utf-8")
+#
 
 # In[ ]:
 
@@ -93,26 +93,26 @@ df.to_csv(r'./icook.csv',index=0,encoding="utf-8")
 
 
 ddf=pd.DataFrame(columns=["食譜名稱","食材與單位"])
-ddf
+# ddf
 
 
 # In[29]:
 
 
-
-foodd_list=[["陳皮紅豆湯圓x","[{'ingredient_names': '雞蛋蛋黃3顆', 'ingredient_units': '雞蛋蛋黃3顆'}]"],["花生x","[{'ingredient_names': '芝麻油10g', 'ingredient_units': '芝麻油10g'}]"]]
-ddf=ddf.append(pd.DataFrame(foodd_list,columns=["食譜名稱","食材與單位"]))
-ddf
+#
+# foodd_list=[["陳皮紅豆湯圓x","[{'ingredient_names': '雞蛋蛋黃3顆', 'ingredient_units': '雞蛋蛋黃3顆'}]"],["花生x","[{'ingredient_names': '芝麻油10g', 'ingredient_units': '芝麻油10g'}]"]]
+# ddf=ddf.append(pd.DataFrame(foodd_list,columns=["食譜名稱","食材與單位"]))
+# ddf
 
 
 # In[30]:
 
-
-def column_filter(s):
-    #x= re.split('【|】|▪|：|•',s)[-1]
-    x=s.replace("✿","")
-    
-    return x
+#
+# def column_filter(s):
+#     #x= re.split('【|】|▪|：|•',s)[-1]
+#     x=s.replace("✿","")
+#
+#     return x
 
 
 # In[82]:
@@ -132,8 +132,12 @@ for i in json_list:
                     ingredient_names=i["ingredient_names"]
                     #print(ingredient_names)
                     a=re.split(r"\d",ingredient_names)[0].strip().split("（")[0].replace("少許","").replace("適量","").replace("少量","").replace("半","0.5")
-                    b=re.split(r"\d",a)[0].replace("依個人喜好添加","").replace("適當","").strip().split("、")[0].split("﹙")[0].split("(")[0]                    .replace("新鮮","").replace("手工","").split("或")[0].replace("基底","").split("約")[0]
-                    print(b)
+                    b=re.split(r"\d",a)[0].replace("依個人喜好添加","").replace("適當","").strip().split("、")[0].split("﹙")[0].split("(")[0].replace("新鮮","")\
+                    .replace("手工","").split("或")[0].replace("基底","").split("約")[0].split(r" ")[0]
+                    c=re.sub(r"[^\u4e00-\u9fa5]", "",b)
+                    print(c)
+                    #英文???被轉掉 再去找unicode
+
 
                     
                 
