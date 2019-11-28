@@ -1,6 +1,6 @@
 import pandas as pd
 import os,json,re
-path=r"F:\資策會\專題\爬蟲\venv\collction_freefood_11_23"
+path=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_11_23"
 #讀所有json
 json_list=os.listdir(path)
 
@@ -49,16 +49,13 @@ for i in json_list:
                     #清理單位
                     ingredient_units=i["ingredient_units"]
 
-
-
-
                     #要有順序性的取代，否則有反效果，一開始就用RE模組可能誤抓
                     ingredient_units = re.sub(r"半\b", "",ingredient_units).replace("1小半","0.5").replace("小半","0.5")\
-                    .replace("半","0.5").replace("½","0.5").replace("⅓","0.333").replace("數","x").replace("一般","")\
-                    .replace("一","1").replace("１","1").replace("０","1").replace("２","2").replace("３","3").replace("４","4")\
-                    .replace("５","5").replace("（","(").replace("）",")")
+                    .replace("一半","0.5").replace("半","0.5").replace("1½","1.5").replace("½","0.5").replace("⅓","0.333")\
+                    .replace("數","x")\
+                    .replace("一般","").replace("一","1").replace("１","1").replace("０","1").replace("２","2")\
+                    .replace("３","3").replace("４","4").replace("５","5").replace("（","(").replace("）",")")
                     #找全形數字
-
                     k=re.search(r"[\uFF10-\uFF19]",ingredient_units)
                     if k:
                         print(k.group())
@@ -72,7 +69,10 @@ for i in json_list:
                         ingredient_units=re.search(r"(([0-9]|x).*)",ingredient_units)
                         ingredient_units=ingredient_units.group()
                         ingredient_units=re.sub(r"(\({1}\D*\))","",ingredient_units)
-                        ingredient_units=ingredient_units.replace("，依個人喜好調整","")
+                        #ingredient_units= re.sub(r"\d*(g|公克|克)",r"\d*(g|公克|克)", ingredient_units)
+                        ingredient_units=re.sub(r"\(百分比.*","",ingredient_units)
+                        ingredient_units = re.sub(r"c+\.c+\.?", "cc", ingredient_units)
+                        ingredient_units=ingredient_units.replace("，依個人喜好調整","").replace("約","").replace(",","")
 
 
                         print(ingredient_units,"               ",ingredient_names,"          ",e)
