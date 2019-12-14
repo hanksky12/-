@@ -1,9 +1,10 @@
 import pandas as pd
-import os,json,re,csv
+import os,json,re,csv,pymongo,sys
 
-path=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_11_23"
-
-
+#參數
+path=r"F:\資策會\專題\爬蟲\venv\collction_freefood_11_23"
+mongo_db="test"
+mongo_db_collection="food4"
 
 # def trans(str,unicode_down,unicode_up):
 #     for i in range(int("0x"+unicode_down,16),int("0x"+unicode_down,16)):
@@ -19,26 +20,35 @@ def split_ingredient_units_to_number(ingredient_units_clean):
         x=re.search(r"\d*.?\d",ingredient_units_clean)
         if x:
             number=x.group()
-            return number+"xxxxx"
+            number=str(float(number))
+            return number
     except TypeError as e:
         print(e)
-
-
 
 def split_ingredient_units_to_unit(ingredient_units_clean):
     try:
-        x=re.search(r"[^0-9.]",ingredient_units_clean)
-        if x:
-            #print(x.group())
-            unit=x.group()
+        unit=re.findall(r"[^0-9.]",ingredient_units_clean)
+        if unit:
+            unit=",".join(unit).replace(",","")
             return unit
     except TypeError as e:
         print(e)
+
 def csv_to_out(ingredient_names_clean,number,unit):
     with open('free_food_clean.csv', 'a+', newline='', encoding="utf-8") as csvfile:
         try:
             writer = csv.writer(csvfile)
-            writer.writerow([ingredient_names_clean,number,unit])
+            try:
+                lista=[ingredient_names_clean,number,unit]
+                #print(lista)
+                #藉由join產生的ERROR來做到，食物與數字與單位同時存在的篩選
+                a=",".join(lista).split(",")
+                #print(a)
+                writer.writerow(a)
+            except JSONDecodeError as e:
+                print(e)
+            except NameError as e:
+                print(e)
         except NameError as e:
             print(e)
         except JSONDecodeError as e:
@@ -48,11 +58,13 @@ def fraction_to_float(s):
     list_str=list(s.group())
     n=round(int(list_str[0])/int(list_str[2]),3)
     return str(n)+",".join(list_str[3:]).replace(",","")
+    #return str(n)
 
 def clean_food(ingredient_names):
     a = ingredient_names.replace("半", "0.5").replace("１", "1").replace("０", "1").replace("２", "2") \
         .replace("３", "3").replace("４", "4").replace("５", "5").replace("（", "(").replace("）", ")")
     b = re.split(r"\d", a)[0]
+    #中文、大寫英文、小寫英文
     c = re.sub(r"([^\u4e00-\u9fa5\u0041-\u005A\u0061-\u007A]|一(包|碗|小碗|附)|(適|少)(量|當|許)|新鮮|市售|\
     |隔夜|切(段|絲|成|塊|片|碎末|花|碎|小丁|丁|末|細|條|小(塊|段))|約|(或|可(不用|用|依|選|均勻|不加|視家裡|\
     |替換|省略|切分|以)).*)|(皆|亦|即|也|均)可|(此次|一(個|支|大匙|小(撮|匙)|隻|把)|(依|視)個人|又(稱|名)).*|\
@@ -91,14 +103,16 @@ def clean_unit(ingredient_units):
 
         ingredient_units = re.sub(r"的量*", "", ingredient_units)
         #轉換數量從分數變成小數 1/2=>0.5
+
         ingredient_units = re.sub(r"\d(\／|\/)\d.*", fraction_to_float, ingredient_units)
+        return ingredient_units
         x = re.search(r"\d*(k)?(g|公克|克)", ingredient_units)
         if x:
             # 有KG被抓進來
             ingredient_units = x.group()
             return ingredient_units
         else:
-            y= re.search(r"(\~|\∼).*", ingredient_units)
+            y= re.search(r"(\~|\∼|\-).*", ingredient_units)
             if y:
                 ingredient_units = y.group()
                 ingredient_units=ingredient_units.replace("~","").replace("∼","")
@@ -109,15 +123,29 @@ def clean_unit(ingredient_units):
         print(e)
     except AttributeError as e:
         print(e)
+def write_file_to_mongo(clean_json_list,mongo_db,mongo_db_collection):
+    # You're trying to call a method from a string. This is not specific(具體) to pymongo.
+    #mongo_db.mongo_db_collection.insert_many(clean_json_list) 不能這樣寫，但不會有ERROR
+    mongo_db[mongo_db_collection].insert_many(clean_json_list)
 
+def load_file_from_mongo(mongo_db,mongo_db_collection):
+    collections = [str(mongo_db_collection)]
+    try:
+        read_categories = mongo_db[collections[0]].find()
+        for i in read_categories:
+            #return i
+            print(i)
+    except:
+        print(sys.exc_info())
 
-
-def main():
+def clean(path):
     #讀所有json
     json_list=os.listdir(path)
-    for i in json_list:
+    list_for_collect_clean_food=[]
+    for j in json_list:
         try:
-            with open(path + "/" + i, "r", encoding="utf-8") as f:
+
+            with open(path + "/" + j, "r", encoding="utf-8") as f:
                 try:
                     dic = f.read()
                     d = json.loads(dic)
@@ -134,10 +162,20 @@ def main():
                         #分隔數量與單位
                         number=split_ingredient_units_to_number(ingredient_units_clean)
                         unit=split_ingredient_units_to_unit(ingredient_units_clean)
-                        #輸出CSV
+
+                        #輸出成CSV
                         #csv_to_out(ingredient_names_clean,number,unit)
 
-                        print(ingredient_units_clean,"        ","   ",unit)
+                        #寫回json,輸出
+                        i["ingredient_names"]=ingredient_names_clean
+                        i["ingredient_quantity"]=number
+                        i["ingredient_units"]=unit
+
+                        #顯示在畫面
+                        #print(ingredient_units_clean,"        ",number,"        ",unit)
+                    #顯示清理後
+                    #print(d)
+                    list_for_collect_clean_food.append(d)
                 except ValueError as e:
                     print(e)
                 except JSONDecodeError as e:
@@ -146,8 +184,22 @@ def main():
             print(e)
         except FileNotFoundError as e:
             print(e)
+    #print(list_for_collect_clean_food)
+    return list_for_collect_clean_food
+
+def main(path,mongo_db,mongo_db_collection):
+    clean_json_list = clean(path)
+    write_file_to_mongo(clean_json_list,mongo_db,mongo_db_collection)
+    #load_file_from_mongo(mongo_db,mongo_db_collection)
+
+
 if __name__ == "__main__":
-    main()
+    # 建立連線  品傑36.228.69.179
+    client = pymongo.MongoClient('mongodb://%s:%s@%s:%s/' % ('root', 'root', 'localhost', '27017'))
+    # 寫法client.mongo_db 的問題 跟def write_file_to_mongo時候一樣
+    mongo_db = client[mongo_db]
+    main(path,mongo_db,mongo_db_collection)
+
 
 
 
