@@ -3,10 +3,8 @@ import os,json,re,csv,pymongo,sys
 
 #參數
 path=r"F:\資策會\專題\爬蟲\venv\collction_freefood_11_23"
-mongo_db_name=test
-mongo_db_collection=food1
-
-
+mongo_db="test"
+mongo_db_collection="food4"
 
 # def trans(str,unicode_down,unicode_up):
 #     for i in range(int("0x"+unicode_down,16),int("0x"+unicode_down,16)):
@@ -125,14 +123,17 @@ def clean_unit(ingredient_units):
         print(e)
     except AttributeError as e:
         print(e)
-def write_file_to_mongo(clean_json_list,mongo_db_collection):
-    mongo_db.mongo_db_collection.insert_many(clean_json_list)
+def write_file_to_mongo(clean_json_list,mongo_db,mongo_db_collection):
+    # You're trying to call a method from a string. This is not specific(具體) to pymongo.
+    #mongo_db.mongo_db_collection.insert_many(clean_json_list) 不能這樣寫，但不會有ERROR
+    mongo_db[mongo_db_collection].insert_many(clean_json_list)
 
-def load_file_from_mongo(mongo_db_collection):
+def load_file_from_mongo(mongo_db,mongo_db_collection):
     collections = [str(mongo_db_collection)]
     try:
         read_categories = mongo_db[collections[0]].find()
         for i in read_categories:
+            #return i
             print(i)
     except:
         print(sys.exc_info())
@@ -186,18 +187,19 @@ def clean(path):
     #print(list_for_collect_clean_food)
     return list_for_collect_clean_food
 
-
-def main(path,mongo_db_name,mongo_db_collection):
-    mongo_db = client.mongo_db_name
+def main(path,mongo_db,mongo_db_collection):
     clean_json_list = clean(path)
-    write_file_to_mongo(clean_json_list,mongo_db_collection)
-    load_file_from_mongo(mongo_db_collection)
+    write_file_to_mongo(clean_json_list,mongo_db,mongo_db_collection)
+    #load_file_from_mongo(mongo_db,mongo_db_collection)
 
 
 if __name__ == "__main__":
-    # 建立連線  品傑36.228.69.179 我的localhost
+    # 建立連線  品傑36.228.69.179
     client = pymongo.MongoClient('mongodb://%s:%s@%s:%s/' % ('root', 'root', 'localhost', '27017'))
-    main()
+    # 寫法client.mongo_db 的問題 跟def write_file_to_mongo時候一樣
+    mongo_db = client[mongo_db]
+    main(path,mongo_db,mongo_db_collection)
+
 
 
 
