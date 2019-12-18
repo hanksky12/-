@@ -2,10 +2,12 @@ import pandas as pd
 import os,json,re,csv,pymongo,sys
 
 #參數
-path=r"F:\資策會\專題\爬蟲\venv\collction_freefood_11_23"
+path=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_11_23"
+path2=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_clean"
 mongo_db="test"
 mongo_db_collection="food4"
-
+if not os.path.exists(path2): #沒有這個資料夾就新創資料夾
+    os.mkdir(path2)
 # def trans(str,unicode_down,unicode_up):
 #     for i in range(int("0x"+unicode_down,16),int("0x"+unicode_down,16)):
 #         if ord(str)==i:
@@ -33,13 +35,13 @@ def split_ingredient_units_to_unit(ingredient_units_clean):
             return unit
     except TypeError as e:
         print(e)
-
-def csv_to_out(ingredient_names_clean,number,unit):
-    with open('free_food_clean.csv', 'a+', newline='', encoding="utf-8") as csvfile:
+#設定欄位輸出成csv
+def csv_to_out(recipe_name,ingredient_names_clean,number,unit):
+    with open('free_food_clean_recipename_ingredientnames_number_unit.csv', 'a+', newline='', encoding="utf-8") as csvfile:
         try:
             writer = csv.writer(csvfile)
             try:
-                lista=[ingredient_names_clean,number,unit]
+                lista=[recipe_name,ingredient_names_clean,number,unit]
                 #print(lista)
                 #藉由join產生的ERROR來做到，食物與數字與單位同時存在的篩選
                 a=",".join(lista).split(",")
@@ -144,11 +146,11 @@ def clean(path):
     list_for_collect_clean_food=[]
     for j in json_list:
         try:
-
             with open(path + "/" + j, "r", encoding="utf-8") as f:
                 try:
                     dic = f.read()
                     d = json.loads(dic)
+                    recipe_name = d["recipe_name"]
                     list_ingredients = d["ingredients"]
                     for i in list_ingredients:
                         #清理食材
@@ -164,7 +166,7 @@ def clean(path):
                         unit=split_ingredient_units_to_unit(ingredient_units_clean)
 
                         #輸出成CSV
-                        #csv_to_out(ingredient_names_clean,number,unit)
+                        #csv_to_out(recipe_name,ingredient_names_clean,number,unit)
 
                         #寫回json,輸出
                         i["ingredient_names"]=ingredient_names_clean
@@ -176,6 +178,7 @@ def clean(path):
                     #顯示清理後
                     #print(d)
                     list_for_collect_clean_food.append(d)
+
                 except ValueError as e:
                     print(e)
                 except JSONDecodeError as e:
@@ -186,12 +189,24 @@ def clean(path):
             print(e)
     #print(list_for_collect_clean_food)
     return list_for_collect_clean_food
+#將資料全部存成一個txt檔，在讀取的時候會容易造成memory ERROR
+def out_put_txt(clean_json_list):
+    with open("clean_json_list6.txt","w+",encoding="utf-8") as f:
+        for i in clean_json_list:
+            f.write(str(i)+"\n")
+        f.close()
+
+def output_json(clean_json_list):
+    for n,i in enumerate(clean_json_list):
+        with open("%s/food_json_%s.json" % (path2, n), "a+", encoding="utf-8") as f:
+            json.dump(i, f, ensure_ascii=False)
 
 def main(path,mongo_db,mongo_db_collection):
     clean_json_list = clean(path)
-    write_file_to_mongo(clean_json_list,mongo_db,mongo_db_collection)
+    output_json(clean_json_list)
+    #out_put_txt(clean_json_list)
+    #write_file_to_mongo(clean_json_list,mongo_db,mongo_db_collection)
     #load_file_from_mongo(mongo_db,mongo_db_collection)
-
 
 if __name__ == "__main__":
     # 建立連線  品傑36.228.69.179

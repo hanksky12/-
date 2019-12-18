@@ -76,7 +76,7 @@ def worker(worker_id,queue):
             time.sleep(random.random())
             print(Dict_for_a_recipe)
             with open("%s/food_json_%s.txt"%(path2,no_article_thrd),"a+",encoding="utf-8") as f:
-                json.dump(Dict_for_a_recipe,f)
+                json.dump(Dict_for_a_recipe,f, ensure_ascii=False)
 
         except IndexError as e:
             print(e)  # 頁配文的文章格式與平常的不同，篇幅較少，就不抓
