@@ -2,12 +2,20 @@ import pandas as pd
 import os,json,re,csv,pymongo,sys
 
 #參數
-path=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_11_23"
-path2=r"E:\BIG DATA下載\專題\爬蟲\venv\collction_freefood_clean"
+#讀取路徑
+path=r"F:\資策會\專題\爬蟲\venv\collction_freefood_11_23"
+#輸出路徑
+path2=r"F:\資策會\專題\爬蟲\venv\collction_freefood_clean"
+#mongo設定
 mongo_db="test"
 mongo_db_collection="food4"
+
+
 if not os.path.exists(path2): #沒有這個資料夾就新創資料夾
     os.mkdir(path2)
+if not os.path.exists(path):
+    os.mkdir(path)
+
 # def trans(str,unicode_down,unicode_up):
 #     for i in range(int("0x"+unicode_down,16),int("0x"+unicode_down,16)):
 #         if ord(str)==i:
@@ -60,7 +68,7 @@ def fraction_to_float(s):
     list_str=list(s.group())
     n=round(int(list_str[0])/int(list_str[2]),3)
     return str(n)+",".join(list_str[3:]).replace(",","")
-    #return str(n)
+
 
 def clean_food(ingredient_names):
     a = ingredient_names.replace("半", "0.5").replace("１", "1").replace("０", "1").replace("２", "2") \
@@ -172,10 +180,9 @@ def clean(path):
                         i["ingredient_names"]=ingredient_names_clean
                         i["ingredient_quantity"]=number
                         i["ingredient_units"]=unit
-
                         #顯示在畫面
                         #print(ingredient_units_clean,"        ",number,"        ",unit)
-                    #顯示清理後
+                    #顯示清理後每個json
                     #print(d)
                     list_for_collect_clean_food.append(d)
 
@@ -189,7 +196,8 @@ def clean(path):
             print(e)
     #print(list_for_collect_clean_food)
     return list_for_collect_clean_food
-#將資料全部存成一個txt檔，在讀取的時候會容易造成memory ERROR
+
+#將資料全部存成一個txt檔，在讀取的時候會容易造成memory ERROR，後續不沿用此FUN
 def out_put_txt(clean_json_list):
     with open("clean_json_list6.txt","w+",encoding="utf-8") as f:
         for i in clean_json_list:
@@ -200,6 +208,9 @@ def output_json(clean_json_list):
     for n,i in enumerate(clean_json_list):
         with open("%s/food_json_%s.json" % (path2, n), "a+", encoding="utf-8") as f:
             json.dump(i, f, ensure_ascii=False)
+
+
+
 
 def main(path,mongo_db,mongo_db_collection):
     clean_json_list = clean(path)

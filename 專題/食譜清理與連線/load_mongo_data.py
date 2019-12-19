@@ -27,7 +27,7 @@ def main():
 if __name__ == "__main__":
     # mongo connect set
     client = pymongo.MongoClient(
-        'mongodb://%s:%s@%s:%s/' % ('root', 'root', '36.228.69.179', '27017'))
+        'mongodb://%s:%s@%s:%s/' % ('root', 'root', '', '27017'))
     mongo_db = client.recipes_info
     
     main()
