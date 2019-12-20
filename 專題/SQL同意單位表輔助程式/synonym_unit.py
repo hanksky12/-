@@ -1,22 +1,29 @@
 import MySQLdb
 #12/14
 word=""
-
-g="100"
-word1="盒"
-word2=""
-
-word3_list=[""]
-#word3_list=["份","球","綑","把"]
-#word3_list=["支","條","根","個","顆","枝","棵","朵","株"]
-#word3_list=["粒","顆","個"]
-#word3_list=["份","","盒"]
-#word3_list=["條","塊","片","個"]
-#word3_list=["塊","支","個","隻","支","根"]
-#word3_list=["條","支","個","隻","尾"]
-ID="J21901"
+ID="E03101"
 #細部調整
 name=''
+g="70"
+word1="枝"
+word2=""
+word3_list=[]
+#word3_list=["片","張"]
+#word3_list=["包","小包"]
+#word3_list=["小包","包"]
+#蔬菜
+#word3_list=["份","球","綑","把"]
+#word3_list=["支","條","根","個","顆","枝","棵","朵","株"]
+#word3_list=["粒","顆","個","塊"]
+#word3_list=["份","","盒"]
+#肉類
+#word3_list=["塊","片","個","根"]
+#word3_list=["塊","條","個","隻","支","根"]
+#海鮮
+#word3_list=["條","支","個","隻","尾"]
+#酒類
+#word3_list=["罐",""]
+
 
 # def sql_transform_unitfc_to_number():
 #     query = "select * from ingredient_unit_combine_update "
