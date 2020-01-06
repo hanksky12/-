@@ -1,29 +1,22 @@
 import MySQLdb
 #12/14
 word=""
-ID="E03101"
-#細部調整
-name=''
-g="70"
-word1="枝"
+
+g="100"
+word1="盒"
 word2=""
-word3_list=[]
-#word3_list=["片","張"]
-#word3_list=["包","小包"]
-#word3_list=["小包","包"]
-#蔬菜
+
+word3_list=[""]
 #word3_list=["份","球","綑","把"]
 #word3_list=["支","條","根","個","顆","枝","棵","朵","株"]
-#word3_list=["粒","顆","個","塊"]
+#word3_list=["粒","顆","個"]
 #word3_list=["份","","盒"]
-#肉類
-#word3_list=["塊","片","個","根"]
-#word3_list=["塊","條","個","隻","支","根"]
-#海鮮
+#word3_list=["條","塊","片","個"]
+#word3_list=["塊","支","個","隻","支","根"]
 #word3_list=["條","支","個","隻","尾"]
-#酒類
-#word3_list=["罐",""]
-
+ID="J22101"
+#細部調整
+name=''
 
 # def sql_transform_unitfc_to_number():
 #     query = "select * from ingredient_unit_combine_update "
@@ -96,7 +89,7 @@ def main(g,word,ID,word1,word2,word3_list,name):
     step_2(g,ID,word1,word2,word3_list,name)
 
 if __name__=="__main__":
-    db = MySQLdb.connect(host="localhost", user="hanksky", passwd="mindyiloveyou", db="free_food", port=3306, charset="utf8")
+    db = MySQLdb.connect(host="localhost", user="hanksky", passwd="", db="free_food", port=3306, charset="utf8")
     cursor = db.cursor()  # 建立游標
     db.autocommit(True)  # 設定自動確認
     main(g,word,ID,word1,word2,word3_list,name)
